@@ -1,0 +1,186 @@
+{%- set CLIENT_PORT = [] %}
+{%- set LINE_PORT = [] %}
+{%- set PHYSICAL_CH = [] %}
+{%- set ASSIGNMENT_LIST = [] %}
+{%- if PORT | line_port_match(LINE_PORT) %}{% endif %}
+{%- if PORT | client_port_match(CLIENT_PORT) %}{% endif %}
+{%- set CLIENT_TRANSCEIVER = [] %}
+{%- set INTERFACE = [] %}
+{%- for port in CLIENT_PORT %}
+    {%- if CLIENT_TRANSCEIVER.append(port) %}{% endif %}
+    {%- if INTERFACE.append(port) %}{% endif %}
+{%- endfor %}
+{%- if CLIENT_TRANSCEIVER | port_to_other_key('TRANSCEIVER') %}{% endif %}
+{%- if INTERFACE | port_to_other_key('INTERFACE') %}{% endif %}
+{%- set LINE_TRANSCEIVER = [] %}
+{%- for port in LINE_PORT %}
+    {%- if LINE_TRANSCEIVER.append(port) %}{% endif %}
+{%- endfor %}
+{%- if LINE_TRANSCEIVER | port_to_other_key('TRANSCEIVER') %}{% endif %}
+{%- set lane_id_list = ['1','2','3','4'] %}
+{%- for client_xcvr in CLIENT_TRANSCEIVER %}
+    {%- for lane_id in lane_id_list %}
+        {%- if PHYSICAL_CH.append(client_xcvr + '|CH-' + lane_id) %}{% endif %}
+    {%- endfor %}
+{%- endfor %}
+{%- set OCH = [] %}
+{%- for port in LINE_PORT %}
+    {%- if OCH.append(port) %}{% endif %}
+{%- endfor %}
+{%- if OCH | port_to_other_key('OCH') %}{% endif %}
+{%- set LLDP = [] %}
+{%- set ETHERNET = [] %}
+{%- set OTN = [] %}
+{%- for ch in LOGICAL_CHANNEL %}
+    {%- if LOGICAL_CHANNEL[ch]['description'][0:2] == 'GE' %}
+        {%- if LLDP.append(ch) %}{% endif %}
+        {%- if ETHERNET.append(ch) %}{% endif %}
+    {%- else %}
+        {%- if OTN.append(ch) %}{% endif %}
+    {%- endif %}
+    {%- if ASSIGNMENT_LIST.append(ch + '|ASS1') %}{% endif %}
+{%- endfor %}
+{
+    "TRANSCEIVER": {
+{% set client_xcvr_count=CLIENT_TRANSCEIVER|length %}
+{% for i in range(0,client_xcvr_count) %}
+    {%- set CLIENT_TRANSCEIVER_PCH = [] %}
+    {%- for lane_id in lane_id_list %}
+        {%- if CLIENT_TRANSCEIVER_PCH.append(CLIENT_TRANSCEIVER[i] + '|CH-' + lane_id) %}{% endif %}
+    {%- endfor %}
+    {%- set PCH = ','.join(CLIENT_TRANSCEIVER_PCH) %}
+    {%- set CLIENT_TRANSCEIVER_LCH = [] %}
+    {%- for lch in LOGICAL_CHANNEL %}
+        {%- if LOGICAL_CHANNEL[lch]['transceiver'] == CLIENT_TRANSCEIVER[i] %}
+            {%- if CLIENT_TRANSCEIVER_LCH.append(lch) %}{% endif %}
+        {%- endif %}
+    {%- endfor %}
+    {%- set LCH = ','.join(CLIENT_TRANSCEIVER_LCH) %}
+    {%- set ETHERNET_LCH = [] %}
+    {%- for lch in CLIENT_TRANSCEIVER_LCH %}
+        {%- if lch in ETHERNET %}
+           {%- if ETHERNET_LCH.append(lch) %}{% endif %}
+        {%- endif %}
+    {%- endfor %}
+    {%- set E_LCH = ','.join(ETHERNET_LCH) %}
+    {%- set OTN_LCH = [] %}
+    {%- for lch in CLIENT_TRANSCEIVER_LCH %}
+        {%- if lch in OTN %}
+           {%- if OTN_LCH.append(lch) %}{% endif %}
+        {%- endif %}
+    {%- endfor %}
+    {%- set O_LCH = ','.join(OTN_LCH) %}
+        "{{ CLIENT_TRANSCEIVER[i] }}": {
+            "index": {{ loop.index }},
+            "port-type": "CLIENT",
+            "port-id": {{ CLIENT_TRANSCEIVER[i][17:] }},
+            "parent": "{{ CLIENT_PORT[i] }}",
+            "physical-channel": "{{PCH}}",
+            "logical-channel": "{{LCH}}",
+            "ethernet": "{{E_LCH}}",
+            "otn": "{{O_LCH}}",
+            "interface": "{{INTERFACE[i]}}"
+        },
+{% endfor %}
+{% for i in range(0,LINE_TRANSCEIVER|length) %}
+    {%- set LINE_TRANSCEIVER_LCH = [] %}
+    {%- for lch in LOGICAL_CHANNEL %}
+        {%- if LOGICAL_CHANNEL[lch]['transceiver'] == LINE_TRANSCEIVER[i] %}
+            {%- if LINE_TRANSCEIVER_LCH.append(lch) %}{% endif %}
+        {%- endif %}
+    {%- endfor %}
+    {%- set LCH = ','.join(LINE_TRANSCEIVER_LCH) %}
+    {%- set OTN_LCH = [] %}
+    {%- for lch in LINE_TRANSCEIVER_LCH %}
+        {%- if lch in OTN %}
+           {%- if OTN_LCH.append(lch) %}{% endif %}
+        {%- endif %}
+    {%- endfor %}
+    {%- set O_LCH = ','.join(OTN_LCH) %}
+        "{{ LINE_TRANSCEIVER[i] }}": {
+            "index": {{ loop.index + client_xcvr_count }},
+            "port-type": "LINE",
+            "port-id": {{ LINE_TRANSCEIVER[i][17:] }},
+            "parent": "{{ LINE_PORT[i] }}",
+            "logical-channel": "{{LCH}}",
+            "otn": "{{O_LCH}}",
+            "och": "{{ OCH[i] }}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "PHYSICAL_CHANNEL": {
+{% for i in range(0,PHYSICAL_CH|length) %}
+        "{{ PHYSICAL_CH[i] }}": {
+            "index": {{ loop.index }},
+            "port-type": "CLIENT",
+            "port-id": {{ PHYSICAL_CH[i][17:18] }},
+            "lane-id": {{ PHYSICAL_CH[i][22:]}}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "OCH": {
+{% for i in range(0,OCH|length) %}
+        "{{ OCH[i] }}": {
+            "index": {{ loop.index }},
+            "port-type": "LINE",
+            "port-id": {{ OCH[i][9:] }}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "LLDP": {
+{% for i in range(0,LLDP|length) %}
+        "{{ LLDP[i] }}": {
+            "index": {{ LLDP[i][2:] }},
+            "channel-id": {{ LLDP[i][2:] }}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "ETHERNET": {
+{% for i in range(0,ETHERNET|length) %}
+        "{{ ETHERNET[i] }}": {
+            "index": {{ ETHERNET[i][2:] }},
+            "channel-id": {{ ETHERNET[i][2:] }}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "OTN": {
+{% for i in range(0,OTN|length) %}
+        "{{ OTN[i] }}": {
+            "index": {{ OTN[i][2:] }},
+            "channel-id": {{ OTN[i][2:] }}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "INTERFACE": {
+{% for i in range(0,INTERFACE|length) %}
+        "{{ INTERFACE[i] }}": {
+            "index": {{ loop.index }},
+            "type": "ethernetCsmacd",
+            "interface-type": "CLIENT",
+            "interface-id": {{ INTERFACE[i][15:] }},
+            "name": "{{ INTERFACE[i] }}",
+            "transceiver": "TRANSCEIVER{{ INTERFACE[i][9:] }}",
+            "hardware-port": "PORT{{ INTERFACE[i][9:] }}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "ASSIGNMENT": {
+{% for i in range(0,ASSIGNMENT_LIST|length) %}
+        "{{ ASSIGNMENT_LIST[i] }}": {
+            "index": {{ ASSIGNMENT_LIST[i][9:] }},
+            "channel-id": {{ ASSIGNMENT_LIST[i][2:5] }},
+            "id": {{ ASSIGNMENT_LIST[i][9:] }},
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{ ASSIGNMENT_LIST[i][2:5] }}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    }
+}

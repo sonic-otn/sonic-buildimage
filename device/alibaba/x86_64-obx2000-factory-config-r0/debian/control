@@ -1,0 +1,11 @@
+Source: sonic
+Maintainer: Xiaodong Gui <guixiaodong.gxd@alibaba-inc.com>
+Section: net
+Priority: optional
+Standards-Version: 1.0.0
+Build-Depends: debhelper (>=9)
+
+Package: obx2000-factory-config
+Architecture: all
+Description: This package contains obx2000 configuration.
+

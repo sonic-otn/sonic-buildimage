@@ -3,6 +3,7 @@ import json
 import os
 import re
 import subprocess
+import syslog
 
 import yaml
 from natsort import natsorted
@@ -488,3 +489,125 @@ def is_fast_reboot_enabled():
         fb_system_state = stdout.rstrip('\n')
 
     return fb_system_state
+
+
+def get_rule_params(protocol, port):
+    param_dict = {}
+    param_dict['protocol'] = protocol
+    param_dict['port'] = port
+    return param_dict
+
+def clean_rules():
+    cmd = "sudo iptables -t nat -F POSTROUTING"
+    #print(cmd)
+    syslog.syslog(syslog.LOG_INFO,"replace_sourecip '{}'".format(cmd))
+    proc = subprocess.Popen(cmd, shell=True, universal_newlines=True, stdout=subprocess.PIPE)
+    (stdout, stderr) = proc.communicate()
+
+    if proc.returncode != 0:
+        syslog.syslog(syslog.LOG_INFO,"Error running command '{}'".format(cmd))
+
+def replace_sourceip(destip, loopbackip, params={}):
+    syslog.syslog(syslog.LOG_INFO,"replace_sourecip {} with params {}".format(destip, params))
+    if(len(destip)==0 or len(loopbackip)==0):
+        return
+        
+    cmd = "sudo iptables -t nat -I POSTROUTING -d {}/32 -j SNAT --to-source {}".format(destip,loopbackip)
+    if params:
+        if ('protocol' not in params) or ('port' not in params):
+            syslog.syslog(syslog.LOG_INFO,"replace_sourecip {} with params {} failed".format(destip, params))
+            return
+        cmd = "sudo iptables -t nat -I POSTROUTING -d {} -p {} --dport {} -j SNAT --to-source {}".format(destip, params['protocol'], params['port'], loopbackip)
+    #print(cmd)
+    syslog.syslog(syslog.LOG_INFO,"replace_sourecip '{}'".format(cmd))
+    proc = subprocess.Popen(cmd, shell=True, universal_newlines=True, stdout=subprocess.PIPE)
+    (stdout, stderr) = proc.communicate()
+
+    if proc.returncode != 0:
+        syslog.syslog(syslog.LOG_INFO,"Error running command {}".format(cmd))
+        
+
+def del_loopbackrule(destip, params={}):
+    if(len(destip)==0):
+        return
+        
+    while True:
+        cmd = """sudo iptables -t nat -L POSTROUTING -n --line-numbers | awk '$6=="{}" && $8=="" {{print $1}}'""".format(destip)
+        if params:
+            if ('protocol' not in params) or ('port' not in params):
+                syslog.syslog(syslog.LOG_INFO,"del_loopbackrule {} with params {} failed".format(destip, params))
+                return
+            cmd = """iptables -t nat -L POSTROUTING -n --line-numbers | awk '$6=="{}" && $7=="{}" && $8 ~ /{}/ {{print $1}}'""".format(destip, params['protocol'], params['port'])
+        syslog.syslog(syslog.LOG_INFO,"del_loopbackrule '{}'".format(cmd))
+        proc = subprocess.Popen(cmd, shell=True, universal_newlines=True, stdout=subprocess.PIPE)
+        (stdout, stderr) = proc.communicate()
+
+        if proc.returncode != 0:
+            syslog.syslog(syslog.LOG_INFO,"Error running command {}".format(cmd))
+            return
+            
+        elif stdout:
+            stdout = stdout.rstrip('\n')
+            rulelist = stdout.split('\n')
+            for rule in rulelist:
+                cmd = "sudo iptables -t nat -D POSTROUTING {}".format(rule)
+                #print(cmd)
+                proc = subprocess.Popen(cmd, shell=True, universal_newlines=True, stdout=subprocess.PIPE)
+                (stdout, stderr) = proc.communicate()
+
+                if proc.returncode != 0:
+                    syslog.syslog(syslog.LOG_INFO,"Error running command {}".format(cmd))
+                break
+        else:
+            return
+    
+def add_loopbackrule(destip, params={}):
+    if(len(destip)==0):
+        return
+    config_db = ConfigDBConnector()
+    config_db.connect()
+    loopbackip_dict = config_db.get_table("LOOPBACK_INTERFACE")
+    for row in loopbackip_dict:
+        if(isinstance(row,tuple)):
+            loopbackip = row[1].split('/')[0]  #only one loopbackip 
+            if(len(loopbackip)==0):
+                return
+            replace_sourceip(destip, loopbackip, params)
+
+  
+def add_allloopbackrule():
+    config_db = ConfigDBConnector()
+    config_db.connect()
+    loopbackip_dict = config_db.get_table("LOOPBACK_INTERFACE") 
+    ntpserverip_dict = config_db.get_table("NTP_SERVER")
+    syslogserverip_dict = config_db.get_table("SYSLOG_SERVER")
+    tacacs_server_dict = config_db.get_table("TACPLUS_SERVER")
+    tlmtaddrs = config_db.get_entry('TELEMETRY_CLIENT', 'DestinationGroup_collector_dest_group')
+    collectors = []
+    if 'dst_addr' in tlmtaddrs:
+        addrs = tlmtaddrs['dst_addr'].split(',')
+        for addr in addrs:
+            collectors.append(addr)
+
+    for row in loopbackip_dict:
+        if(isinstance(row,tuple)):
+            loopbackip = row[1].split('/')[0]  #only one loopbackip 
+            if(len(loopbackip)==0):
+                continue
+            for ntp in ntpserverip_dict:
+                replace_sourceip(ntp,loopbackip)
+            for logserver in syslogserverip_dict:
+                replace_sourceip(logserver,loopbackip)
+            for server in tacacs_server_dict:
+                replace_sourceip(server,loopbackip)
+            for collector in collectors:
+                addr = collector[:collector.index(':')]
+                port = collector[collector.index(':')+1:]
+                params = get_rule_params('tcp', port)
+                replace_sourceip(addr, loopbackip, params)
+                
+def update_loopbackrule():
+    clean_rules()
+    add_allloopbackrule()
+    
+

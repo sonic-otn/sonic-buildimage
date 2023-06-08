@@ -126,6 +126,8 @@ RUN pip{% if 'py3' in whl %}3{% else %}2{% endif %} install python-wheels/{{ whl
 {%- endfor %}
 {% endif %}
 
+RUN pip3 install pytest
+
 # Clean up
 RUN apt-get purge -y build-essential libssl-dev swig
 RUN apt-get purge -y python-dev python3-dev
@@ -145,7 +147,8 @@ RUN sed -ri 's/^(save .*$)/# \1/g;                                              
             ' /etc/redis/redis.conf
 
 COPY ["50-default.conf", "/etc/rsyslog.d/"]
-COPY ["start.sh", "orchagent.sh", "files/update_chassisdb_config", "/usr/bin/"]
+COPY ["files/dsserve", "files/vscmd", "start.sh", "orchagent.sh", "files/update_chassisdb_config", "/usr/bin/"]
+RUN chmod +x /usr/bin/dsserve /usr/bin/vscmd
 COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
 COPY ["files/configdb-load.sh", "/usr/bin/"]
 COPY ["files/arp_update", "/usr/bin/"]
@@ -159,6 +162,7 @@ COPY ["asic_table.json", "/etc/sonic/"]
 COPY ["buffermgrd.sh", "/usr/bin/"]
 
 COPY ["platform.json", "/usr/share/sonic/device/x86_64-kvm_x86_64-r0/"]
+COPY ["lai_cfg.json", "/usr/share/sonic/device/x86_64-kvm_x86_64-r0/"]
 COPY ["hwsku.json", "/usr/share/sonic/device/x86_64-kvm_x86_64-r0/Force10-S6000/"]
 
 # Workaround the tcpdump issue
@@ -170,9 +174,6 @@ RUN touch /etc/quagga/zebra.conf
 
 # disable integrated vtysh config
 RUN rm /etc/frr/frr.conf
-
-# Create /var/warmboot/teamd folder for teammgrd
-RUN mkdir -p /var/warmboot/teamd
 
 # Set PLATFORM and HWSKU environment variables
 ENV PLATFORM=x86_64-kvm_x86_64-r0

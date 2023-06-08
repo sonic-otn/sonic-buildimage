@@ -1,0 +1,8 @@
+ocm8/config_db*.json etc/sonic/factory/ocm8
+otdr8/config_db*.json etc/sonic/factory/otdr8
+oa2325/config_db*.json etc/sonic/factory/oa2325
+oa2335/config_db*.json etc/sonic/factory/oa2335
+ocm8/flexcounter.json etc/sonic/factory/ocm8
+otdr8/flexcounter.json etc/sonic/factory/otdr8
+oa2325/flexcounter.json etc/sonic/factory/oa2325
+oa2335/flexcounter.json etc/sonic/factory/oa2335

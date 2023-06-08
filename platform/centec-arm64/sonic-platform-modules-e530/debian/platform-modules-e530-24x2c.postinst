@@ -1,2 +1,0 @@
-systemctl enable 24x2c_platform.service
-systemctl start 24x2c_platform.service

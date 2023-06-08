@@ -34,12 +34,13 @@ import netaddr
 import os
 import sys
 import yaml
+import re
 
 from collections import OrderedDict
 from config_samples import generate_sample_config, get_available_config
 from functools import partial
 from minigraph import minigraph_encoder, parse_xml, parse_device_desc_xml, parse_asic_sub_role
-from portconfig import get_port_config, get_breakout_mode
+from portconfig import get_port_config, get_breakout_mode, get_logicalchannel_config
 from redis_bcc import RedisBytecodeCache
 from sonic_py_common.multi_asic import get_asic_id_from_name, is_multi_asic
 from sonic_py_common import device_info
@@ -66,6 +67,31 @@ def sort_by_port_index(value):
         value.sort(
             key = lambda k: int(k[8:]) if "BP" not in k else int(k[11:]) + 1024
         )
+
+def client_port_match(value, client_port):
+    pattern = re.compile('PORT-1-[1-4]-C[0-9]+')
+    for port in value:
+        m = pattern.match(port)
+        if m is not None:
+            client_port.append(port)
+
+def line_port_match(value, line_port):
+    pattern = re.compile('PORT-1-[1-4]-L[0-9]+')
+    for port in value:
+        m = pattern.match(port)
+        if m is not None:
+            line_port.append(port)
+
+def port_to_other_key(value, key):
+    #pattern = re.compile('PORT-1-[1-4]-[C|L][0-9]+')
+    for i, port in enumerate(value):
+        new_value = key + port[4:]
+        value[i] = new_value
+
+def logical_channel_to_other_key(value, key):
+    for i, ch in enumerate(value):
+        new_value = key + ch[2:]
+        value[i] = new_value
 
 def is_ipv4(value):
     if not value:
@@ -244,6 +270,10 @@ def _get_jinja2_env(paths):
     redis_bcc = RedisBytecodeCache(SonicV2Connector(host='127.0.0.1'))
     env = jinja2.Environment(loader=loader, trim_blocks=True, bytecode_cache=redis_bcc)
     env.filters['sort_by_port_index'] = sort_by_port_index
+    env.filters['client_port_match'] = client_port_match
+    env.filters['line_port_match'] = line_port_match
+    env.filters['port_to_other_key'] = port_to_other_key
+    env.filters['logical_channel_to_other_key'] = logical_channel_to_other_key
     env.filters['ipv4'] = is_ipv4
     env.filters['ipv6'] = is_ipv6
     env.filters['unique_name'] = unique_name
@@ -262,8 +292,10 @@ def main():
     group.add_argument("-m", "--minigraph", help="minigraph xml file", nargs='?', const='/etc/sonic/minigraph.xml')
     group.add_argument("-M", "--device-description", help="device description xml file")
     group.add_argument("-k", "--hwsku", help="HwSKU")
+    parser.add_argument("-z", "--timezone", help="TimeZone")
     parser.add_argument("-n", "--namespace", help="namespace name", nargs='?', const=None, default=None)
     parser.add_argument("-p", "--port-config", help="port config file, used with -m or -k", nargs='?', const=None)
+    parser.add_argument("-l", "--logicalchannel-config", help="logicalchannel config file, used with -m or -k", nargs='?', const=None)
     parser.add_argument("-S", "--hwsku-config", help="hwsku config file, used with -p and -m or -k", nargs='?', const=None)
     parser.add_argument("-y", "--yaml", help="yaml file that contains additional variables", action='append', default=[])
     parser.add_argument("-j", "--json", help="json file that contains additional variables", action='append', default=[])
@@ -292,6 +324,7 @@ def main():
 
     data = {}
     hwsku = args.hwsku
+    timezone = args.timezone
     asic_name = args.namespace
     asic_id = None
     if asic_name is not None:
@@ -313,17 +346,26 @@ def main():
             'hwsku': hwsku
             }}}
         deep_update(data, hardware_data)
-        if args.port_config is None:
-            args.port_config = device_info.get_path_to_port_config_file(hwsku)
+
+    if timezone is not None:
+        timezone_data = {'DEVICE_METADATA': {'localhost': {
+            'timezone': timezone
+            }}}
+        deep_update(data, timezone_data)
+
+    if args.logicalchannel_config is not None:
+        (logicalchannels, _, _) = get_logicalchannel_config(hwsku, platform, args.logicalchannel_config, asic_id)
+        if not logicalchannels:
+            print('Failed to get logicalchannel config', file=sys.stderr)
+            sys.exit(1)
+        deep_update(data, {'LOGICAL_CHANNEL': logicalchannels})
+
+    if args.port_config is not None:
         (ports, _, _) = get_port_config(hwsku, platform, args.port_config, asic_id)
         if not ports:
             print('Failed to get port config', file=sys.stderr)
             sys.exit(1)
         deep_update(data, {'PORT': ports})
-
-        brkout_table = get_breakout_mode(hwsku, platform, args.port_config)
-        if  brkout_table is not None:
-            deep_update(data, {'BREAKOUT_CFG': brkout_table})
 
     _process_json(args, data)
 

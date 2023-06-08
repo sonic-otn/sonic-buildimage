@@ -1,0 +1,17 @@
+e100c/config_db*.json etc/sonic/factory/e100c
+e110c/config_db*.json etc/sonic/factory/e110c
+e120c/config_db*.json etc/sonic/factory/e120c
+p230c/LA_200G_CA_100GE_QPSK/0/config_db0.json etc/sonic/factory/p230c/LA_200G_CA_100GE_QPSK
+p230c/LA_200G_CA_100GE_QPSK/1/config_db1.json etc/sonic/factory/p230c/LA_200G_CA_100GE_QPSK
+p230c/LA_200G_CA_100GE_QPSK/2/config_db2.json etc/sonic/factory/p230c/LA_200G_CA_100GE_QPSK
+p230c/LA_200G_CA_100GE_QPSK/3/config_db3.json etc/sonic/factory/p230c/LA_200G_CA_100GE_QPSK
+p230c/L1_400G_CA_100GE/0/config_db0.json etc/sonic/factory/p230c/L1_400G_CA_100GE
+p230c/L1_400G_CA_100GE/1/config_db1.json etc/sonic/factory/p230c/L1_400G_CA_100GE
+p230c/L1_400G_CA_100GE/2/config_db2.json etc/sonic/factory/p230c/L1_400G_CA_100GE
+p230c/L1_400G_CA_100GE/3/config_db3.json etc/sonic/factory/p230c/L1_400G_CA_100GE
+
+e100c/flexcounter.json etc/sonic/factory/e100c
+e110c/flexcounter.json etc/sonic/factory/e110c
+e120c/flexcounter.json etc/sonic/factory/e120c
+p230c/flexcounter.json etc/sonic/factory/p230c
+

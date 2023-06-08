@@ -1,0 +1,235 @@
+#!/usr/bin/python3
+import json
+from threading import Timer
+from otn_pmon.common import slot_status
+from otn_pmon.thrift_api.ttypes import *
+from otn_pmon.thrift_api import periph_rpc
+import otn_pmon.db as db
+import otn_pmon.periph as periph
+
+from thrift.transport import TSocket
+from thrift.transport import TTransport
+from thrift.protocol import TBinaryProtocol
+from thrift.server import TServer
+
+class IfaceHandler(object):
+    def __init__(self):
+        self.log = {}
+        self.load_data()
+
+    def load_data(self):
+        with open('/etc/sonic/dev_mock_data.json', 'r', encoding='utf8') as fp:
+            self.data = json.load(fp)
+
+    def find_data(self, component, kv, field):
+        self.load_data()
+
+        for each in self.data[component]:
+            if each["id"] == kv and field in each :
+                return each[field]
+        return None
+
+    def periph_presence(self, type, id):
+        type_name = periph_type._VALUES_TO_NAMES[type]
+        ret = self.find_data(type_name, id, "presence")
+        return True if ret == "true" else False
+
+    def get_system_version(self):
+        ver = system_version()
+        ver.fpga = "1:1.1;2:1.2"
+        ver.pcb = "1"
+        ver.bom = "3"
+        ver.ucd90120 = "1.1"
+        ver.devmgr = "1.20"
+        return ver
+
+    def get_periph_version(self, type, id):
+        """
+        Parameters:
+         - type
+         - id
+
+        """
+        pass
+
+    def get_psu_info(self, id):
+        info = psu_info()
+        ret = self.find_data("PSU", id, "info")
+        info.abs = ret["abs"]
+        info.ambient_temp = ret["ambient_temp"]
+        info.primary_temp = ret["primary_temp"]
+        info.secondary_temp = ret["secondary_temp"]
+        info.vout = ret["vout"]
+        info.vin = ret["vin"]
+        info.iout = ret["iout"]
+        info.iin = ret["iin"]
+        info.pout = ret["pout"]
+        info.pin = ret["pin"]
+        info.fan = ret["fan"]
+        info.capacity = ret["capacity"]
+        return ret_psu_info(0, info)
+
+    def psu_vin_high(self, id):
+        ret = self.find_data("PSU", id, "vin_high")
+        return True if ret == "true" else False
+
+    def psu_vin_low(self, id):
+        ret = self.find_data("PSU", id, "vin_low")
+        return True if ret == "true" else False
+
+    def get_periph_temperature(self, type, id):
+        type_name = periph_type._VALUES_TO_NAMES[type]
+        temp = self.find_data(type_name, id, "temperature")
+        return ret_temp(0, temp)
+
+    def get_inventory(self, type, id):
+        tmp = inventory()
+        type_name = periph_type._VALUES_TO_NAMES[type]
+        eeprom = self.find_data(type_name, id, "eeprom")
+        if not eeprom :
+            return ret_inventory(error_code.ERROR, None)
+
+        tmp.type = eeprom["type"]
+        # tmp.model_name = eeprom["model_name"]
+        tmp.pn = eeprom["pn"]
+        tmp.sn = eeprom["sn"]
+        tmp.label = eeprom["label"]
+        tmp.hw_ver = eeprom["hw_ver"]
+        tmp.sw_ver = eeprom["sw_ver"]
+        tmp.mfg_date = eeprom["mfg_date"]
+        tmp.mac_addr = eeprom["mac_addr"]
+        return ret_inventory(error_code.OK, tmp)
+
+    def set_led_color(self, type, id, color):
+        """
+        Parameters:
+         - type
+         - id
+         - color
+
+        """
+        return 0
+
+    def set_led_state(self, type, id, state):
+        """
+        Parameters:
+         - type
+         - id
+         - state
+
+        """
+        return 0
+
+    def get_reboot_type(self):
+        pass
+
+    def peripheral_reboot(self, type, id, reboot_type):
+        """
+        Parameters:
+         - type
+         - id
+         - reboot_type
+
+        """
+        pass
+
+    def update_slot_power_time(self, slot_id):
+        """
+        Parameters:
+         - slot_id
+
+        """
+        pass
+
+    def recover_linecard_default_config(self, id, type):
+        """
+        Parameters:
+         - id
+         - type
+
+        """
+        pass
+
+    def switch_slot_uart(self, id):
+        """
+        Parameters:
+         - id
+
+        """
+        pass
+
+    def get_fan_speed(self, id):
+        speed = fan_speed()
+        ret = self.find_data("FAN", id, "speed")
+        speed.front = ret["front"]
+        speed.behind = ret["behind"]
+        return ret_fan_speed(error_code.OK, speed)
+
+    def get_fan_speed_spec(self, id):
+        spec = fan_speed_spec()
+        ret = self.find_data("FAN", id, "speed_spec")
+        spec.max = ret["max"]
+        spec.min = ret["min"]
+        return spec
+
+    def set_fan_enable(self, id):
+        """
+        Parameters:
+         - fan_id
+
+        """
+        pass
+
+    def set_fan_speed_rate(self, id, speed):
+        """
+        Parameters:
+         - fan_id
+         - fan_speed
+
+        """
+        return 0
+
+    def set_power_control(self, slot_id, type):
+        return 0
+
+    def update_db_slot_status(self, type, status) :
+        type_name = periph_type._VALUES_TO_NAMES[type]
+        status_name = periph.get_slot_status_name(status)
+        for each in self.data[type_name]:
+            id = int(each["id"])
+            name = f"{type_name}-1-{id}"
+
+            ret = self.find_data(type_name, id, "presence")
+            if ret != "true" :
+                continue
+
+            db_num = 0
+            multi_db = False
+            if id <= 4 :
+                db_num = id
+                multi_db = True
+            dbc = db.Client(db_num, db.STATE_DB, multi_db)
+            dbc.set_field(type_name, name, "slot-status", status_name)
+            # if type_name == "LINECARD" :
+            #     dbc.set_field(type_name, name, "linecard-type", self.find_data(type_name, id, "linecard-type"))
+            print(f"update {name} slot-status {status_name}")
+
+def main():
+    handler = IfaceHandler()
+    processor = periph_rpc.Processor(handler)
+    transport = TSocket.TServerSocket('127.0.0.1', 9092)
+    t_factory = TTransport.TBufferedTransportFactory()
+    p_factory = TBinaryProtocol.TBinaryProtocolFactory()
+
+    server = TServer.TSimpleServer(processor, transport, t_factory, p_factory)
+
+    print("Starting python server...")
+
+    linecard_timer = Timer(60, handler.update_db_slot_status, (periph_type.LINECARD, slot_status.READY, ))
+    linecard_timer.start()
+
+    server.serve()
+    print("done!")
+
+if __name__ == '__main__':
+    main()

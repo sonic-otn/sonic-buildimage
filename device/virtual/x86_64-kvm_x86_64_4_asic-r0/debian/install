@@ -1,0 +1,6 @@
+config_db*.json etc/sonic/factory/vs
+vs_p230c/flexcounter.json etc/sonic/factory/vs_p230c/
+vs_e110c/flexcounter.json etc/sonic/factory/vs_e110c/
+vs_ocm8/flexcounter.json etc/sonic/factory/vs_ocm8/
+vs_otdr8/flexcounter.json etc/sonic/factory/vs_otdr8/
+

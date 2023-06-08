@@ -1,0 +1,20 @@
+[Unit]
+Description=chrony sync process service
+Requires=database.service
+
+After=database.service
+
+BindsTo=sonic.target
+
+After=sonic.target
+
+StartLimitIntervalSec=1200
+
+StartLimitBurst= 1200
+
+[Service]
+ExecStart=/usr/bin/write2Redis.sh
+RestartSec=30
+
+[Install]
+WantedBy=sonic.target

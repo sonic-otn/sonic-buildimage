@@ -9,19 +9,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update &&       \
     apt-get install -f -y   \
-        ifupdown            \
-        arping              \
-        iproute2            \
-        ndisc6              \
-        tcpdump             \
-        libelf1             \
-        libmnl0             \
-        bridge-utils        \
-        conntrack           \
-        ndppd               \
         # Needed for installing netifaces Python package
         build-essential     \
         python3-dev
+
 
 {% if ( CONFIGURED_ARCH == "armhf" or CONFIGURED_ARCH == "arm64" ) %}
 # Fix for gcc/python not found in arm docker
@@ -63,11 +54,9 @@ RUN apt-get purge -y          \
     apt-get autoremove -y  && \
     rm -rf /debs
 
-COPY ["files/arp_update", "/usr/bin"]
-COPY ["arp_update.conf", "files/arp_update_vars.j2", "/usr/share/sonic/templates/"]
-COPY ["ndppd.conf", "/usr/share/sonic/templates/"]
-COPY ["enable_counters.py", "/usr/bin"]
-COPY ["docker-init.sh", "orchagent.sh", "swssconfig.sh", "buffermgrd.sh", "/usr/bin/"]
+RUN apt-get install -f -y gdb
+
+COPY ["docker-init.sh", "orchagent.sh", "/usr/bin/"]
 COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
 COPY ["files/supervisor-proc-exit-listener", "/usr/bin"]
 COPY ["critical_processes", "/etc/supervisor/"]

@@ -73,7 +73,7 @@ def main():
                                      formatter_class=argparse.RawTextHelpFormatter,
                                      epilog="""
 Examples:
-  docker-wait-any -s swss -d syncd teamd
+  docker-wait-any -s swss -d syncd
 """)
 
     parser.add_argument('-s', '--service', nargs='+', default=None, help='name of the service')

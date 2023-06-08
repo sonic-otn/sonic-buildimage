@@ -1,0 +1,189 @@
+
+[
+    {
+        "OTDR_COUNTER_ID_LIST_STATUS": {
+
+            "attr1": "LAI_OTDR_ATTR_REFRACTIVE_INDEX",
+
+
+            "attr2": "LAI_OTDR_ATTR_BACKSCATTER_INDEX",
+
+
+            "attr3": "LAI_OTDR_ATTR_REFLECTION_THRESHOLD",
+
+
+            "attr4": "LAI_OTDR_ATTR_SPLICE_LOSS_THRESHOLD",
+
+
+            "attr5": "LAI_OTDR_ATTR_END_OF_FIBER_THRESHOLD",
+
+
+            "attr6": "LAI_OTDR_ATTR_DISTANCE_RANGE",
+
+
+            "attr7": "LAI_OTDR_ATTR_PULSE_WIDTH",
+
+
+            "attr8": "LAI_OTDR_ATTR_AVERAGE_TIME",
+
+
+            "attr9": "LAI_OTDR_ATTR_OUTPUT_FREQUENCY",
+
+
+            "attr10": "LAI_OTDR_ATTR_DYNAMIC_RANGE",
+
+
+            "attr11": "LAI_OTDR_ATTR_DISTANCE_ACCURACY",
+
+
+            "attr12": "LAI_OTDR_ATTR_SAMPLING_RESOLUTION",
+
+
+            "attr13": "LAI_OTDR_ATTR_LOSS_DEAD_ZONE",
+
+
+            "attr14": "LAI_OTDR_ATTR_REFLECTION_DEAD_ZONE",
+
+
+            "attr15": "LAI_OTDR_ATTR_SCANNING_STATUS",
+
+
+            "attr16": "LAI_OTDR_ATTR_SERIAL_NO",
+
+
+            "attr17": "LAI_OTDR_ATTR_PART_NO",
+
+
+            "attr18": "LAI_OTDR_ATTR_MFG_NAME",
+
+
+            "attr19": "LAI_OTDR_ATTR_MFG_DATE",
+
+
+            "attr20": "LAI_OTDR_ATTR_HARDWARE_VERSION",
+
+
+            "attr21": "LAI_OTDR_ATTR_OPER_STATUS",
+
+
+            "attr22": "LAI_OTDR_ATTR_EMPTY",
+
+
+            "attr23": "LAI_OTDR_ATTR_REMOVABLE",
+
+
+            "attr24": "LAI_OTDR_ATTR_SOFTWARE_VERSION"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_STATUS": {
+
+            "attr1": "LAI_LINECARD_ATTR_POWER_ADMIN_STATE",
+
+
+            "attr2": "LAI_LINECARD_ATTR_EMPTY",
+
+
+            "attr3": "LAI_LINECARD_ATTR_PART_NO",
+
+
+            "attr4": "LAI_LINECARD_ATTR_SERIAL_NO",
+
+
+            "attr5": "LAI_LINECARD_ATTR_HARDWARE_VERSION",
+
+
+            "attr6": "LAI_LINECARD_ATTR_MFG_DATE",
+
+
+            "attr7": "LAI_LINECARD_ATTR_REMOVABLE",
+
+
+            "attr8": "LAI_LINECARD_ATTR_LINECARD_TYPE",
+
+
+            "attr9": "LAI_LINECARD_ATTR_ADMIN_STATE",
+
+
+            "attr10": "LAI_LINECARD_ATTR_OPER_STATUS",
+
+
+            "attr11": "LAI_LINECARD_ATTR_RELAY",
+
+
+            "attr12": "LAI_LINECARD_ATTR_CPLD_VERSION",
+
+
+            "attr13": "LAI_LINECARD_ATTR_SCRIPT_VERSION",
+
+
+            "attr14": "LAI_LINECARD_ATTR_MFG_NAME",
+
+
+            "attr15": "LAI_LINECARD_ATTR_BAUD_RATE",
+
+
+            "attr16": "LAI_LINECARD_ATTR_SOFTWARE_VERSION",
+
+
+            "attr17": "LAI_LINECARD_ATTR_FPGA_VERSION",
+
+
+            "attr18": "LAI_LINECARD_ATTR_UCD_VERSION",
+
+
+            "attr19": "LAI_LINECARD_ATTR_TEMP_HIGH_ALARM_THRESHOLD",
+
+
+            "attr20": "LAI_LINECARD_ATTR_TEMP_HIGH_WARN_THRESHOLD",
+
+
+            "attr21": "LAI_LINECARD_ATTR_TEMP_LOW_ALARM_THRESHOLD",
+
+
+            "attr22": "LAI_LINECARD_ATTR_TEMP_LOW_WARN_THRESHOLD",
+
+
+            "attr23": "LAI_LINECARD_ATTR_SLOT_ID",
+
+
+            "attr24": "LAI_LINECARD_ATTR_LED_MODE",
+
+
+            "attr25": "LAI_LINECARD_ATTR_LED_FLASH_INTERVAL",
+
+
+            "attr26": "LAI_LINECARD_ATTR_LED_COLOR",
+
+
+            "attr27": "LAI_LINECARD_ATTR_EQUIPMENT_FAILURE",
+
+
+            "attr28": "LAI_LINECARD_ATTR_EQUIPMENT_MISMATCH"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_GAUGE": {
+
+            "attr1": "LAI_LINECARD_STAT_MEMORY_AVAILABLE",
+
+
+            "attr2": "LAI_LINECARD_STAT_MEMORY_UTILIZED",
+
+
+            "attr3": "LAI_LINECARD_STAT_CPU_UTILIZATION",
+
+
+            "attr4": "LAI_LINECARD_STAT_TEMPERATURE"
+
+
+        },
+        "OP": "SET"
+    }
+]

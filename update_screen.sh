@@ -30,7 +30,8 @@ function remove_target {
 # Check if TERM is available
 local status="finished"
 [[ ! -z "${2}" ]] &&  status="cached"
-[[ "${TERM}" == "dumb" ]] && echo "[ ${status} ] [ $1 ] " && return
+time=`date | awk '{print $4}'`
+[[ "${TERM}" == "dumb" ]] && echo "[ ${status} at $time ] [ $1 ] " && return
 
 old_list=$(cat ${target_list_file})
 rm ${target_list_file}
@@ -44,7 +45,8 @@ touch ${target_list_file}
 
 function add_target {
 # Check if TERM is available
-[[ "${TERM}" == "dumb" ]] && echo "[ building ] [ $1 ] " && return
+time=`date | awk '{print $4}'`
+[[ "${TERM}" == "dumb" ]] && echo "[ building at $time ] [ $1 ] " && return
 
 echo $1 >> ${target_list_file}
 }

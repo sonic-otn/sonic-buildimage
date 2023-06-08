@@ -1,0 +1,139 @@
+{%- set aps_id_list = ['1'] %}
+{%- set apsport_type_list = ['LinePrimaryIn','LineSecondaryIn','CommonIn','LinePrimaryOut','LineSecondaryOut','CommonOutput'] %}
+{%- set apsport_type_v2_list = ['LINE_PRIMARY_IN','LINE_SECONDARY_IN','COMMON_IN','LINE_PRIMARY_OUT','LINE_SECONDARY_OUT','COMMON_OUTPUT'] %}
+{%- set attenuator_id_list = ['1','2'] %}
+{
+    "LINECARD": {
+        "LINECARD-1-{{linecard_id}}": {
+            "linecard-type": "E120C"
+        }
+    },
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic_id": {{asic_id}},
+            "hwsku": "e120c"
+        }   
+    },
+    "APS": {
+{% for id in aps_id_list %}
+        "APS-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }},
+            "name": "APS-1-{{linecard_id}}-{{id}}",
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}",
+            "subcomponents": "PORT-1-{{linecard_id}}-OLPPRIIN,PORT-1-{{linecard_id}}-OLPPRIOUT,PORT-1-{{linecard_id}}-OLPSECIN,PORT-1-{{linecard_id}}-OLPSECOUT,PORT-1-{{linecard_id}}-OLPCOMIN,PORT-1-{{linecard_id}}-OLPCOMOUT"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "APS_PORT": {
+{% for aps in aps_id_list %}
+{% for i in range(0,apsport_type_list|length) %}
+        "APS-1-{{linecard_id}}-{{aps}}_{{ apsport_type_list[i] }}": {
+            "index": {{ loop.index }},
+            "id": {{ aps }},
+            "port-type": "{{ apsport_type_v2_list[i] }}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+{% endfor %}
+    },
+    "PORT": {
+        "PORT-1-{{linecard_id}}-C1IN": {
+            "index": 1,
+            "port-type": "CLIENT_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "APS-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-C1OUT": {
+            "index": 2,
+            "port-type": "CLIENT_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "APS-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-L1IN": {
+            "index": 3,
+            "port-type": "LINE_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        },
+        "PORT-1-{{linecard_id}}-L1OUT": {
+            "index": 4,
+            "port-type": "LINE_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        },
+        "PORT-1-{{linecard_id}}-L2IN": {
+            "index": 5,
+            "port-type": "LINE_IN",
+            "port-id": 2,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        },
+        "PORT-1-{{linecard_id}}-L2OUT": {
+            "index": 6,
+            "port-type": "LINE_OUT",
+            "port-id": 2,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        },
+        "PORT-1-{{linecard_id}}-OLPPRIIN": {
+            "index": 7,
+            "port-type": "OLP_PRI_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "APS-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-OLPPRIOUT": {
+            "index": 8,
+            "port-type": "OLP_PRI_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "APS-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-OLPSECIN": {
+            "index": 9,
+            "port-type": "OLP_SEC_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "APS-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-OLPSECOUT": {
+            "index": 10,
+            "port-type": "OLP_SEC_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "APS-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-OLPCOMIN": {
+            "index": 11,
+            "port-type": "OLP_COM_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "APS-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-OLPCOMOUT": {
+            "index": 12,
+            "port-type": "OLP_COM_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "APS-1-{{linecard_id}}-1"
+        }
+    },
+    "ATTENUATOR": {
+{% for id in attenuator_id_list %}
+        "ATTENUATOR-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }},
+            "name": "ATTENUATOR-1-{{linecard_id}}-{{id}}",
+            "component": "ATTENUATOR-1-{{linecard_id}}-{{id}}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    }
+}

@@ -1,0 +1,11 @@
+[Unit]
+Description=alarm daemon process 
+
+After=config-setup.service
+
+[Service]
+ExecStart=/usr/bin/alarm_daemon.py
+RestartSec=30
+
+[Install]
+WantedBy=sonic.target

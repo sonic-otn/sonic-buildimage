@@ -1,0 +1,17 @@
+
+#DPKG FRK
+SPATH       := $($(LIBLAIREDIS)_SRC_PATH)
+DEP_FILES   := $(SONIC_COMMON_FILES_LIST) rules/lairedis.mk rules/lairedis.dep   
+DEP_FILES   += $(SONIC_COMMON_BASE_FILES_LIST)
+
+SMDEP_PATHS := $(SPATH) $(SPATH)/LAI 
+$(foreach path, $(SMDEP_PATHS), $(eval $(path) :=$(filter-out $(SMDEP_PATHS),$(addprefix $(path)/, \
+					$(shell cd $(path)  && git ls-files | grep -v " ")))))
+
+
+$(LIBLAIREDIS)_CACHE_MODE  := GIT_CONTENT_SHA
+$(LIBLAIREDIS)_DEP_FLAGS   := $(SONIC_COMMON_FLAGS_LIST)
+$(LIBLAIREDIS)_DEP_FILES   := $(DEP_FILES)
+$(LIBLAIREDIS)_SMDEP_FILES := $(foreach path, $(SMDEP_PATHS), $($(path)))
+$(LIBLAIREDIS)_SMDEP_PATHS := $(SMDEP_PATHS)
+

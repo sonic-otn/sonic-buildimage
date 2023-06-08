@@ -2,10 +2,6 @@
 Description=switch state service
 Requires=database{% if multi_instance == 'true' %}@%i{% endif %}.service
 After=database{% if multi_instance == 'true' %}@%i{% endif %}.service
-{% if multi_instance == 'true' and sonic_asic_platform == 'vs' %}
-Requires=topology.service
-After=topology.service
-{% endif %}
 {% if sonic_asic_platform == 'broadcom' %}
 Requires=opennsl-modules.service
 {% endif %}

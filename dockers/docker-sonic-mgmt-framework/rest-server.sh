@@ -45,7 +45,7 @@ if [ -z $SERVER_CRT ] && [ -z $SERVER_KEY ]; then
 fi
 
 
-REST_SERVER_ARGS="-ui /rest_ui -logtostderr"
+REST_SERVER_ARGS="-ui /rest_ui -logtostderr -client_auth user"
 [ ! -z $SERVER_PORT ] && REST_SERVER_ARGS+=" -port $SERVER_PORT"
 [ ! -z $LOG_LEVEL   ] && REST_SERVER_ARGS+=" -v $LOG_LEVEL"
 [ ! -z $CLIENT_AUTH ] && REST_SERVER_ARGS+=" -client_auth $CLIENT_AUTH"

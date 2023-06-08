@@ -1,7 +1,0 @@
-# LED microprocessor initialization for Dell z9332f 
-#
-#
-#Led0
-#Support only after SAI 3.6
-#led auto on
-#led start

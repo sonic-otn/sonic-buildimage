@@ -49,7 +49,8 @@ else
     sonic-cfggen -p /usr/share/sonic/device/$PLATFORM/platform.json -k $HWSKU --print-data > /tmp/ports.json
     # change admin_status from up to down; Test cases dependent
     sed -i "s/up/down/g" /tmp/ports.json
-    sonic-cfggen -j /etc/sonic/init_cfg.json -j /tmp/buffers.json -j /tmp/qos.json -j /tmp/ports.json --print-data > /etc/sonic/config_db.json
+    #sonic-cfggen -j /etc/sonic/init_cfg.json -j /tmp/ports.json --print-data > /etc/sonic/config_db.json
+    sonic-cfggen -j /usr/share/sonic/device/$PLATFORM/lai_cfg.json --print-data > /etc/sonic/config_db.json
 fi
 sonic-cfggen -t /usr/share/sonic/templates/copp_cfg.j2 > /etc/sonic/copp_cfg.json
 
@@ -97,50 +98,23 @@ fi
 
 supervisorctl start syncd
 
+supervisorctl start linecardmgrd
+
 supervisorctl start portsyncd
+
+supervisorctl start transceiversyncd 
+
+supervisorctl start ethernetsyncd
+
+supervisorctl start lldpsyncd
+
+supervisorctl start ochsyncd
+
+supervisorctl start logicalchannelsyncd 
+
+supervisorctl start otnsyncd
+
+supervisorctl start physicalchannelsyncd
 
 supervisorctl start orchagent
 
-supervisorctl start coppmgrd
-
-supervisorctl start neighsyncd
-
-supervisorctl start fdbsyncd
-
-supervisorctl start teamsyncd
-
-supervisorctl start fpmsyncd
-
-supervisorctl start teammgrd
-
-supervisorctl start vrfmgrd
-
-supervisorctl start portmgrd
-
-supervisorctl start intfmgrd
-
-supervisorctl start vlanmgrd
-
-supervisorctl start zebra
-
-supervisorctl start staticd
-
-supervisorctl start buffermgrd
-
-supervisorctl start nbrmgrd
-
-supervisorctl start vxlanmgrd
-
-supervisorctl start sflowmgrd
-
-supervisorctl start natmgrd
-
-supervisorctl start natsyncd
-
-supervisorctl start tunnelmgrd
-
-# Start arp_update when VLAN exists
-VLAN=`sonic-cfggen -d -v 'VLAN.keys() | join(" ") if VLAN'`
-if [ "$VLAN" != "" ]; then
-    supervisorctl start arp_update
-fi

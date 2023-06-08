@@ -403,7 +403,7 @@ demo_install_uefi_grub()
         --no-nvram \
         --bootloader-id="$demo_volume_label" \
         --efi-directory="/boot/efi" \
-        --boot-directory="$demo_mnt" \
+        --boot-directory="$demo_mnt/boot" \
         --recheck \
         "$blk_dev" > /$grub_install_log 2>&1 || {
         echo "ERROR: grub-install failed on: $blk_dev"
@@ -639,6 +639,7 @@ if [ "$install_env" = "onie" ]; then
     # ONIE distribution.
     $onie_root_dir/grub.d/50_onie_grub >> $grub_cfg
     mkdir -p $onie_initrd_tmp/$demo_mnt/grub
+    mkdir -p $onie_initrd_tmp/$demo_mnt/boot
 else
 cat <<EOF >> $grub_cfg
 $old_sonic_menuentry
@@ -648,9 +649,11 @@ fi
 
 if [ "$install_env" = "build" ]; then
     cp $grub_cfg $demo_mnt/grub.cfg
+    cp $grub_cfg $demo_mnt/boot/grub.cfg
     umount $demo_mnt
 else
     cp $grub_cfg $onie_initrd_tmp/$demo_mnt/grub/grub.cfg
+    cp $grub_cfg $onie_initrd_tmp/$demo_mnt/boot/grub/grub.cfg
 fi
 
 cd /

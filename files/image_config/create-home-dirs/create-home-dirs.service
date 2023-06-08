@@ -1,0 +1,14 @@
+[Unit]
+Description=Create users home directories if necessary
+Requires=updategraph.service
+After=updategraph.service
+BindsTo=sonic.target
+After=sonic.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/create-home-dirs.sh
+
+[Install]
+WantedBy=sonic.target

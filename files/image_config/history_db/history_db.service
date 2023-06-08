@@ -1,0 +1,32 @@
+[Unit]
+Description=save history db
+Requires=database@0.service
+
+Requires=database@1.service
+
+Requires=database@2.service
+
+Requires=database@3.service
+
+After=database@0.service
+
+After=database@1.service
+
+After=database@2.service
+
+After=database@3.service
+
+BindsTo=sonic.target
+
+After=sonic.target
+
+StartLimitIntervalSec=1200
+
+StartLimitBurst= 1200
+
+[Service]
+ExecStart=/usr/bin/save_history.sh
+RestartSec=30
+
+[Install]
+WantedBy=sonic.target

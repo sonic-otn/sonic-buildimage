@@ -52,6 +52,7 @@ setup(
     ],
     scripts = [
         'sonic-cfggen',
+        'upgrade_config',
     ],
     install_requires = dependencies,
     data_files = [

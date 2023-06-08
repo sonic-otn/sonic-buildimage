@@ -1,0 +1,13 @@
+{
+    "number" : {
+        "CHASSIS" : 1,
+        "CU" : 1,
+        "LINECARD" : 4,
+        "FAN" : 5,
+        "PSU" : 2
+    },
+    "expected-pn" : {
+        "CHASSIS" : "1141TAC000",
+        "PSU" : "R1K3AX06P,R1CA2801A,CSU800AP-3,GW-CRPS800N2,CRPS1300D"
+    }
+}

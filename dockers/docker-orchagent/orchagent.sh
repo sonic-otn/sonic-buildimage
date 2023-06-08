@@ -6,12 +6,6 @@ SWSS_VARS_FILE=/usr/share/sonic/templates/swss_vars.j2
 SWSS_VARS=$(sonic-cfggen -d -y /etc/sonic/sonic_version.yml -t $SWSS_VARS_FILE) || exit 1
 export platform=$(echo $SWSS_VARS | jq -r '.asic_type')
 
-MAC_ADDRESS=$(echo $SWSS_VARS | jq -r '.mac')
-if [ "$MAC_ADDRESS" == "None" ] || [ -z "$MAC_ADDRESS" ]; then
-    MAC_ADDRESS=$(ip link show eth0 | grep ether | awk '{print $2}')
-    logger "Mac address not found in Device Metadata, Falling back to eth0"
-fi
-
 # Create a folder for SwSS record files
 mkdir -p /var/log/swss
 ORCHAGENT_ARGS="-d /var/log/swss "
@@ -43,29 +37,13 @@ fi
 
 # for multi asic platforms add the asic name to the record file names
 if [[ "$NAMESPACE_ID" ]]; then
-    ORCHAGENT_ARGS+="-f swss.asic$NAMESPACE_ID.rec -j sairedis.asic$NAMESPACE_ID.rec "
+    ORCHAGENT_ARGS+="-f swss.asic$NAMESPACE_ID.rec -j lairedis.asic$NAMESPACE_ID.rec "
 fi
 
-# Add platform specific arguments if necessary
-if [ "$platform" == "broadcom" ]; then
-    ORCHAGENT_ARGS+="-m $MAC_ADDRESS"
-elif [ "$platform" == "cavium" ]; then
-    ORCHAGENT_ARGS+="-m $MAC_ADDRESS"
-elif [ "$platform" == "nephos" ]; then
-    ORCHAGENT_ARGS+="-m $MAC_ADDRESS"
-elif [ "$platform" == "centec" ]; then
-    ORCHAGENT_ARGS+="-m $MAC_ADDRESS"
-elif [ "$platform" == "barefoot" ]; then
-    ORCHAGENT_ARGS+="-m $MAC_ADDRESS"
-elif [ "$platform" == "vs" ]; then
-    ORCHAGENT_ARGS+="-m $MAC_ADDRESS"
-elif [ "$platform" == "mellanox" ]; then
-    ORCHAGENT_ARGS+=""
-elif [ "$platform" == "innovium" ]; then
-    ORCHAGENT_ARGS+="-m $MAC_ADDRESS"
-else
-    # Should we use the fallback MAC in case it is not found in Device.Metadata
-    ORCHAGENT_ARGS+="-m $MAC_ADDRESS"
+hwsku=$(echo $SWSS_VARS | jq -r '.hwsku')
+if [ -n "$hwsku" ]
+then
+    ORCHAGENT_ARGS+="-c /etc/sonic/factory/$hwsku/flexcounter.json "
 fi
 
 exec /usr/bin/orchagent ${ORCHAGENT_ARGS}

@@ -4,12 +4,17 @@ DOCKER_ORCHAGENT_STEM = docker-orchagent
 DOCKER_ORCHAGENT = $(DOCKER_ORCHAGENT_STEM).gz
 DOCKER_ORCHAGENT_DBG = $(DOCKER_ORCHAGENT_STEM)-$(DBG_IMAGE_MARK).gz
 
-$(DOCKER_ORCHAGENT)_DEPENDS += $(SWSS)
+$(DOCKER_ORCHAGENT)_DEPENDS += $(SWSS) \
+                               $(SWSS_DBG) \
+                               $(LIBSWSSCOMMON_DBG) \
+                               $(LIBLAIREDIS_DBG) \
+                               $(LIBLAIMETADATA_DBG)
 
 $(DOCKER_ORCHAGENT)_DBG_DEPENDS = $($(DOCKER_CONFIG_ENGINE_BUSTER)_DBG_DEPENDS)
 $(DOCKER_ORCHAGENT)_DBG_DEPENDS +=   $(SWSS_DBG) \
                                 $(LIBSWSSCOMMON_DBG) \
-                                $(LIBSAIREDIS_DBG)
+                                $(LIBLAIREDIS_DBG) \
+                                $(LIBLAIMETADATA_DBG)
 
 $(DOCKER_ORCHAGENT)_DBG_IMAGE_PACKAGES = $($(DOCKER_CONFIG_ENGINE_BUSTER)_DBG_IMAGE_PACKAGES)
 

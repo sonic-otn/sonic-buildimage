@@ -1,13 +1,3 @@
 program:orchagent
-program:portsyncd
-program:neighsyncd
-program:fdbsyncd
-program:vlanmgrd
-program:intfmgrd
-program:portmgrd
-program:buffermgrd
-program:vrfmgrd
-program:nbrmgrd
-program:vxlanmgrd
-program:coppmgrd
-program:tunnelmgrd
+program:linecardmgrd
+program:configsyncd

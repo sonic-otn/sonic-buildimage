@@ -1,0 +1,112 @@
+From c7405209b555006f680e1121ebc8edda7162f297 Mon Sep 17 00:00:00 2001
+From: Jenkins <jenkins@obx-sonic011158130130.NA62>
+Date: Mon, 21 Nov 2022 20:39:42 +0800
+Subject: [PATCH] cross-compile frr
+
+---
+ debian/frr-doc.info    |  2 +-
+ debian/frr-doc.install |  1 -
+ debian/frr.manpages    | 32 ++++++++++++++++----------------
+ debian/rules           | 15 +++++++++++----
+ 4 files changed, 28 insertions(+), 22 deletions(-)
+
+diff --git a/debian/frr-doc.info b/debian/frr-doc.info
+index a83255a..1976365 100644
+--- a/debian/frr-doc.info
++++ b/debian/frr-doc.info
+@@ -1 +1 @@
+-doc/user/_build/texinfo/frr.info
++build/doc/user/_build/texinfo/frr.info
+diff --git a/debian/frr-doc.install b/debian/frr-doc.install
+index c48dc5a..955c8fc 100644
+--- a/debian/frr-doc.install
++++ b/debian/frr-doc.install
+@@ -3,7 +3,6 @@ usr/share/doc/frr/html
+ 
+ # info + images referenced by it
+ usr/share/info/
+-doc/user/_build/texinfo/*.png usr/share/info
+ 
+ # other
+ README.md         usr/share/doc/frr
+diff --git a/debian/frr.manpages b/debian/frr.manpages
+index 5075fd7..5a1b74c 100644
+--- a/debian/frr.manpages
++++ b/debian/frr.manpages
+@@ -1,16 +1,16 @@
+-doc/manpages/_build/man/frr-bgpd.8
+-doc/manpages/_build/man/frr-eigrpd.8
+-doc/manpages/_build/man/frr-fabricd.8
+-doc/manpages/_build/man/frr-isisd.8
+-doc/manpages/_build/man/frr-ldpd.8
+-doc/manpages/_build/man/frr-nhrpd.8
+-doc/manpages/_build/man/frr-ospf6d.8
+-doc/manpages/_build/man/frr-ospfd.8
+-doc/manpages/_build/man/frr-pimd.8
+-doc/manpages/_build/man/frr-ripd.8
+-doc/manpages/_build/man/frr-ripngd.8
+-doc/manpages/_build/man/frr-watchfrr.8
+-doc/manpages/_build/man/frr-zebra.8
+-doc/manpages/_build/man/frr.1
+-doc/manpages/_build/man/mtracebis.8
+-doc/manpages/_build/man/vtysh.1
++build/doc/manpages/_build/man/frr-bgpd.8
++build/doc/manpages/_build/man/frr-eigrpd.8
++build/doc/manpages/_build/man/frr-fabricd.8
++build/doc/manpages/_build/man/frr-isisd.8
++build/doc/manpages/_build/man/frr-ldpd.8
++build/doc/manpages/_build/man/frr-nhrpd.8
++build/doc/manpages/_build/man/frr-ospf6d.8
++build/doc/manpages/_build/man/frr-ospfd.8
++build/doc/manpages/_build/man/frr-pimd.8
++build/doc/manpages/_build/man/frr-ripd.8
++build/doc/manpages/_build/man/frr-ripngd.8
++build/doc/manpages/_build/man/frr-watchfrr.8
++build/doc/manpages/_build/man/frr-zebra.8
++build/doc/manpages/_build/man/frr.1
++build/doc/manpages/_build/man/mtracebis.8
++build/doc/manpages/_build/man/vtysh.1
+diff --git a/debian/rules b/debian/rules
+index c8550ec..20a5830 100755
+--- a/debian/rules
++++ b/debian/rules
+@@ -29,10 +29,17 @@ else
+   CONF_SYSTEMD=--enable-systemd=no
+ endif
+ 
++DEB_BUILD_ARCH ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH)
++DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
++
++ifneq ($(DEB_BUILD_ARCH),$(DEB_HOST_ARCH))
++export PYTHON=/python_virtualenv/env3/bin/python3
++else
+ export PYTHON=python3
++endif
+ 
+ %:
+-	dh $@ --with=$(DH_WITH_SYSTEMD)autoreconf --parallel
++	dh $@ --with=$(DH_WITH_SYSTEMD)autoreconf --parallel --builddirectory=build
+ 
+ override_dh_auto_configure:
+ 	$(shell dpkg-buildflags --export=sh); \
+@@ -70,14 +77,14 @@ override_dh_auto_configure:
+ override_dh_auto_install:
+ 	dh_auto_install
+ 
+-	sed -e '1c #!/usr/bin/python3' -i debian/tmp/usr/lib/frr/frr-reload.py
+-	sed -e '1c #!/usr/bin/python3' -i debian/tmp/usr/lib/frr/generate_support_bundle.py
++	sed -e '1c #!$(shell which $PYTHON)' -i debian/tmp/usr/lib/frr/frr-reload.py
++	sed -e '1c #!$(shell which $PYTHON)' -i debian/tmp/usr/lib/frr/generate_support_bundle.py
+ 
+ # let dh_systemd_* and dh_installinit do their thing automatically
+ ifeq ($(filter pkg.frr.nosystemd,$(DEB_BUILD_PROFILES)),)
+ 	cp tools/frr.service debian/frr.service
+ endif
+-	cp tools/frrinit.sh debian/frr.init
++	cp build/tools/frrinit.sh debian/frr.init
+ 	-rm -f debian/tmp/usr/lib/frr/frr
+ 
+ # install config files
+-- 
+2.7.4
+

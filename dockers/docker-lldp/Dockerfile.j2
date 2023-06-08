@@ -13,6 +13,7 @@ ENV IMAGE_VERSION=$image_version
 
 # Update apt's cache of available packages
 RUN apt-get update
+RUN apt-get install -f -y tcpreplay
 
 {% if docker_lldp_debs.strip() -%}
 # Copy locally-built Debian package dependencies

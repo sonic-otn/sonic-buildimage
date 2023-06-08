@@ -1,0 +1,12 @@
+.ONESHELL:
+SHELL = /bin/bash
+.SHELLFLAGS += -e
+n := 0
+all:
+	@(n=$(n); \
+        while [ $${n} -lt $${NUM_ASIC} ]; do \
+            slot=`expr $$n + 1`; \
+            asic_id=$$n linecard_id=$${slot} j2 config_db.json.j2 > config_db$$n.json; \
+            n=`expr $$n + 1`; \
+        done;)
+	@(j2 flexcounter.json.j2 > flexcounter.json;)

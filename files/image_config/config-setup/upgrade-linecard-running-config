@@ -1,0 +1,70 @@
+CONFIG_DB_PATH=/etc/sonic/
+CONFIG_DB_FACTORY_PATH=/etc/sonic/factory/
+OLD_FACTORY_CONF_PATH=/host/linecard_factory_config
+OLD_RUNNING_CONF_PATH=/host/linecard_running_config
+UPGRADE_CONFIG=/usr/local/bin/upgrade_config
+
+if [ -d ${OLD_FACTORY_CONF_PATH} ]; then
+
+    PLATFORM=${PLATFORM:-`sonic-cfggen -H -v DEVICE_METADATA.localhost.platform`}
+    ASIC_CONF=/usr/share/sonic/device/$PLATFORM/asic.conf
+    if [[ -f "$ASIC_CONF" ]]; then
+        source $ASIC_CONF
+    fi
+    
+    echo "NUM_ASIC = $NUM_ASIC ..."
+    
+    if [[ ($NUM_ASIC -gt 1) ]]; then
+        asic_num=0
+        while [[ ($asic_num -lt $NUM_ASIC) && ($NUM_ASIC -gt 1) ]]; do
+            asic_no=$asic_num
+            slot_no=$(expr $asic_num + 1)
+            ((asic_num = asic_num + 1))
+    
+            CONFIGx_DB_JSON=${CONFIG_DB_PATH}/config_db${asic_no}.json
+            if [ ! -f ${CONFIGx_DB_JSON} ]; then
+                echo "${CONFIGx_DB_JSON} doesn't exist"
+                continue
+            fi
+            CARD_TYPE=`sonic-cfggen -j ${CONFIGx_DB_JSON} -v "LINECARD['LINECARD-1-${slot_no}']['linecard-type']" | 
+                       tr "[:upper:]" "[:lower:]"`
+            CONFIGx_DB_JSON_SRC=${OLD_FACTORY_CONF_PATH}/${CARD_TYPE}/config_db${asic_no}.json
+            if [ ! -f ${CONFIGx_DB_JSON_SRC} ]; then
+                echo "${CONFIGx_DB_JSON_SRC} doesn't exist"
+                continue
+            fi
+            CONFIGx_DB_JSON_DEST=${CONFIG_DB_FACTORY_PATH}/${CARD_TYPE}/config_db${asic_no}.json
+            if [ ! -f ${CONFIGx_DB_JSON_DEST} ]; then
+                echo "${CONFIGx_DB_JSON_DEST} doesn't exist"
+                continue
+            fi
+            CONFIGx_DB_JSON_TMP=/tmp/config_db${asic_no}.json
+            if [ -f ${CONFIGx_DB_JSON_TMP} ]; then
+                rm ${CONFIGx_DB_JSON_TMP}
+            fi
+    
+            if [ ! -f ${UPGRADE_CONFIG} ];then
+                echo "${UPGRADE_CONFIG} doesn't exist"
+                continue
+            fi
+    
+            echo "${UPGRADE_CONFIG} -s ${CONFIGx_DB_JSON_SRC} -d ${CONFIGx_DB_JSON_DEST} -r ${CONFIGx_DB_JSON} > ${CONFIGx_DB_JSON_TMP}"
+            ${UPGRADE_CONFIG} -s ${CONFIGx_DB_JSON_SRC} -d ${CONFIGx_DB_JSON_DEST} -r ${CONFIGx_DB_JSON} > ${CONFIGx_DB_JSON_TMP}
+            if [ -s ${CONFIGx_DB_JSON_TMP} ];then
+                echo "Upgrade config: ${CONFIGx_DB_JSON}"
+                mkdir -p ${OLD_RUNNING_CONF_PATH} 
+                cp -a ${CONFIGx_DB_JSON} ${OLD_RUNNING_CONF_PATH}
+                cp -a ${CONFIGx_DB_JSON_TMP} ${CONFIGx_DB_JSON}
+            else
+                echo "Don't need to upgrade ${CONFIGx_DB_JSON}"
+            fi
+    
+        done
+    fi
+    
+    rm -rf ${OLD_FACTORY_CONF_PATH}
+    
+else
+    echo "${OLD_FACTORY_CONF_PATH} doesn't exist"
+fi
+

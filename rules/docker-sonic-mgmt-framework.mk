@@ -26,8 +26,14 @@ endif
 
 $(DOCKER_MGMT_FRAMEWORK)_CONTAINER_NAME = mgmt-framework
 $(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += --privileged -t
+$(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += -m 800m
 $(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += -v /etc/sonic:/etc/sonic:ro
 $(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += -v /etc:/host_etc:ro
+$(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += -p 8080:8080
+$(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += -v /etc/passwd:/etc/passwd:ro
+$(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += -v /etc/group:/etc/group:ro
+$(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += -v /etc/shadow:/etc/shadow:ro
+$(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += -v /etc/timezone:/etc/timezone
 $(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += -v /var/run/dbus:/var/run/dbus:rw
 $(DOCKER_MGMT_FRAMEWORK)_RUN_OPT += --mount type=bind,source="/var/platform/",target="/mnt/platform/"
 

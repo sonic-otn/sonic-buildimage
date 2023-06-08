@@ -1,0 +1,13 @@
+[Unit]
+Description=PMON data mock daemon
+Requires=syslog.service
+After=syslog.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/devmock
+StandardOutput=null
+Restart=on-failure
+
+[Install]
+WantedBy=sonic.target

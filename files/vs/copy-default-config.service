@@ -1,0 +1,14 @@
+[Unit]
+Description=Create default configuration for vs if necessary
+Requires=updategraph.service
+After=network.target
+Before=config-setup.service
+Before=database.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/copy-default-config.sh
+
+[Install]
+WantedBy=sonic.target

@@ -3,7 +3,6 @@
 DOCKER_BASE = docker-base.gz
 $(DOCKER_BASE)_PATH = $(DOCKERS_PATH)/docker-base
 $(DOCKER_BASE)_DEPENDS += $(BASH)
-$(DOCKER_BASE)_DEPENDS += $(SOCAT)
 
 ifeq ($(INSTALL_DEBUG_TOOLS),y)
 GDB = gdb

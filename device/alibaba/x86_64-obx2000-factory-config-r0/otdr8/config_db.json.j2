@@ -1,0 +1,26 @@
+{%- set otdr_id_list = ['1', '2', '3', '4', '5', '6', '7', '8'] %}
+{
+    "LINECARD": {
+        "LINECARD-1-{{linecard_id}}": {
+            "linecard-type": "OTDR8"
+        }   
+    },  
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic_id": {{asic_id}},
+            "hwsku": "otdr8"
+        }   
+    },
+    "OTDR": {
+{% for id in otdr_id_list %}
+        "OTDR-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }},
+            "name": "OTDR-1-{{linecard_id}}-{{id}}",
+            "component": "OTDR-1-{{linecard_id}}-{{id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    }
+}

@@ -1,3 +1,0 @@
-depmod -a
-systemctl enable platform-modules-midstone-200i.service
-systemctl start platform-modules-midstone-200i.service

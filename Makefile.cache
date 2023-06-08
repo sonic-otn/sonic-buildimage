@@ -82,10 +82,6 @@ include $(RULES_PATH)/*.dep
 
 
 ifneq ($(CONFIGURED_PLATFORM), undefined)
-ifeq ($(PDDF_SUPPORT), y)
-include $(PLATFORM_PDDF_PATH)/rules.dep
-endif
-
 -include $(PLATFORM_PATH)/rules.dep
 endif
 

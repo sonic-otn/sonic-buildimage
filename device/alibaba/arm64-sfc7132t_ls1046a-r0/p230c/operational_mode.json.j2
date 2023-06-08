@@ -1,0 +1,43 @@
+{%- set operational_mode_list = ["600G::DP-64QAM::FEC-27::69.435::BICHM[0]",
+                                 "600G::DP-64QAM::FEC-15::63.054::BICHM[0]",
+                                 "600G::32QAM/64QAM::FEC-15::71.96::BICHM[33]",
+                                 "500G::DP-64QAM::FEC-27::57.863::BICHM[0]",
+                                 "500G::DP-64QAM::FEC-15::52.545::BICHM[0]",
+                                 "500G::DP-32QAM::FEC-27::69.435::BICHM[0]",
+                                 "500G::DP-32QAM::FEC-15::63.054::BICHM[0]",
+                                 "400G::DP-64QAM::FEC-27::46.29::BICHM[0]",
+                                 "400G::DP-64QAM::FEC-15::42.036::BICHM[0]",
+                                 "400G::DP-32QAM::FEC-27::55.548::BICHM[0]",
+                                 "400G::DP-32QAM::FEC-15::50.444::BICHM[0]",
+                                 "400G::DP-16QAM::FEC-27::69.435::BICHM[0]",
+                                 "400G::DP-16QAM::FEC-15::63.054::BICHM[0]",
+                                 "300G::DP-64QAM::FEC-27::34.718::BICHM[0]",
+                                 "300G::DP-64QAM::FEC-15::31.527::BICHM[0]",
+                                 "300G::DP-32QAM::FEC-27::41.661::BICHM[0]",
+                                 "300G::DP-32QAM::FEC-15::37.832::BICHM[0]",
+                                 "300G::DP-16QAM::FEC-27::52.076::BICHM[0]",
+                                 "300G::DP-16QAM::FEC-15::47.291::BICHM[0]",
+                                 "300G::DP-P-16QAM::FEC-27::69.435::BICHM[0]",
+                                 "300G::DP-P-16QAM::FEC-15::63.054::BICHM[0]",
+                                 "200G::DP-32QAM::FEC-27::27.774::BICHM[0]",
+                                 "200G::DP-32QAM::FEC-15::25.221::BICHM[0]",
+                                 "200G::DP-16QAM::FEC-27::34.718::BICHM[0]",
+                                 "200G::DP-16QAM::FEC-15::31.527::BICHM[0]",
+                                 "200G::DP-P-16QAM::FEC-27::46.29::BICHM[0]",
+                                 "200G::DP-P-16QAM::FEC-15::42.036::BICHM[0]",
+                                 "200G::DP-QPSK::FEC-27::69.435::BICHM[0]",
+                                 "200G::DP-QPSK::FEC-15::63.054::BICHM[0]",
+                                 "100G::DP-QPSK::FEC-27::34.718::BICHM[0]",
+                                 "100G::DP-QPSK::FEC-15::31.527::BICHM[0]"]%}
+{
+    "MODE": {
+{% for mode in operational_mode_list  %}
+        "{{loop.index}}": {
+            "mode-id": "{{loop.index}}",
+            "vendor-id": "Accelink",
+            "description": "{{ mode }}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    }
+}

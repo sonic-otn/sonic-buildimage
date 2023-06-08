@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 
-RUN apt-get install -f -y iproute2 libcap2-bin
+RUN apt-get install -f -y iproute2 libcap2-bin gdb
 
 COPY \
 {% for deb in docker_syncd_vs_debs.split(' ') -%}

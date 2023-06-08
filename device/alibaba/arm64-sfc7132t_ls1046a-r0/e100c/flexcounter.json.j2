@@ -1,0 +1,300 @@
+{%- set port_attr_id_list = ["LAI_PORT_ATTR_OPER_STATUS",
+                             "LAI_PORT_ATTR_ADMIN_STATE",
+                             "LAI_PORT_ATTR_EQUIPMENT_FAILURE",
+                             "LAI_PORT_ATTR_EQUIPMENT_MISMATCH",
+                             "LAI_PORT_ATTR_HIGH_THRESHOLD",
+                             "LAI_PORT_ATTR_LED_COLOR",
+                             "LAI_PORT_ATTR_LED_MODE",
+                             "LAI_PORT_ATTR_LOS_THRESHOLD",
+                             "LAI_PORT_ATTR_LOW_THRESHOLD",
+                             "LAI_PORT_ATTR_ROLL_OFF",
+                             "LAI_PORT_ATTR_RX_CD_RANGE",
+                             "LAI_PORT_ATTR_EMPTY",
+                             "LAI_PORT_ATTR_REMOVABLE",
+                             "LAI_PORT_ATTR_INPUT_OFFSET",
+                             "LAI_PORT_ATTR_OUTPUT_OFFSET",
+                             "LAI_PORT_ATTR_OPTICAL_PORT_TYPE"] %}
+{%- set inport_gauge_id_list = ["LAI_PORT_STAT_INPUT_POWER"] %}
+{%- set outport_gauge_id_list = ["LAI_PORT_STAT_OUTPUT_POWER"] %}
+{%- set oa_attr_id_list = ["LAI_OA_ATTR_OPER_STATUS",
+                           "LAI_OA_ATTR_NAME",
+                           "LAI_OA_ATTR_TYPE",
+                           "LAI_OA_ATTR_TARGET_GAIN",
+                           "LAI_OA_ATTR_MIN_GAIN",
+                           "LAI_OA_ATTR_MAX_GAIN",
+                           "LAI_OA_ATTR_TARGET_GAIN_TILT",
+                           "LAI_OA_ATTR_GAIN_RANGE",
+                           "LAI_OA_ATTR_AMP_MODE",
+                           "LAI_OA_ATTR_TARGET_OUTPUT_POWER",
+                           "LAI_OA_ATTR_MAX_OUTPUT_POWER",
+                           "LAI_OA_ATTR_ENABLED",
+                           "LAI_OA_ATTR_FIBER_TYPE_PROFILE",
+                           "LAI_OA_ATTR_INGRESS_PORT",
+                           "LAI_OA_ATTR_EGRESS_PORT",
+                           "LAI_OA_ATTR_INPUT_LOS_THRESHOLD",
+                           "LAI_OA_ATTR_INPUT_LOS_HYSTERESIS",
+                           "LAI_OA_ATTR_OUTPUT_LOS_THRESHOLD",
+                           "LAI_OA_ATTR_OUTPUT_LOS_HYSTERESIS",
+                           "LAI_OA_ATTR_SERIAL_NO",
+                           "LAI_OA_ATTR_PART_NO",
+                           "LAI_OA_ATTR_MFG_NAME",
+                           "LAI_OA_ATTR_MFG_DATE",
+                           "LAI_OA_ATTR_EMPTY",
+                           "LAI_OA_ATTR_REMOVABLE",
+                           "LAI_OA_ATTR_EQUIPMENT_FAILURE",
+                           "LAI_OA_ATTR_EQUIPMENT_MISMATCH",
+                           "LAI_OA_ATTR_SOFTWARE_VERSION",
+                           "LAI_OA_ATTR_FIRMWARE_VERSION",
+                           "LAI_OA_ATTR_HARDWARE_VERSION",
+                           "LAI_OA_ATTR_LOS_ASE_DELAY",
+                           "LAI_OA_ATTR_ADMIN_STATE",
+                           "LAI_OA_ATTR_GAIN_LOW_THRESHOLD",
+                           "LAI_OA_ATTR_GAIN_LOW_HYSTERESIS",
+                           "LAI_OA_ATTR_INPUT_LOW_THRESHOLD",
+                           "LAI_OA_ATTR_OUTPUT_LOW_THRESHOLD",
+                           "LAI_OA_ATTR_WORKING_STATE",
+                           "LAI_OA_ATTR_INPUT_OFFSET_LINEP_RX",
+                           "LAI_OA_ATTR_OUTPUT_OFFSET_LINEP_TX",
+                           "LAI_OA_ATTR_INPUT_OFFSET_LINES_RX",
+                           "LAI_OA_ATTR_OUTPUT_OFFSET_LINES_TX"] %}
+{%- set oa_gauge_id_list = ["LAI_OA_STAT_ACTUAL_GAIN",
+                            "LAI_OA_STAT_ACTUAL_GAIN_TILT",
+                            "LAI_OA_STAT_TEMPERATURE",
+                            "LAI_OA_STAT_INPUT_POWER_TOTAL",
+                            "LAI_OA_STAT_INPUT_POWER_C_BAND",
+                            "LAI_OA_STAT_INPUT_POWER_L_BAND",
+                            "LAI_OA_STAT_OUTPUT_POWER_TOTAL",
+                            "LAI_OA_STAT_OUTPUT_POWER_C_BAND",
+                            "LAI_OA_STAT_OUTPUT_POWER_L_BAND",
+                            "LAI_OA_STAT_LASER_BIAS_CURRENT",
+                            "LAI_OA_STAT_OPTICAL_RETURN_LOSS",
+                            "LAI_OA_STAT_LASER_TEC_CURRENT",
+                            "LAI_OA_STAT_LASER_TEMPERATURE",
+                            "LAI_OA_STAT_PANEL_INPUT_POWER_LINEP_RX",
+                            "LAI_OA_STAT_PANEL_OUTPUT_POWER_LINEP_TX",
+                            "LAI_OA_STAT_PANEL_INPUT_POWER_LINES_RX",
+                            "LAI_OA_STAT_PANEL_OUTPUT_POWER_LINES_TX",
+                            "LAI_OA_STAT_INGRESS_VOA_ATTEN"] %}
+{%- set osc_attr_id_list = ["LAI_OSC_ATTR_OPER_STATUS",
+                            "LAI_OSC_ATTR_OUTPUT_FREQUENCY",
+                            "LAI_OSC_ATTR_ADMIN_STATE",
+                            "LAI_OSC_ATTR_ENABLED",
+                            "LAI_OSC_ATTR_NAME",
+                            "LAI_OSC_ATTR_EMPTY",
+                            "LAI_OSC_ATTR_MFG_DATE",
+                            "LAI_OSC_ATTR_SERIAL_NO",
+                            "LAI_OSC_ATTR_PART_NO",
+                            "LAI_OSC_ATTR_MFG_NAME",
+                            "LAI_OSC_ATTR_REMOVABLE",
+                            "LAI_OSC_ATTR_EQUIPMENT_FAILURE",
+                            "LAI_OSC_ATTR_EQUIPMENT_MISMATCH",
+                            "LAI_OSC_ATTR_FIRMWARE_VERSION",
+                            "LAI_OSC_ATTR_SOFTWARE_VERSION",
+                            "LAI_OSC_ATTR_HARDWARE_VERSION",
+                            "LAI_OSC_ATTR_RX_LOW_THRESHOLD",
+                            "LAI_OSC_ATTR_RX_HIGH_THRESHOLD",
+                            "LAI_OSC_ATTR_TX_LOW_THRESHOLD"] %}
+{%- set osc_gauge_id_list = ["LAI_OSC_STAT_INPUT_POWER",
+                             "LAI_OSC_STAT_OUTPUT_POWER",
+                             "LAI_OSC_STAT_LASER_BIAS_CURRENT",
+                             "LAI_OSC_STAT_INPUT_OFFSET_LINEP_RX",
+                             "LAI_OSC_STAT_OUTPUT_OFFSET_LINEP_TX",
+                             "LAI_OSC_STAT_INPUT_OFFSET_LINES_RX",
+                             "LAI_OSC_STAT_OUTPUT_OFFSET_LINES_TX",
+                             "LAI_OSC_STAT_TEMPERATURE",
+                             "LAI_OSC_STAT_PANEL_INPUT_POWER_LINEP_RX",
+                             "LAI_OSC_STAT_PANEL_OUTPUT_POWER_LINEP_TX",
+                             "LAI_OSC_STAT_PANEL_INPUT_POWER_LINES_RX",
+                             "LAI_OSC_STAT_PANEL_OUTPUT_POWER_LINES_TX"] %}
+{%- set attenuator_attr_id_list = ["LAI_ATTENUATOR_ATTR_NAME",
+                                   "LAI_ATTENUATOR_ATTR_ATTENUATION_MODE",
+                                   "LAI_ATTENUATOR_ATTR_TARGET_OUTPUT_POWER",
+                                   "LAI_ATTENUATOR_ATTR_ATTENUATION",
+                                   "LAI_ATTENUATOR_ATTR_INGRESS_PORT",
+                                   "LAI_ATTENUATOR_ATTR_EGRESS_PORT",
+                                   "LAI_ATTENUATOR_ATTR_FIX_ATTENUATION",
+                                   "LAI_ATTENUATOR_ATTR_ENABLED"] %}
+{%- set attenuator_gauge_id_list = ["LAI_ATTENUATOR_STAT_ACTUAL_ATTENUATION",
+                                    "LAI_ATTENUATOR_STAT_OUTPUT_POWER_TOTAL",
+                                    "LAI_ATTENUATOR_STAT_OPTICAL_RETURN_LOSS"] %}
+{%- set linecard_attr_id_list = [
+                              "LAI_LINECARD_ATTR_ADMIN_STATE",
+                              "LAI_LINECARD_ATTR_BOARD_MODE",
+                              "LAI_LINECARD_ATTR_OPER_STATUS",
+                              "LAI_LINECARD_ATTR_RELAY",
+                              "LAI_LINECARD_ATTR_CPLD_VERSION",
+                              "LAI_LINECARD_ATTR_SCRIPT_VERSION",
+                              "LAI_LINECARD_ATTR_MFG_NAME",
+                              "LAI_LINECARD_ATTR_BAUD_RATE",
+                              "LAI_LINECARD_ATTR_SOFTWARE_VERSION",
+                              "LAI_LINECARD_ATTR_FPGA_VERSION",
+                              "LAI_LINECARD_ATTR_UCD_VERSION",
+                              "LAI_LINECARD_ATTR_TEMP_HIGH_ALARM_THRESHOLD",
+                              "LAI_LINECARD_ATTR_TEMP_HIGH_WARN_THRESHOLD",
+                              "LAI_LINECARD_ATTR_TEMP_LOW_ALARM_THRESHOLD",
+                              "LAI_LINECARD_ATTR_TEMP_LOW_WARN_THRESHOLD",
+                              "LAI_LINECARD_ATTR_SLOT_ID",
+                              "LAI_LINECARD_ATTR_LED_MODE",
+                              "LAI_LINECARD_ATTR_LED_FLASH_INTERVAL",
+                              "LAI_LINECARD_ATTR_LED_COLOR",
+                              "LAI_LINECARD_ATTR_EQUIPMENT_FAILURE",
+                              "LAI_LINECARD_ATTR_EQUIPMENT_MISMATCH"] %}
+{%- set linecard_gauge_id_list = [
+                              "LAI_LINECARD_STAT_MEMORY_AVAILABLE",
+                              "LAI_LINECARD_STAT_MEMORY_UTILIZED",
+                              "LAI_LINECARD_STAT_CPU_UTILIZATION",
+                              "LAI_LINECARD_STAT_TEMPERATURE"] %}
+{%- set interface_stat_id_list = ["LAI_INTERFACE_STAT_OUT_MULTICAST_PKTS",
+                                  "LAI_INTERFACE_STAT_IN_OCTETS",
+                                  "LAI_INTERFACE_STAT_OUT_PKTS",
+                                  "LAI_INTERFACE_STAT_OUT_BROADCAST_PKTS",
+                                  "LAI_INTERFACE_STAT_OUT_OCTETS",
+                                  "LAI_INTERFACE_STAT_LAST_CLEAR",
+                                  "LAI_INTERFACE_STAT_IN_PKTS",
+                                  "LAI_INTERFACE_STAT_IN_MULTICAST_PKTS",
+                                  "LAI_INTERFACE_STAT_IN_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_BROADCAST_PKTS",
+                                  "LAI_INTERFACE_STAT_OUT_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_CRC_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_UNDERSIZE_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_1024_1518_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_256_511_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_65_127_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_128_255_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_512_1023_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_64_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_OVERSIZE_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_JABBER_FRAMES",
+                                  "LAI_INTERFACE_STAT_CARRIER_TRANSITIONS",
+                                  "LAI_INTERFACE_STAT_IN_8021Q_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_BLOCK_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_CARRIER_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_DISCARDS",
+                                  "LAI_INTERFACE_STAT_IN_FCS_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_FRAGMENT_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_INTERRUPTED_TX",
+                                  "LAI_INTERFACE_STAT_IN_LATE_COLLISION",
+                                  "LAI_INTERFACE_STAT_IN_MAC_CONTROL_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_MAC_ERRORS_RX",
+                                  "LAI_INTERFACE_STAT_IN_MAC_PAUSE_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_MAXSIZE_EXCEEDED",
+                                  "LAI_INTERFACE_STAT_IN_SINGLE_COLLISION",
+                                  "LAI_INTERFACE_STAT_IN_SYMBOL_ERROR",
+                                  "LAI_INTERFACE_STAT_IN_UNICAST_PKTS",
+                                  "LAI_INTERFACE_STAT_IN_UNKNOWN_PROTOS",
+                                  "LAI_INTERFACE_STAT_OUT_8021Q_FRAMES",
+                                  "LAI_INTERFACE_STAT_OUT_DISCARDS",
+                                  "LAI_INTERFACE_STAT_OUT_MAC_CONTROL_FRAMES",
+                                  "LAI_INTERFACE_STAT_OUT_MAC_ERRORS_TX",
+                                  "LAI_INTERFACE_STAT_OUT_MAC_PAUSE_FRAMES",
+                                  "LAI_INTERFACE_STAT_OUT_UNICAST_PKTS"] %}
+[
+    {
+        "PORT_COUNTER_ID_LIST_STATUS": {
+{% for id in port_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "INPORT_COUNTER_ID_LIST_GAUGE": {
+{% for id in inport_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OUTPORT_COUNTER_ID_LIST_GAUGE": {
+{% for id in outport_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OA_COUNTER_ID_LIST_STATUS": {
+{% for id in oa_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OA_COUNTER_ID_LIST_GAUGE": {
+{% for id in oa_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OSC_COUNTER_ID_LIST_STATUS": {
+{% for id in osc_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OSC_COUNTER_ID_LIST_GAUGE": {
+{% for id in osc_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "ATTENUATOR_COUNTER_ID_LIST_STATUS": {
+{% for id in attenuator_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "ATTENUATOR_COUNTER_ID_LIST_GAUGE": {
+{% for id in attenuator_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_STATUS": {
+{% for id in linecard_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_GAUGE": {
+{% for id in linecard_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "INTERFACE_COUNTER_ID_LIST_COUNTER": {
+{% for id in interface_stat_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    }
+]

@@ -58,7 +58,6 @@ iproute2==4.20.0-2+deb10u1
 iptables==1.8.2-4
 iptables-persistent==1.0.11+deb10u1
 iputils-ping==3:20180629-2+deb10u1
-isc-dhcp-client==4.4.1-2
 jq==1.5+dfsg-2+b1
 kdump-tools==1:1.6.1-1
 kernel-mft-dkms-modules-4.19.0-12-2-amd64==4.16.0

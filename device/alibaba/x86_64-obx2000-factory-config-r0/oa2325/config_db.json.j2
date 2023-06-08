@@ -1,0 +1,119 @@
+{%- set oa_id_list = ['1','2'] %}
+{%- set osc_id_list = ['1'] %}
+{%- set attenuator_id_list = ['1','2', '3'] %}
+{
+    "LINECARD": {
+        "LINECARD-1-{{linecard_id}}": {
+            "linecard-type": "OA2325"
+        }   
+    },  
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic_id": {{asic_id}},
+            "hwsku": "oa2325"
+        }   
+    },
+    "AMPLIFIER": {
+{% for id in oa_id_list %}
+        "AMPLIFIER-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }}, 
+            "location": "1-{{linecard_id}}",
+            "component": "AMPLIFIER-1-{{linecard_id}}-{{id}}",
+            "parent": "LINECARD-1-{{linecard_id}}",
+            "subcomponents": "PORT-1-{{linecard_id}}-{{id}}-EDFAIN,PORT-1-{{linecard_id}}-{{id}}-EDFAOUT"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "OSC": {
+{% for id in osc_id_list %}
+        "OSC-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }}, 
+            "location": "1-{{linecard_id}}",
+            "interface": "INTERFACE-1-{{linecard_id}}-{{id}}-OSC",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "INTERFACE": {
+{% for id in osc_id_list %}
+        "INTERFACE-1-{{linecard_id}}-{{id}}-OSC": {
+            "index": {{ loop.index }},
+            "interface-type": "OSC",
+            "interface-id": {{ id }},
+            "name": "INTERFACE-1-{{linecard_id}}-{{id}}-OSC"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "PORT": {
+        "PORT-1-{{linecard_id}}-1-EDFAIN": {
+            "index": 1,
+            "port-type": "EDFA_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "AMPLIFIER-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-1-EDFAOUT": {
+            "index": 2,
+            "port-type": "EDFA_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "AMPLIFIER-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-2-EDFAIN": {
+            "index": 3,
+            "port-type": "EDFA_IN",
+            "port-id": 2,
+            "location": "1-{{linecard_id}}",
+            "parent": "AMPLIFIER-1-{{linecard_id}}-2"
+        },
+        "PORT-1-{{linecard_id}}-2-EDFAOUT": {
+            "index": 4,
+            "port-type": "EDFA_OUT",
+            "port-id": 2,
+            "location": "1-{{linecard_id}}",
+            "parent": "AMPLIFIER-1-{{linecard_id}}-2"
+        },
+        "PORT-1-{{linecard_id}}-C1IN": {
+            "index": 5,
+            "port-type": "CLIENT_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        },
+        "PORT-1-{{linecard_id}}-C1OUT": {
+            "index": 6,
+            "port-type": "CLIENT_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        },
+        "PORT-1-{{linecard_id}}-L1IN": {
+            "index": 7,
+            "port-type": "LINE_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        },
+        "PORT-1-{{linecard_id}}-L1OUT": {
+            "index": 8,
+            "port-type": "LINE_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        },
+    "ATTENUATOR": {
+{% for id in attenuator_id_list %}
+        "ATTENUATOR-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }},
+            "component": "ATTENUATOR-1-{{linecard_id}}-{{id}}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    }
+}

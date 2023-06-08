@@ -1,0 +1,304 @@
+{
+    "CHASSIS": [
+      {
+        "id": 1,
+        "presence": "true",
+        "temperature": 1111,
+        "eeprom": {
+          "type" : "CHASSIS",
+          "model_name" : "OBX-1141T",
+          "pn" : "1141TAC000",
+          "sn" : "AC0405173001",
+          "label" : "",
+          "hw_ver" : "1.1",
+          "sw_ver" : "0.0",
+          "mfg_date" : "2022-03-03",
+          "mac_addr" : "ac:ce:57:d8:d0:fc"
+        }
+      }
+    ],
+    "LINECARD": [
+      {
+        "id": 1,
+        "presence": "true",
+        "temperature": 4110,
+        "eeprom": {
+          "type" : "P230C",
+          "pn" : "P230CAC000",
+          "sn" : "AC049015C007",
+          "label" : "",
+          "hw_ver" : "1.1",
+          "sw_ver" : "Sonic-P230C-B021",
+          "mfg_date" : "2022-03-03",
+          "mac_addr" : "ac:ce:57:d8:d0:fc"
+        }
+      },
+      {
+        "id": 2,
+        "presence": "true",
+        "temperature": 4220,
+        "eeprom": {
+          "type" : "P230C",
+          "pn" : "P230CAC000",
+          "sn" : "AC049015C008",
+          "label" : "",
+          "hw_ver" : "1.1",
+          "sw_ver" : "Sonic-P230C-B021",
+          "mfg_date" : "2022-03-03",
+          "mac_addr" : "ac:ce:57:d8:d0:fc"
+        }
+      },
+      {
+        "id": 3,
+        "presence": "true",
+        "temperature": 4330,
+        "eeprom": {
+          "type" : "P230C",
+          "pn" : "P230CAC000",
+          "sn" : "AC049015C009",
+          "label" : "",
+          "hw_ver" : "1.1",
+          "sw_ver" : "Sonic-P230C-B021",
+          "mfg_date" : "2022-03-03",
+          "mac_addr" : "ac:ce:57:d8:d0:fc"
+        }
+      },
+      {
+        "id": 4,
+        "presence": "true",
+        "temperature": 4440,
+        "eeprom": {
+          "type" : "E110C",
+          "pn" : "E110CAC000",
+          "sn" : "AC04B1167003",
+          "label" : "",
+          "hw_ver" : "1.1",
+          "sw_ver" : "Sonic-E1X0C-B019",
+          "mfg_date" : "2022-03-03",
+          "mac_addr" : "ac:ce:57:d8:d0:fc"
+        }
+      },
+      {
+        "id": 5,
+        "linecard-type" : "OCM8",
+        "presence": "true",
+        "temperature": 4440
+      }
+    ],
+    "CU": [
+      {
+        "id": 1,
+        "presence": "true",
+        "temperature": 2222,
+        "eeprom": {
+          "type" : "CU",
+          "model_name" : "E3940-T10",
+          "pn" : "X86AC001",
+          "sn" : "2201360333",
+          "label" : "",
+          "hw_ver" : "V102",
+          "sw_ver" : "0.0",
+          "mfg_date" : "2021-01-26",
+          "mac_addr" : ""
+        },
+        "memory": {
+          "utilized": 2082078720,
+          "available": 3970838528,
+          "ratio": 20
+        },
+        "cpu": {
+          "utilized": 40,
+          "available": 60,
+          "ratio": 40
+        }
+      }
+    ],
+    "FAN": [
+      {
+        "id": 7,
+        "presence": "true",
+        "temperature": 5110,
+        "eeprom": {
+          "type" : "FAN",
+          "model_name" : "",
+          "pn" : "FANAC000",
+          "sn" : "AC042315901A",
+          "label" : "",
+          "hw_ver" : "1.1",
+          "sw_ver" : "0.0",
+          "mfg_date" : "2022-07-19",
+          "mac_addr" : "00:00:00:00:00:00"
+        },
+        "speed": {
+          "front": 1000,
+          "behind":2000
+        },
+        "speed_spec": {
+            "max": 9000,
+            "min": 3000
+        }
+      },
+      {
+        "id": 8,
+        "presence": "true",
+        "temperature": 5220,
+        "eeprom": {
+          "type": "FAN",
+          "model_name": "",
+          "pn": "FANAC000",
+          "sn": "AC042315901B",
+          "label": "",
+          "hw_ver": "1.1",
+          "sw_ver": "0.0",
+          "mfg_date": "2022-07-19",
+          "mac_addr": "00:00:00:00:00:00"
+        },
+        "speed": {
+            "front": 7100,
+            "behind":8100
+        },
+        "speed_spec": {
+            "max": 9000,
+            "min": 3000
+        }
+      },
+      {
+        "id": 9,
+        "presence": "true",
+        "temperature": 5330,
+        "eeprom": {
+          "type" : "FAN",
+          "model_name" : "",
+          "pn" : "FANAC000",
+          "sn" : "AC042315901C",
+          "label" : "",
+          "hw_ver" : "1.1",
+          "sw_ver" : "0.0",
+          "mfg_date" : "2022-07-19",
+          "mac_addr" : "00:00:00:00:00:00"
+        },
+        "speed": {
+            "front": 7200,
+            "behind":8200
+        },
+        "speed_spec": {
+            "max": 9000,
+            "min": 3000
+        }
+      },
+      {
+        "id": 10,
+        "presence": "true",
+        "temperature": 5440,
+        "eeprom": {
+          "type" : "FAN",
+          "model_name" : "",
+          "pn" : "FANAC000",
+          "sn" : "AC042315901D",
+          "label" : "",
+          "hw_ver" : "1.1",
+          "sw_ver" : "0.0",
+          "mfg_date" : "2022-07-19",
+          "mac_addr" : "00:00:00:00:00:00"
+        },
+        "speed": {
+            "front": 7300,
+            "behind":8300
+        },
+        "speed_spec": {
+            "max": 9000,
+            "min": 3000
+        }
+      },
+      {
+        "id": 11,
+        "presence": "true",
+        "temperature": 5550,
+        "eeprom": {
+          "type" : "FAN",
+          "model_name" : "",
+          "pn" : "FANAC000",
+          "sn" : "AC042315901E",
+          "label" : "",
+          "hw_ver" : "1.1",
+          "sw_ver" : "0.0",
+          "mfg_date" : "2022-07-19",
+          "mac_addr" : "00:00:00:00:00:00"
+        },
+        "speed": {
+            "front": 7400,
+            "behind":8400
+        },
+        "speed_spec": {
+            "max": 9000,
+            "min": 3000
+        }
+      }
+    ],
+    "PSU": [
+      {
+        "id": 5,
+        "presence": "true",
+        "temperature": 2110,
+        "vin_high": "false",
+        "vin_low": "false",
+        "eeprom": {
+          "type" : "PSU",
+          "model_name" : "",
+          "pn" : "GW-CRPS800N2",
+          "sn" : "2K120052945",
+          "label" : "",
+          "hw_ver" : "2.0",
+          "sw_ver" : "0.0",
+          "mfg_date" : "2022-07-19",
+          "mac_addr" : "00:00:00:00:00:00"
+        },
+        "info" : {
+          "abs" : 0,
+          "ambient_temp" : 100,
+          "primary_temp" : 100,
+          "secondary_temp" : 100,
+          "vout" : 100,
+          "vin" : 100,
+          "iout" : 100,
+          "iin" : 100,
+          "pout" : 100,
+          "pin" : 100,
+          "fan" : 100,
+          "capacity" : 800
+        }
+      },
+      {
+        "id": 6,
+        "presence": "false",
+        "temperature": 2220,
+        "vin_high": "false",
+        "vin_low": "false",
+        "eeprom": {
+          "type" : "PSU",
+          "model_name" : "",
+          "pn" : "GW-CRPS800N2",
+          "sn" : "2K120065293",
+          "label" : "",
+          "hw_ver" : "2.0",
+          "sw_ver" : "0.0",
+          "mfg_date" : "2022-07-19",
+          "mac_addr" : "00:00:00:00:00:00"
+        },
+        "info" : {
+          "abs" : 0,
+          "ambient_temp" : 100,
+          "primary_temp" : 100,
+          "secondary_temp" : 100,
+          "vout" : 100,
+          "vin" : 100,
+          "iout" : 100,
+          "iin" : 100,
+          "pout" : 100,
+          "pin" : 100,
+          "fan" : 100,
+          "capacity" : 100
+        }
+      }
+    ]
+  }

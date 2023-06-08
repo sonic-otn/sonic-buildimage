@@ -13,7 +13,11 @@ $(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
 	dpkg-source -x smartmontools_$(SMARTMONTOOLS_VERSION_FULL).dsc
 
 	pushd smartmontools-$(SMARTMONTOOLS_VERSION_MAJOR)
+ifeq ($(CROSS_BUILD_ENVIRON), y)
+	dpkg-buildpackage -us -uc -b -a$(CONFIGURED_ARCH) -Pcross,nocheck -j$(SONIC_CONFIG_MAKE_JOBS) --admindir $(SONIC_DPKG_ADMINDIR)
+else
 	dpkg-buildpackage -us -uc -b -j$(SONIC_CONFIG_MAKE_JOBS) --admindir $(SONIC_DPKG_ADMINDIR)
+endif
 	popd
 
 	mv $* $(DEST)/

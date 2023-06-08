@@ -19,11 +19,23 @@ CFGGEN_PARAMS=" \
     -t /usr/local/sonic/frrcfgd/ospfd.conf.j2,/etc/frr/ospfd.conf \
 "
 
+if [  -f "/etc/frr/bgpd.conf" ];then
+CFGGEN_PARAMS=" \
+    -d \
+    -y /etc/sonic/constants.yml \
+    -t /usr/share/sonic/templates/supervisord/supervisord.conf.j2,/etc/supervisor/conf.d/supervisord.conf \
+    -t /usr/share/sonic/templates/supervisord/critical_processes.j2,/etc/supervisor/critical_processes \
+    -t /usr/share/sonic/templates/gen_frr.conf.j2,/etc/frr/frr.conf \
+    -t /usr/share/sonic/templates/isolate.j2,/usr/sbin/bgp-isolate \
+    -t /usr/share/sonic/templates/unisolate.j2,/usr/sbin/bgp-unisolate \
+"
+fi
 FRR_VARS=$(sonic-cfggen $CFGGEN_PARAMS)
+
 MGMT_FRAMEWORK_CONFIG=$(echo $FRR_VARS | jq -r '.frr_mgmt_framework_config')
 CONFIG_TYPE=$(echo $FRR_VARS | jq -r '.docker_routing_config_mode')
 if [ -z "$MGMT_FRAMEWORK_CONFIG" ] || [ "$MGMT_FRAMEWORK_CONFIG" == "false" ]; then
-    rm /etc/frr/bfdd.conf /etc/frr/ospfd.conf
+    rm /etc/frr/bfdd.conf
 fi
 
 update_default_gw()

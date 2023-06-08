@@ -1,3 +1,0 @@
-depmod -a
-systemctl enable es6220_platform.service
-systemctl start es6220_platform.service

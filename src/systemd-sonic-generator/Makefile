@@ -1,13 +1,11 @@
 CC=gcc
-CFLAGS=-std=gnu99
+CFLAGS += -std=gnu99 -D_GNU_SOURCE
+
+CXX=g++
+CXXFLAGS += -std=c++11 -D_GNU_SOURCE
+LDFLAGS += -lpthread -lboost_filesystem -lboost_system -lgtest
 
 BINARY = systemd-sonic-generator
-MAIN_TARGET = $(BINARY)_1.0.0_$(CONFIGURED_ARCH).deb
-
-$(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
-	dpkg-buildpackage -us -uc -b -j$(SONIC_CONFIG_MAKE_JOBS) --admindir $(SONIC_DPKG_ADMINDIR)
-	mv ../$(MAIN_TARGET) $(DEST)/
-	rm ../$(BINARY)-* ../$(BINARY)_*
 
 $(BINARY): systemd-sonic-generator.c
 	rm -f ./systemd-sonic-generator

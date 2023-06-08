@@ -48,7 +48,7 @@ dependent_startup_wait_for=rsyslogd:running
 {% if DEVICE_METADATA['localhost']['sub_role'] is defined and DEVICE_METADATA['localhost']['sub_role']|length %}
 command=/usr/sbin/lldpd -d -I Ethernet* -C Ethernet*
 {% else %}
-command=/usr/sbin/lldpd -d -I Ethernet*,eth0 -C eth0
+command=/usr/sbin/lldpd -d -I eth*,eth0 -C eth0
 {% endif %}
 priority=3
 autostart=false

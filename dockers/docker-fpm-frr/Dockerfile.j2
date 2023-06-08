@@ -18,7 +18,8 @@ RUN apt-get update   && \
         iproute2        \
         libjson-c3      \
         logrotate       \
-        libunwind8
+        libunwind8      \
+        gdb
 
 RUN groupadd -g ${frr_user_gid} frr
 RUN useradd -u ${frr_user_uid} -g ${frr_user_gid} -M -s /bin/false frr

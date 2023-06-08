@@ -1,0 +1,5 @@
+KVM_4_SLOT_FACTORY_CONFIG = kvm-4-slot-factory-config_1.0.0_all.deb
+$(KVM_4_SLOT_FACTORY_CONFIG)_SRC_PATH = device/virtual/x86_64-kvm_x86_64_4_asic-r0
+SONIC_DPKG_DEBS += $(KVM_4_SLOT_FACTORY_CONFIG)
+
+export KVM_4_SLOT_FACTORY_CONFIG

@@ -7,8 +7,8 @@ $(DOCKER_SYNCD_BASE)_DEPENDS += $(SYNCD_VS)
 
 $(DOCKER_SYNCD_BASE)_DBG_DEPENDS += $(SYNCD_VS_DBG) \
                                 $(LIBSWSSCOMMON_DBG) \
-                                $(LIBSAIMETADATA_DBG) \
-                                $(LIBSAIREDIS_DBG) \
-                                $(LIBSAIVS_DBG)
+                                $(LIBLAIMETADATA_DBG) \
+                                $(LIBLAIREDIS_DBG) \
+                                $(LIBLAIVS_DBG)
 
 $(DOCKER_SYNCD_BASE)_RUN_OPT += -v /host/warmboot:/var/warmboot

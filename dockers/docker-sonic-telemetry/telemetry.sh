@@ -51,7 +51,7 @@ fi
 
 # If no configuration entry exists for TELEMETRY, create one default port
 if [ -z "$GNMI" ]; then
-    PORT=8080
+    PORT=8081
 else
     PORT=$(echo $GNMI | jq -r '.port')
 fi

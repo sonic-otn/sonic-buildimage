@@ -1,3 +1,0 @@
-depmod -a
-systemctl enable 48x6q_platform.service
-systemctl start 48x6q_platform.service

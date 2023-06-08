@@ -29,10 +29,10 @@ $(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
 	stg init
 	stg import -s ../patch-$(SNMPD_VERSION)/series
 
-ifeq ($(CONFIGURED_ARCH), arm64)
+ifneq ($(CROSS_BUILD_ENVIRON), y)
 	dpkg-buildpackage -rfakeroot -b -d -us -uc -j1 --admindir $(SONIC_DPKG_ADMINDIR)
 else
-	dpkg-buildpackage -rfakeroot -b -d -us -uc -j$(SONIC_CONFIG_MAKE_JOBS) --admindir $(SONIC_DPKG_ADMINDIR)
+	PYTHONPATH=/usr/lib/python2.7/plat-aarch64-linux-gnu/ dpkg-buildpackage -rfakeroot -b -d -us -uc -a$(CONFIGURED_ARCH) -Pcross,nocheck -j1 --admindir $(SONIC_DPKG_ADMINDIR)
 endif
 	popd
 

@@ -6,35 +6,16 @@
             "default_pfcwd_status": {% if enable_pfcwd_on_start == "y" %}"enable"{% else %}"disable"{% endif %}
         }
     },
-    "CRM": {
-        "Config": {
-            "polling_interval": "300",
-{%- for crm_res in ["ipv4_route", "ipv6_route", "ipv4_nexthop", "ipv6_nexthop", "ipv4_neighbor",
-                    "ipv6_neighbor", "nexthop_group_member", "nexthop_group", "acl_table",
-                    "acl_group", "acl_entry", "acl_counter", "fdb_entry", "snat_entry", "dnat_entry", "ipmc_entry"] %}
-            "{{crm_res}}_threshold_type": "percentage",
-            "{{crm_res}}_low_threshold": "70",
-            "{{crm_res}}_high_threshold": "85"{% if not loop.last %},{% endif -%}
-{% endfor %}
-        }
-    },
 {%- set features = [("bgp", "enabled", false, "enabled"),
                    ("database", "always_enabled", false, "always_enabled"),
-                   ("dhcp_relay", "enabled", false, "enabled"),
                    ("lldp", "enabled", false, "enabled"),
                    ("pmon", "enabled", false, "enabled"),
-                   ("radv", "enabled", false, "enabled"),
-                   ("snmp", "enabled", true, "enabled"),
                    ("swss", "enabled", false, "enabled"),
-                   ("syncd", "enabled", false, "enabled"),
-                   ("teamd", "enabled", false, "enabled")] %}
-{%- if sonic_asic_platform == "vs" %}{% do features.append(("gbsyncd", "enabled", false, "enabled")) %}{% endif %}
-{%- if include_iccpd == "y" %}{% do features.append(("iccpd", "disabled", false, "enabled")) %}{% endif %}
+                   ("syncd", "enabled", false, "enabled")] %}
+{%- if sonic_asic_platform == "vs" %}{% do features.append(("gbsyncd", "disabled", false, "enabled")) %}{% endif %}
 {%- if include_mgmt_framework == "y" %}{% do features.append(("mgmt-framework", "enabled", true, "enabled")) %}{% endif %}
-{%- if include_nat == "y" %}{% do features.append(("nat", "disabled", false, "enabled")) %}{% endif %}
-{%- if include_restapi == "y" %}{% do features.append(("restapi", "enabled", false, "enabled")) %}{% endif %}
-{%- if include_sflow == "y" %}{% do features.append(("sflow", "disabled", false, "enabled")) %}{% endif %}
 {%- if include_system_telemetry == "y" %}{% do features.append(("telemetry", "enabled", true, "enabled")) %}{% endif %}
+{%- if include_snmp == "y" %}{% do features.append(("snmp", "disabled", true, "enabled")) %}{% endif %}
     "FEATURE": {
 {# has_timer field if set, will start the feature systemd .timer unit instead of .service unit #}
 {%- for feature, state, has_timer, autorestart in features %}
@@ -44,10 +25,6 @@
             "has_global_scope": {% if feature + '.service' in installer_services.split(' ') %}true{% else %}false{% endif %},
             "has_per_asic_scope": {% if feature + '@.service' in installer_services.split(' ') %}true{% else %}false{% endif %},
             "auto_restart": "{{autorestart}}",
-{%- if include_kubernetes == "y" %}
-{%- if feature in ["dhcp_relay", "lldp", "pmon", "radv", "snmp", "telemetry"] %}
-            "set_owner": "kube", {% else %}
-            "set_owner": "local", {% endif %} {% endif %}
             "high_mem_alert": "disabled"
         }{% if not loop.last %},{% endif -%}
 {% endfor %}

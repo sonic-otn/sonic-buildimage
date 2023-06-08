@@ -1,0 +1,31 @@
+{%- set ocm_id_list = ['1', '2', '3', '4', '5', '6', '7', '8'] %}
+{
+    "LINECARD": {
+        "LINECARD-1-{{linecard_id}}": {
+            "linecard-type": "OCM8"
+        }   
+    },  
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic_id": {{asic_id}},
+            "hwsku": "ocm8"
+        }   
+    },
+    "OCM_GROUP": {
+        "OCM_GROUP_1": {
+            "index": "1"
+        }
+    },
+    "OCM": {
+{% for id in ocm_id_list %}
+        "OCM-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }},
+            "name": "OCM-1-{{linecard_id}}-{{id}}",
+            "component": "OCM-1-{{linecard_id}}-{{id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    }
+}

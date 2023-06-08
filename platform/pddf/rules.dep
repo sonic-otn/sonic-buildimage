@@ -1,3 +1,0 @@
-#DPKG FRK
-include $(PLATFORM_PDDF_PATH)/platform-modules-pddf.dep
-include $(PLATFORM_PDDF_PATH)/platform-api-pddf-base.dep

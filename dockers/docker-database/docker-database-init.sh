@@ -8,6 +8,7 @@ then
 else
     INTFC=eth0
 fi
+INTFC=eth0
 
 # Get the ip address of the interface
 # if the ip address was not retrieved correctly, put localhost(127.0.0.1) as the default.
@@ -88,8 +89,6 @@ do
         if [[ "$DUMPFILE" != "/var/lib/$inst/dump.rdb" ]]; then
             cp $DUMPFILE /var/lib/$inst/dump.rdb
         fi
-    else
-        echo -n > /var/lib/$inst/dump.rdb
     fi
 done
 

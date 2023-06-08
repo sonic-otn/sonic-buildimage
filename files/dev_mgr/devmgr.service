@@ -1,0 +1,10 @@
+[Unit]
+Description=accelink devmgr service
+StartLimitBurst=10
+StartLimitIntervalSec=40
+
+[Service]
+User=root
+ExecStart=/usr/sbin/DevMgr
+Restart=always
+RestartSec=1

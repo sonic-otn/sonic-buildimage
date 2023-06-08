@@ -1,0 +1,11 @@
+{
+    "CHASSIS": {
+        "CHASSIS-1": {
+            "temp-high-alarm-threshold": "55.0",
+            "temp-high-warn-threshold": "50.0",
+            "temp-low-alarm-threshold": "15.0",
+            "temp-low-warn-threshold": "10.0"
+        }
+    }
+}
+

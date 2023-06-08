@@ -1,0 +1,9 @@
+#Take a backup of all user accounts
+mkdir -p /host/user_accounts
+cp -a /etc/passwd /host/user_accounts
+cp -a /etc/shadow /host/user_accounts
+cp -a /etc/group /host/user_accounts
+cp -a /etc/gshadow /host/user_accounts
+cp -a /etc/subgid /host/user_accounts
+cp -a /etc/subuid /host/user_accounts
+

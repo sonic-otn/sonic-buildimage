@@ -1,0 +1,3 @@
+mkdir -p /host/linecard_factory_config
+cp -ar /etc/sonic/factory/* /host/linecard_factory_config
+

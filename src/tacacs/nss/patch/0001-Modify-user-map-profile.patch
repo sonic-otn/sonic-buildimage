@@ -566,14 +566,14 @@ index 79e62b9..ecfa0b0 100644
 +    user = &useradd_grp_list[MIN_TACACS_USER_PRIV];
 +    user->gid = 100;
 +    user->info = strdup("remote_user");
-+    user->secondary_grp = strdup("users");
-+    user->shell = strdup("/bin/bash");
++    user->secondary_grp = strdup("docker,redis");
++    user->shell = strdup("/usr/sbin/cli/clish_start");
 +
 +    user = &useradd_grp_list[MAX_TACACS_USER_PRIV];
 +    user->gid = 1000;
 +    user->info = strdup("remote_user_su");
-+    user->secondary_grp = strdup("sudo,docker");
-+    user->shell = strdup("/bin/bash");
++    user->secondary_grp = strdup("sudo,docker,redis");
++    user->shell = strdup("/usr/sbin/cli/clish_start");
 +}
 +
 +static int parse_config(const char *file)

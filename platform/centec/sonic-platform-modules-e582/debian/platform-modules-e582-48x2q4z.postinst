@@ -1,3 +1,0 @@
-depmod -a
-systemctl enable 48x2q4z_platform.service
-systemctl start 48x2q4z_platform.service

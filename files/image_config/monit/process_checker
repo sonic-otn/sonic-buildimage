@@ -19,6 +19,21 @@ def check_process_existence(container_name, process_cmdline):
     config_db.connect()
     feature_table = config_db.get_table("FEATURE")
 
+    if container_name == "host":
+        for process in psutil.process_iter(["cmdline", "status", "pid"]):
+            try:
+                # print(process.cmdline(),process.status())
+                if ((' '.join(process.cmdline())).startswith(process_cmdline) and process.status() in ["running", "sleeping"]):
+                    print(f"{process_cmdline} existed")
+                    sys.exit(0)
+                else:
+                    pass
+                    # print(f"no such 1{process.info['pid']}")
+            except psutil.NoSuchProcess:
+                sys.exit(1)
+                pass
+        sys.exit(1)
+
     if container_name in feature_table:
         # We look into the 'FEATURE' table to verify whether the container is disabled or not.
         # If the container is diabled, we exit.

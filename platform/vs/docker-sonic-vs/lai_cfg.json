@@ -1,0 +1,201 @@
+{
+    "DEVICE_METADATA": {
+        "localhost": {
+            "mac": "02:42:ac:13:00:02",
+            "buffer_model": "traditional",
+            "hwsku": "Force10-S6000"
+        }
+    },
+    "FLEX_COUNTER_GROUP_TABLE": {
+        "1S_STAT_COUNTER": {
+            "FLEX_COUNTER_STATUS": "enable",
+            "POLL_INTERVAL": "1000"
+        },
+        "1S_STAT_GAUGE": {
+            "FLEX_COUNTER_STATUS": "enable",
+            "POLL_INTERVAL": "1000"
+        },
+        "1S_STAT_STATUS": {
+            "FLEX_COUNTER_STATUS": "enable",
+            "POLL_INTERVAL": "1000"
+        }
+    },
+    "FLEX_COUNTER_TABLE": {
+        "ETHERNET_COUNTER_ID_LIST_COUNTER": {
+            "attr1": "LAI_ETHERNET_STAT_OUT_CRC_ERRORS",
+            "attr10": "LAI_ETHERNET_STAT_IN_MAC_CONTROL_FRAMES",
+            "attr11": "LAI_ETHERNET_STAT_IN_MAC_PAUSE_FRAMES",
+            "attr12": "LAI_ETHERNET_STAT_IN_FRAGMENT_FRAMES",
+            "attr13": "LAI_ETHERNET_STAT_IN_8021Q_FRAMES",
+            "attr2": "LAI_ETHERNET_STAT_IN_JABBER_FRAMES",
+            "attr3": "LAI_ETHERNET_STAT_IN_PCS_BIP_ERRORS",
+            "attr4": "LAI_ETHERNET_STAT_IN_CRC_ERRORS",
+            "attr5": "LAI_ETHERNET_STAT_IN_PCS_ERRORED_SECONDS",
+            "attr6": "LAI_ETHERNET_STAT_IN_OVERSIZE_FRAMES",
+            "attr7": "LAI_ETHERNET_STAT_IN_UNDERSIZE_FRAMES",
+            "attr8": "LAI_ETHERNET_STAT_IN_PCS_SEVERELY_ERRORED_SECONDS",
+            "attr9": "LAI_ETHERNET_STAT_IN_PCS_UNAVAILABLE_SECONDS"
+        },
+        "TRANSCEIVER_COUNTER_ID_LIST_COUNTER": {
+            "attr1": "LAI_TRANSCEIVER_STAT_FEC_UNCORRECTOABLE_WORDS"
+        },
+        "TRANSCEIVER_COUNTER_ID_LIST_GAUGE": {
+            "attr1": "LAI_TRANSCEIVER_STAT_INPUT_POWER",
+            "attr2": "LAI_TRANSCEIVER_STAT_OUTPUT_POWER",
+            "attr3": "LAI_TRANSCEIVER_STAT_LASER_BIAS_CURRENT",
+            "attr4": "LAI_TRANSCEIVER_STAT_TEMPERATURE",
+            "attr5": "LAI_TRANSCEIVER_STAT_PRE_FEC_BER"
+        },
+        "TRANSCEIVER_COUNTER_ID_LIST_STATUS": {
+            "attr1": "LAI_TRANSCEIVER_ATTR_ENABLED",
+            "attr2": "LAI_TRANSCEIVER_ATTR_VENDOR",
+            "attr3": "LAI_TRANSCEIVER_ATTR_VENDOR_REV",
+            "attr4": "LAI_TRANSCEIVER_ATTR_DATE_CODE",
+            "attr5": "LAI_TRANSCEIVER_ATTR_VENDOR_PART",
+            "attr6": "LAI_TRANSCEIVER_ATTR_FORM_FACTOR",
+            "attr7": "LAI_TRANSCEIVER_ATTR_ETHERNET_PMD",
+            "attr8": "LAI_TRANSCEIVER_ATTR_ETHERNET_PMD_PRECONF",
+            "attr9": "LAI_TRANSCEIVER_ATTR_PRESENT",
+            "attr10": "LAI_TRANSCEIVER_ATTR_FAULT_CONDITION",
+            "attr11": "LAI_TRANSCEIVER_ATTR_SERIAL_NO",
+            "attr12": "LAI_TRANSCEIVER_ATTR_MFG_DATE",
+            "attr13": "LAI_TRANSCEIVER_ATTR_HARDWARE_VERSION",
+            "attr14": "LAI_TRANSCEIVER_ATTR_FIRMWARE_VERSION",
+            "attr15": "LAI_TRANSCEIVER_ATTR_REMOVABLE",
+            "attr16": "LAI_TRANSCEIVER_ATTR_OPER_STATUS",
+            "attr17": "LAI_TRANSCEIVER_ATTR_MFG_NAME",
+            "attr18": "LAI_TRANSCEIVER_ATTR_PART_NO",
+            "attr19": "LAI_TRANSCEIVER_ATTR_CONNECTOR_TYPE",
+            "attr20": "LAI_TRANSCEIVER_ATTR_FEC_MODE"
+        }
+    },
+    "LINECARD": {
+        "LINECARD-1-1": {
+            "linecard-type": "T340CE"
+        }
+    },
+    "TRANSCEIVER": {
+        "TRANSCEIVER-1-1-L1": {
+            "index": "1",
+            "enable": "true",
+            "fec-mode": "DISABLED",
+            "vendor-expect": "Acacia",
+            "num-of-physical-channel": "4"
+        },
+        "TRANSCEIVER-1-1-L2": {
+            "index": "2",
+            "enable": "true",
+            "fec-mode": "DISABLED",
+            "vendor-expect": "Acacia",
+            "num-of-physical-channel": "4"
+        }
+    },
+    "OTN": {
+        "CH1": {
+            "index": "1",
+            "tti-msg-expected": "TBC02-K-BA-T001:/1/1/L1",
+            "tti-msg-transmit": "TBC04-K-BA-T001:/1/1/L1",
+            "tti-msg-auto": "false",
+            "delay-measurement-enabled": "false"
+        },
+        "CH2": {
+            "index": "2",
+            "tti-msg-expected": "TBC02-K-BA-T001:/1/1/L2",
+            "tti-msg-transmit": "TBC04-K-BA-T001:/1/1/L2",
+            "tti-msg-auto": "false",
+            "delay-measurement-enabled": "false"
+        }
+    },
+    "ETHERNET": {
+        "CH1": {
+            "index": "1",
+            "client-als": "LASER_SHUTDOWN",
+            "als-delay": "2000"
+        },
+        "CH2": {
+            "index": "2",
+            "client-als": "LASER_SHUTDOWN",
+            "als-delay": "2000"
+        }
+    },
+    "LLDP": {
+        "CH1": {
+            "index": "1",
+            "enabled": "false"
+        },
+        "CH2": {
+            "index": "2",
+            "enabled": "false"
+        }
+    },
+    "LOGICAL_CHANNEL": {
+        "CH1": {
+            "index": "1",
+            "loopback-mode": "NONE",
+            "admin-state": "ENABLED"
+        },
+        "CH2": {
+            "index": "2",
+            "loopback-mode": "NONE",
+            "admin-state": "ENABLED"
+        }
+    },
+    "OCH": {
+        "OCH-1-1-L1": {
+            "index": "1",
+            "operational-mode": "200G::DP-QPSK::FEC-15::63.054::BICHM[0]",
+            "frequency": "193700001",
+            "target-output-power": "-1.23"
+        },
+        "OCH-1-1-L2": {
+            "index": "2",
+            "operational-mode": "100G::DP-QPSK::FEC-15::63.054::BICHM[0]",
+            "frequency": "193700002",
+            "target-output-power": "-1.21"
+        }
+    },
+    "PORT": {
+        "PORT-1-1-L1": {
+            "index": "1",
+            "admin-state": "ENABLED",
+            "cd-range-lower": "210002",
+            "cd-range-upper": "222345",
+            "roll-off": "23"
+        },
+        "PORT-1-1-L2": {
+            "index": "2",
+            "admin-state": "ENABLED",
+            "cd-range-lower": "210002",
+            "cd-range-upper": "222345",
+            "roll-off": "23"
+        },
+        "PORT-1-1-C1": {
+            "index": "3",
+            "admin-state": "ENABLED",
+            "cd-range-lower": "210002",
+            "cd-range-upper": "222345",
+            "roll-off": "23"
+        },
+        "PORT-1-1-C2": {
+            "index": "4",
+            "admin-state": "ENABLED",
+            "cd-range-lower": "210002",
+            "cd-range-upper": "222345",
+            "roll-off": "23"
+        },
+        "PORT-1-1-C3": {
+            "index": "5",
+            "admin-state": "ENABLED",
+            "cd-range-lower": "210002",
+            "cd-range-upper": "222345",
+            "roll-off": "23"
+        },
+        "PORT-1-1-C4": {
+            "index": "6",
+            "admin-state": "ENABLED",
+            "cd-range-lower": "210002",
+            "cd-range-upper": "222345",
+            "roll-off": "23"
+        }
+    }
+}

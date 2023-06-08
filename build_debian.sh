@@ -3,12 +3,16 @@
 ## an ONIE installer image.
 ##
 ## USAGE:
-##   USERNAME=username PASSWORD=password ./build_debian
+##   USERNAME=username PASSWORD=password CLIUSER=admin CLIUSER_PASSWORD=cliuser_password ./build_debian
 ## ENVIRONMENT:
 ##   USERNAME
-##          The name of the default admin user
+##          The name of the root user
 ##   PASSWORD
 ##          The password, expected by chpasswd command
+##   CLIUSER
+##          The name of the cli user whose default shell is cli.
+##   CLIUSER_PASSWORD
+##          The cli user's password, expected by chpasswd command
 
 ## Default user
 [ -n "$USERNAME" ] || {
@@ -22,6 +26,16 @@
     exit 1
 }
 
+[ -n "$CLIUSER" ] || {
+    echo "Error: no or empty CLIUSER"
+    exit 1
+}
+
+[ -n "$CLIUSER_PASSWORD" ] || {
+    echo "Error: no or empty CLIUSER_PASSWORD"
+    exit 1
+}
+
 ## Include common functions
 . functions.sh
 
@@ -31,8 +45,13 @@ set -x -e
 CONFIGURED_ARCH=$([ -f .arch ] && cat .arch || echo amd64)
 
 ## docker engine version (with platform)
+if [[ $CONFIGURED_ARCH == arm64 ]]; then
+DOCKER_VERSION=5:20.10.7~3-0~debian-$IMAGE_DISTRO
+LINUX_KERNEL_VERSION=5.10.0-8-2
+else
 DOCKER_VERSION=5:18.09.8~3-0~debian-$IMAGE_DISTRO
 LINUX_KERNEL_VERSION=4.19.0-12-2
+fi
 
 ## Working directory to prepare the file system
 FILESYSTEM_ROOT=./fsroot
@@ -111,6 +130,10 @@ sudo LANG=C chroot $FILESYSTEM_ROOT apt-get -y upgrade
 echo '[INFO] Install packages for building image'
 sudo LANG=C chroot $FILESYSTEM_ROOT apt-get -y install makedev psmisc systemd-sysv
 
+if [[ $CROSS_BUILD_ENVIRON == y ]]; then
+    sudo LANG=C chroot $FILESYSTEM_ROOT dpkg --add-architecture $CONFIGURED_ARCH
+fi
+
 ## Create device files
 echo '[INFO] MAKEDEV'
 if [[ $CONFIGURED_ARCH == armhf || $CONFIGURED_ARCH == arm64 ]]; then
@@ -133,6 +156,10 @@ sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/initramfs-tools_*.deb || \
     sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install -f
 sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/linux-image-${LINUX_KERNEL_VERSION}-*_${CONFIGURED_ARCH}.deb || \
     sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install -f
+if [[ $CONFIGURED_ARCH == arm64 ]]; then
+sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/linux-image-5.10.35_arm64.deb || \
+    sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install -f
+fi
 sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install acl
 if [[ $CONFIGURED_ARCH == amd64 ]]; then
     sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install dmidecode hdparm
@@ -171,9 +198,6 @@ sudo cp files/initramfs-tools/union-mount $FILESYSTEM_ROOT/etc/initramfs-tools/s
 sudo chmod +x $FILESYSTEM_ROOT/etc/initramfs-tools/scripts/init-bottom/union-mount
 sudo cp files/initramfs-tools/varlog $FILESYSTEM_ROOT/etc/initramfs-tools/scripts/init-bottom/varlog
 sudo chmod +x $FILESYSTEM_ROOT/etc/initramfs-tools/scripts/init-bottom/varlog
-# Management interface (eth0) dhcp can be optionally turned off (during a migration from another NOS to SONiC)
-#sudo cp files/initramfs-tools/mgmt-intf-dhcp $FILESYSTEM_ROOT/etc/initramfs-tools/scripts/init-bottom/mgmt-intf-dhcp
-#sudo chmod +x $FILESYSTEM_ROOT/etc/initramfs-tools/scripts/init-bottom/mgmt-intf-dhcp
 sudo cp files/initramfs-tools/union-fsck $FILESYSTEM_ROOT/etc/initramfs-tools/hooks/union-fsck
 sudo chmod +x $FILESYSTEM_ROOT/etc/initramfs-tools/hooks/union-fsck
 pushd $FILESYSTEM_ROOT/usr/share/initramfs-tools/scripts/init-bottom && sudo patch -p1 < $OLDPWD/files/initramfs-tools/udev.patch; popd
@@ -187,12 +211,41 @@ if [ -f platform/$CONFIGURED_PLATFORM/modules ]; then
     cat platform/$CONFIGURED_PLATFORM/modules | sudo tee -a $FILESYSTEM_ROOT/etc/initramfs-tools/modules > /dev/null
 fi
 
+##install devmgr
+sudo cp files/dev_mgr/DevMgr  $FILESYSTEM_ROOT/usr/sbin/DevMgr
+sudo chmod +x $FILESYSTEM_ROOT/usr/sbin/DevMgr
+
+sudo cp files/dev_mgr/mac.sh  $FILESYSTEM_ROOT/usr/sbin/mac.sh
+sudo chmod +x $FILESYSTEM_ROOT/usr/sbin/mac.sh
+
+sudo cp files/udp_proxy/UdpProxy  $FILESYSTEM_ROOT/usr/sbin/UdpProxy
+sudo chmod +x $FILESYSTEM_ROOT/usr/sbin/UdpProxy
+
+sudo cp files/dev_mgr/cli_client  $FILESYSTEM_ROOT/usr/sbin/cli_client
+sudo chmod +x $FILESYSTEM_ROOT/usr/sbin/cli_client
+sudo cp files/dev_mgr/vconfig  $FILESYSTEM_ROOT/usr/sbin/vconfig
+sudo chmod +x $FILESYSTEM_ROOT/usr/sbin/vconfig
+sudo cp files/dev_mgr/libft4222.so $FILESYSTEM_ROOT/lib/
+sudo cp files/dev_mgr/libmsdDrv.so $FILESYSTEM_ROOT/lib/
+sudo cp files/dev_mgr/lpc_fpga.ko $FILESYSTEM_ROOT/usr/sbin/
+
+##install set_mac_to_sys.py
+sudo cp files/dev_mgr/set_mac_to_sys.py  $FILESYSTEM_ROOT/usr/sbin/set_mac_to_sys.py
+sudo chmod +x $FILESYSTEM_ROOT/usr/sbin/set_mac_to_sys.py
+
+##install test_cmd
+sudo cp files/dev_mgr/test_cmd  $FILESYSTEM_ROOT/usr/sbin/test_cmd
+sudo chmod +x $FILESYSTEM_ROOT/usr/sbin/test_cmd
+
+##install recover_default_config.py
+sudo cp files/dev_mgr/recover_default_config.py  $FILESYSTEM_ROOT/usr/sbin/recover_default_config.py
+sudo chmod +x $FILESYSTEM_ROOT/usr/sbin/recover_default_config.py
+
 ## Install docker
 echo '[INFO] Install docker'
 ## Install apparmor utils since they're missing and apparmor is enabled in the kernel
 ## Otherwise Docker will fail to start
 sudo LANG=C chroot $FILESYSTEM_ROOT apt-get -y install apparmor
-sudo cp files/image_config/ntp/ntp-apparmor $FILESYSTEM_ROOT/etc/apparmor.d/local/usr.sbin.ntpd
 sudo LANG=C chroot $FILESYSTEM_ROOT apt-get -y install apt-transport-https \
                                                        ca-certificates \
                                                        curl \
@@ -247,10 +300,10 @@ sudo LANG=C chroot $FILESYSTEM_ROOT groupadd -f redis
 
 ## Create default user
 ## Note: user should be in the group with the same name, and also in sudo/docker/redis groups
-sudo LANG=C chroot $FILESYSTEM_ROOT useradd -G sudo,docker,redis $USERNAME -c "$DEFAULT_USERINFO" -m -s /bin/bash
+sudo LANG=C chroot $FILESYSTEM_ROOT useradd -G sudo,docker,redis $CLIUSER -c "$DEFAULT_USERINFO" -m -s /usr/sbin/cli/clish_start
+echo "$CLIUSER:$CLIUSER_PASSWORD" | sudo LANG=C chroot $FILESYSTEM_ROOT chpasswd
 ## Create password for the default user
 echo "$USERNAME:$PASSWORD" | sudo LANG=C chroot $FILESYSTEM_ROOT chpasswd
-
 if [[ $CONFIGURED_ARCH == amd64 ]]; then
     ## Pre-install hardware drivers
     sudo LANG=C chroot $FILESYSTEM_ROOT apt-get -y install      \
@@ -314,7 +367,21 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
     python3-pip             \
     cron                    \
     haveged                 \
-    jq
+    vsftpd                  \
+    ntpdate                 \
+    jq                      \
+    auditd                  \
+    gdb                     \
+    chrony                  \
+    libxml2
+
+# Have systemd create the auditd log directory
+sudo mkdir -p ${FILESYSTEM_ROOT}/etc/systemd/system/auditd.service.d
+sudo tee ${FILESYSTEM_ROOT}/etc/systemd/system/auditd.service.d/log-directory.conf >/dev/null <<EOF
+[Service]
+LogsDirectory=audit
+LogsDirectoryMode=0750
+EOF
 
 if [[ $CONFIGURED_ARCH == amd64 ]]; then
 ## Pre-install the fundamental packages for amd64 (x86)
@@ -322,6 +389,9 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
     flashrom                \
     rasdaemon
 fi
+
+## copy vsftpd.conf
+sudo cp files/vsftpd/vsftpd.conf $FILESYSTEM_ROOT/etc/
 
 ## Set /etc/shadow permissions to -rw-------.
 sudo LANG=c chroot $FILESYSTEM_ROOT chmod 600 /etc/shadow
@@ -376,7 +446,7 @@ rm /files/etc/ssh/sshd_config/ClientAliveInterval
 rm /files/etc/ssh/sshd_config/ClientAliveCountMax
 touch /files/etc/ssh/sshd_config/EmptyLineHack
 rename /files/etc/ssh/sshd_config/EmptyLineHack ""
-set /files/etc/ssh/sshd_config/ClientAliveInterval 900
+set /files/etc/ssh/sshd_config/ClientAliveInterval 300
 set /files/etc/ssh/sshd_config/ClientAliveCountMax 0
 ins #comment before /files/etc/ssh/sshd_config/ClientAliveInterval
 set /files/etc/ssh/sshd_config/#comment[following-sibling::*[1][self::ClientAliveInterval]] "Close inactive client sessions after 15 minutes"
@@ -386,6 +456,8 @@ EOF
 # Configure sshd to listen for v4 connections; disable listening for v6 connections
 sudo sed -i 's/^ListenAddress ::/#ListenAddress ::/' $FILESYSTEM_ROOT/etc/ssh/sshd_config
 sudo sed -i 's/^#ListenAddress 0.0.0.0/ListenAddress 0.0.0.0/' $FILESYSTEM_ROOT/etc/ssh/sshd_config
+
+sudo sed -i 's/^#PermitRootLogin prohibit-password/PermitRootLogin yes/' $FILESYSTEM_ROOT/etc/ssh/sshd_config
 
 ## Config rsyslog
 sudo augtool -r $FILESYSTEM_ROOT --autosave "
@@ -416,21 +488,26 @@ done < files/image_config/sysctl/sysctl-net.conf
 sudo augtool --autosave "$sysctl_net_cmd_string" -r $FILESYSTEM_ROOT
 
 # Upgrade pip via PyPI and uninstall the Debian version
-sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip2 install --upgrade 'pip<21'
+sudo chroot $FILESYSTEM_ROOT pip3 config set global.index-url http://mirrors.aliyun.com/pypi/simple
+sudo chroot $FILESYSTEM_ROOT pip3 config set install.trusted-host mirrors.aliyun.com
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install --upgrade pip
 sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get purge -y python-pip python3-pip
 
 # For building Python packages
-sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip2 install 'setuptools==40.8.0'
-sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip2 install 'wheel==0.35.1'
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install 'setuptools==49.6.00'
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install 'wheel==0.35.1'
+
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install 'urllib3==1.26.15'
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install 'requests==2.28.2'
 
 # docker Python API package is needed by Ansible docker module as well as some SONiC applications
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install 'docker==4.3.1'
 
 # Install scapy
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install 'scapy==2.4.4'
+
+# Install pytest
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install 'pytest==6.2.5'
 
 ## Note: keep pip installed for maintainance purpose
 
@@ -440,28 +517,12 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
 ## Create /var/run/redis folder for docker-database to mount
 sudo mkdir -p $FILESYSTEM_ROOT/var/run/redis
 
-## Config DHCP for eth0
-sudo tee -a $FILESYSTEM_ROOT/etc/network/interfaces > /dev/null <<EOF
-
-auto eth0
-allow-hotplug eth0
-iface eth0 inet dhcp
-EOF
-
 sudo cp files/dhcp/rfc3442-classless-routes $FILESYSTEM_ROOT/etc/dhcp/dhclient-exit-hooks.d
 sudo cp files/dhcp/sethostname $FILESYSTEM_ROOT/etc/dhcp/dhclient-exit-hooks.d/
 sudo cp files/dhcp/sethostname6 $FILESYSTEM_ROOT/etc/dhcp/dhclient-exit-hooks.d/
 sudo cp files/dhcp/graphserviceurl $FILESYSTEM_ROOT/etc/dhcp/dhclient-exit-hooks.d/
 sudo cp files/dhcp/snmpcommunity $FILESYSTEM_ROOT/etc/dhcp/dhclient-exit-hooks.d/
 sudo cp files/dhcp/vrf $FILESYSTEM_ROOT/etc/dhcp/dhclient-exit-hooks.d/
-if [ -f files/image_config/ntp/ntp ]; then
-    sudo cp ./files/image_config/ntp/ntp $FILESYSTEM_ROOT/etc/init.d/
-fi
-
-if [ -f files/image_config/ntp/ntp-systemd-wrapper ]; then
-    sudo mkdir -p $FILESYSTEM_ROOT/usr/lib/ntp/
-    sudo cp ./files/image_config/ntp/ntp-systemd-wrapper $FILESYSTEM_ROOT/usr/lib/ntp/
-fi
 
 ## Version file
 sudo mkdir -p $FILESYSTEM_ROOT/etc/sonic
@@ -474,6 +535,7 @@ commit_id: '$(git rev-parse --short HEAD)'
 build_date: $(date -u)
 build_number: ${BUILD_NUMBER:-0}
 built_by: $USER@$BUILD_HOSTNAME
+lai_version: '${LAI_VERSION}'
 EOF
 
 ## Copy over clean-up script
@@ -489,7 +551,7 @@ fi
 sudo cp ./asic_config_checksum $FILESYSTEM_ROOT/etc/sonic/asic_config_checksum
 
 if [ -f sonic_debian_extension.sh ]; then
-    ./sonic_debian_extension.sh $FILESYSTEM_ROOT $PLATFORM_DIR
+    ./sonic_debian_extension.sh $FILESYSTEM_ROOT $PLATFORM_DIR $IMAGE_DISTRO
 fi
 
 ## Organization specific extensions such as Configuration & Scripts for features like AAA, ZTP...
@@ -507,6 +569,39 @@ sudo cp -f files/image_config/ebtables/ebtables.service $FILESYSTEM_ROOT/lib/sys
 sudo cp files/image_config/ebtables/ebtables.filter.cfg ${FILESYSTEM_ROOT}/etc
 sudo LANG=C chroot $FILESYSTEM_ROOT update-alternatives --set ebtables /usr/sbin/ebtables-legacy
 sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable ebtables.service
+
+#install history_db_service
+sudo cp -f files/image_config/history_db/history_db.service $FILESYSTEM_ROOT/lib/systemd/system/history_db.service
+sudo cp -f files/image_config/history_db/history_db.timer $FILESYSTEM_ROOT/lib/systemd/system/history_db.timer
+sudo cp -f files/image_config/history_db/save_history.sh $FILESYSTEM_ROOT/usr/bin/save_history.sh
+sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable history_db.timer
+
+#install alarm_daemon_service
+sudo cp -f files/image_config/alarm_daemon/alarm_daemon.service $FILESYSTEM_ROOT/lib/systemd/system/alarm_daemon.service
+sudo cp -f files/image_config/alarm_daemon/alarm_daemon.py $FILESYSTEM_ROOT/usr/bin/alarm_daemon.py
+sudo cp -f files/image_config/alarm_daemon/alarm_profile_default.json $FILESYSTEM_ROOT/etc/sonic/alarm_profile_default.json
+sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable alarm_daemon.service
+
+#install chrony-sync && chrony-config services
+sudo cp -f files/image_config/chrony/chrony-sync.service $FILESYSTEM_ROOT/lib/systemd/system/chrony-sync.service
+sudo cp -f files/image_config/chrony/chrony-sync.timer $FILESYSTEM_ROOT/lib/systemd/system/chrony-sync.timer
+sudo cp -f files/image_config/chrony/chrony-config.service $FILESYSTEM_ROOT/lib/systemd/system/chrony-config.service
+sudo cp -f files/image_config/chrony/chrony-config.sh $FILESYSTEM_ROOT/usr/bin/chrony-config.sh
+sudo cp -f files/image_config/chrony/write2Redis.sh $FILESYSTEM_ROOT/usr/bin/write2Redis.sh
+sudo cp -f files/image_config/chrony/chrony.conf.j2 $FILESYSTEM_ROOT/usr/share/sonic/templates/chrony.conf.j2
+sudo sed -i '/DAEMON_OPTS/s/-F -1/-F -1 -u root/g' ${FILESYSTEM_ROOT}/etc/default/chrony
+sudo LANG=C chroot $FILESYSTEM_ROOT systemctl disable chrony.service
+sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable chrony-config.service
+sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable chrony-sync.timer
+
+#install devmock_service
+sudo cp -f files/image_config/devmock/devmock.service $FILESYSTEM_ROOT/lib/systemd/system/devmock.service
+sudo cp -f files/image_config/devmock/dev_mock_data.json $FILESYSTEM_ROOT/etc/sonic/dev_mock_data.json
+sudo cp -f files/image_config/devmock/devmock $FILESYSTEM_ROOT/usr/bin/devmock
+sudo chmod +x $FILESYSTEM_ROOT/usr/bin/devmock
+if [[ $CONFIGURED_PLATFORM == vs ]]; then
+    sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable devmock.service
+fi
 
 ## Debug Image specific changes
 ## Update motd for debug image
@@ -541,7 +636,7 @@ if [[ $CONFIGURED_ARCH == armhf || $CONFIGURED_ARCH == arm64 ]]; then
         ## Overwriting the initrd image with uInitrd
         sudo LANG=C chroot $FILESYSTEM_ROOT mv /boot/u${INITRD_FILE} /boot/$INITRD_FILE
     elif [[ $CONFIGURED_ARCH == arm64 ]]; then
-        sudo cp -v $PLATFORM_DIR/${sonic_asic_platform}-${CONFIGURED_ARCH}/sonic_fit.its $FILESYSTEM_ROOT/boot/
+        sudo cp -v $PLATFORM_DIR/${sonic_asic_platform}/sonic_fit.its $FILESYSTEM_ROOT/boot/
         sudo LANG=C chroot $FILESYSTEM_ROOT mkimage -f /boot/sonic_fit.its /boot/sonic_${CONFIGURED_ARCH}.fit
     fi
 fi
@@ -581,7 +676,10 @@ sudo mksquashfs $FILESYSTEM_ROOT $FILESYSTEM_SQUASHFS -e boot -e var/lib/docker 
 
 scripts/collect_host_image_version_files.sh $TARGET_PATH $FILESYSTEM_ROOT
 
-if [[ $CONFIGURED_ARCH == armhf || $CONFIGURED_ARCH == arm64 ]]; then
+# ALERT: This bit of logic tears down the qemu based build environment used to
+# perform builds for the ARM architecture. This must be the last step in this
+# script before creating the Sonic installer payload zip file.
+if [[ $MULTIARCH_QEMU_ENVIRON == y || $CROSS_BUILD_ENVIRON == y ]]; then
     # Remove qemu arm bin executable used for cross-building
     sudo rm -f $FILESYSTEM_ROOT/usr/bin/qemu*static || true
     DOCKERFS_PATH=../dockerfs/

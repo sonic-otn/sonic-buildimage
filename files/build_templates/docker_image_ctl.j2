@@ -37,7 +37,11 @@ function updateSyslogConf()
         CONTAINER_NAME="$DOCKERNAME"
         TMP_FILE="/tmp/rsyslog.$CONTAINER_NAME.conf"
 
+        {%- if docker_container_name == "database" %}
+        python3 -c "import jinja2, os; paths=['/usr/share/sonic/templates']; loader = jinja2.FileSystemLoader(paths); env = jinja2.Environment(loader=loader, trim_blocks=True); template_file='/usr/share/sonic/templates/rsyslog-container.conf.j2'; template = env.get_template(os.path.basename(template_file)); data=template.render({\"target_ip\":\"$TARGET_IP\",\"container_name\":\"$CONTAINER_NAME\"}); print(data)" > $TMP_FILE
+        {%- else %}
         sonic-cfggen -t /usr/share/sonic/templates/rsyslog-container.conf.j2 -a "{\"target_ip\": \"$TARGET_IP\", \"container_name\": \"$CONTAINER_NAME\" }"  > $TMP_FILE
+        {%- endif %}
         docker cp $TMP_FILE ${DOCKERNAME}:/etc/rsyslog.conf
         rm -rf $TMP_FILE
     fi
@@ -75,10 +79,6 @@ function preStartAction()
         if [[ ("$BOOT_TYPE" == "warm" || "$BOOT_TYPE" == "fastfast")  && -f $WARM_DIR/dump.rdb ]]; then
             # Load redis content from /host/warmboot/dump.rdb
             docker cp $WARM_DIR/dump.rdb database$DEV:/var/lib/redis/dump.rdb
-        else
-            # Create an emtpy file and overwrite any RDB if already there
-            echo -n > /tmp/dump.rdb
-            docker cp /tmp/dump.rdb database$DEV:/var/lib/redis/
         fi
     fi
 {%- elif docker_container_name == "snmp" %}
@@ -118,6 +118,13 @@ function postStartAction()
         if [[ ("$BOOT_TYPE" == "warm" || "$BOOT_TYPE" == "fastfast") && -f $WARM_DIR/dump.rdb ]]; then
             rm -f $WARM_DIR/dump.rdb
         else
+            $SONIC_DB_CLI APPL_DB FLUSHDB
+            $SONIC_DB_CLI ASIC_DB FLUSHDB
+            $SONIC_DB_CLI COUNTERS_DB FLUSHDB
+            $SONIC_DB_CLI CONFIG_DB FLUSHDB
+            $SONIC_DB_CLI FLEX_COUNTER_DB FLUSHDB
+            $SONIC_DB_CLI STATE_DB FLUSHDB
+
             # If there is a config_db.json dump file, load it.
             if [ -r /etc/sonic/config_db$DEV.json ]; then
                 if [ -r /etc/sonic/init_cfg.json ]; then
@@ -135,12 +142,6 @@ function postStartAction()
             $SONIC_DB_CLI CONFIG_DB SET "CONFIG_DB_INITIALIZED" "1"
         fi
 
-        if [[ -x /usr/local/bin/db_migrator.py ]]; then
-            # Migrate the DB to the latest schema version if needed
-            if [ -z "$DEV" ]; then
-                /usr/local/bin/db_migrator.py -o migrate
-            fi
-        fi
         # Add redis UDS to the redis group and give read/write access to the group
         REDIS_SOCK="/var/run/redis${DEV}/redis.sock"
     else
@@ -174,6 +175,7 @@ function postStartAction()
 {%- else %}
     : # nothing
 {%- endif %}
+    docker cp -L /etc/localtime ${DOCKERNAME}:/etc/
 }
 
 start() {
@@ -319,12 +321,16 @@ start() {
         # /var/run/redis1 ---> mounted as --> /var/run/redis1
         # redis_dir_list is a string of form "/var/run/redis0/ /var/run/redis1/ /var/run/redis2/"
         if [ -n "$redis_dir_list" ]; then
+	    redis_port=`expr $DEV + 5000`	
+            redis_port1=`expr $DEV + 5499`
+            redis_port2=`expr $DEV + 5999`
             id=`expr $DEV + 1`
             redis_dir=`echo $redis_dir_list | cut -d " " -f $id`
             REDIS_MNT=" -v $redis_dir:$redis_dir:rw "
         fi
 
         {%- if docker_container_name == "database" %}
+        NET="bridge"
         DB_OPT=$DB_OPT" -v /var/run/redis$DEV:/var/run/redis:rw "
         {%- else %}
         NET="container:database$DEV"
@@ -381,11 +387,16 @@ start() {
         -v /etc/sonic/frr/$DEV:/etc/frr:rw \
 {%- endif %}
 {%- if docker_container_name == "database" %}
+        -p 0.0.0.0:$redis_port:6379 \
+        -p 0.0.0.0:$redis_port1:5000/udp \
+        -p 0.0.0.0:$redis_port2:5500/udp \
         $DB_OPT \
+        -v /etc/sonic/redis$DEV:/var/lib/redis \
 {%- else %}
         -v /var/run/redis$DEV:/var/run/redis:rw \
         -v /var/run/redis-chassis:/var/run/redis-chassis:ro \
         -v /usr/share/sonic/device/$PLATFORM/$HWSKU/$DEV:/usr/share/sonic/hwsku:ro \
+        -v /usr/share/sonic/device/$PLATFORM/$DEV:/usr/share/sonic/slot:ro \
 {%- endif %}
         $REDIS_MNT \
         -v /usr/share/sonic/device/$PLATFORM:/usr/share/sonic/platform:ro \
@@ -424,9 +435,6 @@ stop() {
     if [ "$DEV" ]; then
         ip netns delete "$NET_NS"
     fi
-    {%- elif docker_container_name == "teamd" %}
-    # Longer timeout of 60 sec to wait for Portchannels to be cleaned.
-    /usr/local/bin/container stop -t 60 $DOCKERNAME
     {%- else %}
     /usr/local/bin/container stop $DOCKERNAME
     {%- endif %}

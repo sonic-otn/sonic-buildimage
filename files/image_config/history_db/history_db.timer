@@ -1,0 +1,14 @@
+[Unit]
+Description=save history db until SONiC has started
+PartOf=history_db.service
+
+[Timer]
+OnActiveSec=300
+OnUnitActiveSec=10 min
+Unit=history_db.service
+
+[Install]
+WantedBy=timers.target
+
+WantedBy=sonic.target
+

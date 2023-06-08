@@ -18,6 +18,7 @@ HWSKU_ROOT_PATH = '/usr/share/sonic/hwsku'
 
 PLATFORM_JSON = 'platform.json'
 PORT_CONFIG_INI = 'port_config.ini'
+LOGICALCHANNEL_CONFIG_INI = 'logicalchannel_config.ini'
 HWSKU_JSON = 'hwsku.json'
 
 PORT_STR = "Ethernet"
@@ -118,7 +119,7 @@ def parse_port_config_file(port_config_file):
     port_alias_map = {}
     port_alias_asic_map = {}
     # Default column definition
-    titles = ['name', 'lanes', 'alias', 'index']
+    titles = ['name', 'index', 'port-type', 'port-id', 'subcomponents']
     with open(port_config_file) as data:
         for line in data:
             if line.startswith('#'):
@@ -140,12 +141,6 @@ def parse_port_config_file(port_config_file):
             port_alias_map[data['alias']] = name
             # asic_port_name to sonic_name mapping also included in
             # port_alias_map
-            if (('asic_port_name' in data) and
-                (data['asic_port_name'] != name)):
-                port_alias_map[data['asic_port_name']] = name
-            # alias to asic_port_name mapping
-            if 'asic_port_name' in data:
-                port_alias_asic_map[data['alias']] = data['asic_port_name'].strip()
     return (ports, port_alias_map, port_alias_asic_map)
 
 # Generate configs (i.e. alias, lanes, speed, index) for port
@@ -189,6 +184,35 @@ def gen_port_config(ports, parent_intf_id, index, alias_at_lanes, lanes, k,  off
         return offset
     else:
         raise Exception('Regex return for k is None...')
+
+def get_logicalchannel_config(hwsku=None, platform=None, logicalchannel_config_file=None, hwsku_config_file=None, asic=None):
+    return parse_logicalchannel_config_file(logicalchannel_config_file)
+
+def parse_logicalchannel_config_file(logicalchannel_config_file):
+    logicalchannels = {}
+    logicalchannel_alias_map = {}
+    logicalchannel_alias_asic_map = {}
+    titles = ['name', 'index', 'channel-id', 'transceiver', 'description']
+    with open(logicalchannel_config_file) as data:
+        for line in data:
+            if line.startswith('#'):
+                if "name" in line:
+                    titles = line.strip('#').split()
+                continue;
+            tokens = line.split()
+            if len(tokens) < 2:
+                continue
+            name_index = titles.index('name')
+            name = tokens[name_index]
+            data = {}
+            for i, item in enumerate(tokens):
+                if i == name_index:
+                    continue
+                data[titles[i]] = item
+            data.setdefault('alias', name)
+            logicalchannels[name] = data
+            logicalchannel_alias_map[data['alias']] = name
+    return (logicalchannels, logicalchannel_alias_map, logicalchannel_alias_asic_map)
 
 """
 Given a port and breakout mode, this method returns

@@ -1,0 +1,6 @@
+.PHONY: ${subdirs}
+all:: ${subdirs}
+
+${subdirs}::
+	make -C $@
+

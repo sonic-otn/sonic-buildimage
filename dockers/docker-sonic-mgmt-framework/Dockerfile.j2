@@ -15,17 +15,16 @@ RUN pip2 install --upgrade 'pip<21'
 RUN apt-get purge -y python-pip
 RUN pip2 install setuptools==40.8.0
 RUN pip2 install wheel==0.35.1
-RUN pip2 install connexion==1.1.15 \
-                setuptools==21.0.0 \
-                grpcio-tools==1.20.0 \
-                certifi==2017.4.17 \
-                python-dateutil==2.6.0 \
-                six==1.11.0 \
-                urllib3==1.21.1
+# RUN pip2 install connexion==1.1.15 \
+#                 setuptools==21.0.0 \
+#                 grpcio-tools==1.20.0 \
+#                 certifi==2017.4.17 \
+#                 python-dateutil==2.6.0 \
+#                 six==1.11.0 \
+#                 urllib3==1.21.1
 
 RUN pip3 install connexion==2.7.0 \
                  setuptools==21.0.0 \
-                 grpcio-tools==1.20.0 \
                  certifi==2017.4.17 \
                  python-dateutil==2.6.0 \
                  six==1.11.0 \

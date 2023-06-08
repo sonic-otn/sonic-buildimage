@@ -1,5 +1,12 @@
 {% set mgmt_if = {} %}
-{% if MGMT_INTERFACE %}
+{% if LOOPBACK_INTERFACE %}
+{% for (mgmt_name, mgmt_prefix) in LOOPBACK_INTERFACE|pfx_filter %}
+{% if mgmt_prefix|ipv4 %}
+{% if mgmt_if.update({'port_name' : mgmt_name}) %} {% endif %}
+{% if mgmt_if.update({'ipv4' : mgmt_prefix|ip}) %} {% endif %}
+{% endif %}
+{% endfor %}
+{% elif MGMT_INTERFACE %}
 {% for (mgmt_name, mgmt_prefix) in MGMT_INTERFACE|pfx_filter %}
 {% if mgmt_prefix|ipv4 %}
 {% if mgmt_if.update({'port_name' : mgmt_name}) %} {% endif %}
@@ -12,7 +19,8 @@
 {% if MGMT_PORT and MGMT_PORT[mgmt_if.port_name] and MGMT_PORT[mgmt_if.port_name].alias %}
 configure ports eth0 lldp portidsubtype local {{ MGMT_PORT[mgmt_if.port_name].alias }}
 {% else %}
-configure ports eth0 lldp portidsubtype local {{ mgmt_if.port_name }}
+configure system interface pattern eth0.4,eth0.5,eth0.3,eth0.6
+configure lldp portidsubtype ifname 
 {% endif %}
 configure system ip management pattern {{ mgmt_if.ipv4 }}
 {% endif %}

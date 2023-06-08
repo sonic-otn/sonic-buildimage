@@ -1,0 +1,205 @@
+{%- set oa_id_list = ['1','2'] %}
+{%- set osc_id_list = ['1'] %}
+{%- set apsport_id_list = [] %}
+{%- set attenuator_id_list = ['1', '3'] %}
+{
+    "AMPLIFIER": {
+{% for id in oa_id_list %}
+        "AMPLIFIER-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }},
+            "location": "1-{{linecard_id}}",
+            "component": "AMPLIFIER-1-{{linecard_id}}-{{id}}",
+            "parent": "LINECARD-1-{{linecard_id}}",
+            "subcomponents": "PORT-1-{{linecard_id}}-{{id}}-EDFAIN,PORT-1-{{linecard_id}}-{{id}}-EDFAOUT"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "OSC": {
+{% for id in osc_id_list %}
+        "OSC-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }},
+            "location": "1-{{linecard_id}}",
+            "interface": "INTERFACE-1-{{linecard_id}}-{{id}}-OSC",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "INTERFACE": {
+{% for id in osc_id_list %}
+        "INTERFACE-1-{{linecard_id}}-{{id}}-OSC": {
+            "index": {{ loop.index }},
+            "interface-type": "OSC",
+            "interface-id": {{ id }},
+            "name": "INTERFACE-1-{{linecard_id}}-{{id}}-OSC"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "PORT": {
+        "PORT-1-{{linecard_id}}-1-EDFAIN": {
+            "index": 1,
+            "port-type": "EDFA_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "AMPLIFIER-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-1-EDFAOUT": {
+            "index": 2,
+            "port-type": "EDFA_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "AMPLIFIER-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-2-EDFAIN": {
+            "index": 3,
+            "port-type": "EDFA_IN",
+            "port-id": 2,
+            "location": "1-{{linecard_id}}",
+            "parent": "AMPLIFIER-1-{{linecard_id}}-2"
+        },
+        "PORT-1-{{linecard_id}}-2-EDFAOUT": {
+            "index": 4,
+            "port-type": "EDFA_OUT",
+            "port-id": 2,
+            "location": "1-{{linecard_id}}",
+            "parent": "AMPLIFIER-1-{{linecard_id}}-2"
+        },
+        "PORT-1-{{linecard_id}}-EXTIN": {
+            "index": 11,
+            "port-type": "MD_EXP_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-EXTOUT": {
+            "index": 12,
+            "port-type": "MD_EXP_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD33IN": {
+            "index": 13,
+            "port-type": "MD_IN",
+            "port-id": 33,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD33OUT": {
+            "index": 14,
+            "port-type": "MD_OUT",
+            "port-id": 33,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD38IN": {
+            "index": 15,
+            "port-type": "MD_IN",
+            "port-id": 38,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD38OUT": {
+            "index": 16,
+            "port-type": "MD_OUT",
+            "port-id": 38,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD43IN": {
+            "index": 17,
+            "port-type": "MD_IN",
+            "port-id": 43,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD43OUT": {
+            "index": 18,
+            "port-type": "MD_OUT",
+            "port-id": 43,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD48IN": {
+            "index": 19,
+            "port-type": "MD_IN",
+            "port-id": 48,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD48OUT": {
+            "index": 20,
+            "port-type": "MD_OUT",
+            "port-id": 48,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD53IN": {
+            "index": 21,
+            "port-type": "MD_IN",
+            "port-id": 53,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD53OUT": {
+            "index": 22,
+            "port-type": "MD_OUT",
+            "port-id": 53,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD58IN": {
+            "index": 23,
+            "port-type": "MD_IN",
+            "port-id": 58,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-MD58OUT": {
+            "index": 24,
+            "port-type": "MD_OUT",
+            "port-id": 58,
+            "location": "1-{{linecard_id}}",
+            "parent": "MUX-1-{{linecard_id}}-1"
+        },
+        "PORT-1-{{linecard_id}}-L1IN": {
+            "index": 25,
+            "port-type": "LINE_IN",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        },
+        "PORT-1-{{linecard_id}}-L1OUT": {
+            "index": 26,
+            "port-type": "LINE_OUT",
+            "port-id": 1,
+            "location": "1-{{linecard_id}}",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        }
+    },
+    "ATTENUATOR": {
+{% for id in attenuator_id_list %}
+        "ATTENUATOR-1-{{linecard_id}}-{{id}}": {
+            "index": {{ loop.index }},
+            "id": {{ id }},
+            "component": "ATTENUATOR-1-{{linecard_id}}-{{id}}"
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "MUX": {
+        "MUX-1-{{linecard_id}}-1": {
+            "index": 1,
+            "empty": "false",
+            "name": "MUX-1-{{linecard_id}}-1",
+            "oper-status": "ACTIVE",
+            "admin-state": "ENABLED",
+            "removable": "false",
+            "parent": "LINECARD-1-{{linecard_id}}"
+        }
+    }
+}

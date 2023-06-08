@@ -19,7 +19,7 @@ $ModLoad imklog   # provides kernel logging support
 
 # provides UDP syslog reception
 $ModLoad imudp
-$UDPServerAddress {{udp_server_ip}}  #bind to localhost before udp server run
+#$UDPServerAddress {{udp_server_ip}}  #bind to localhost before udp server run
 $UDPServerRun 514
 
 # provides TCP syslog reception
@@ -37,14 +37,22 @@ $UDPServerRun 514
 #$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
 
 # Define a custom template
-$template SONiCFileFormat,"%timegenerated%.%timegenerated:::date-subseconds% %HOSTNAME% %syslogseverity-text:::uppercase% %syslogtag%%msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%\n"
+$template SONiCFileFormat,"%TIMESTAMP:::date-rfc3339% %HOSTNAME% %syslogseverity-text:::uppercase% %syslogtag%%msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%\n
 $ActionFileDefaultTemplate SONiCFileFormat
+#$template SONiCFileFormat,"%timegenerated%.%timegenerated:::date-subseconds% %HOSTNAME% %syslogseverity-text:::uppercase% %syslogtag%%msg:::sp-if-no-1st-sp%%msg:::drop-last-lf%\n"
+#$ActionFileDefaultTemplate SONiCFileFormat
 
 #Set remote syslog server
 {% for server in SYSLOG_SERVER %}
-*.* @[{{ server }}]:514;SONiCFileFormat
+{% if SYSLOG_SERVER[server].severity == 'all' %}
+*.* @[{{ server }}]:514;RSYSLOG_SyslogProtocol23Format
+{% else %}
+*.{{ SYSLOG_SERVER[server].severity }} @[{{ server }}]:514;RSYSLOG_SyslogProtocol23Format
+{% endif %}
 {% endfor %}
-
+$template remote_path, "/var/log/%FROMHOST-IP%.log"
+if $fromhost-ip == '117.103.88.1' or $fromhost-ip == '117.103.88.2' or $fromhost-ip == '117.103.88.3' or $fromhost-ip == '117.103.88.4' then ?remote_path
+& ~
 #
 # Set the default permissions for all log files.
 #
@@ -68,6 +76,11 @@ $IncludeConfig /etc/rsyslog.d/*.conf
 # Suppress duplicate messages and report "message repeated n times"
 #
 $RepeatedMsgReduction on
+
+$IMUXSockRateLimitInterval 0
+$IMUXSockRateLimitBurst 0
+$SystemLogRateLimitInterval 0
+$SystemLogRateLimitBurst  0
 
 ###############
 #### RULES ####

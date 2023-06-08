@@ -14,6 +14,8 @@ ifeq ($(SONIC_IMAGE_VERSION),)
 	override SONIC_IMAGE_VERSION = $(shell export BUILD_TIMESTAMP=$(BUILD_TIMESTAMP) && export BUILD_NUMBER=$(BUILD_NUMBER) && . functions.sh && sonic_get_version)
 endif
 
+override LAI_VERSION = $(shell . functions.sh && sonic_get_lai_version)
+
 .SECONDEXPANSION:
 
 NULL :=
@@ -56,11 +58,14 @@ IMAGE_DISTRO_FILES_PATH = $(TARGET_PATH)/files/$(IMAGE_DISTRO)
 export BUILD_NUMBER
 export BUILD_TIMESTAMP
 export SONIC_IMAGE_VERSION
+export LAI_VERSION
 export CONFIGURED_PLATFORM
 export CONFIGURED_ARCH
 export PYTHON_WHEELS_PATH
 export IMAGE_DISTRO
 export IMAGE_DISTRO_DEBS_PATH
+export MULTIARCH_QEMU_ENVIRON
+export CROSS_BUILD_ENVIRON
 
 ###############################################################################
 ## Utility rules
@@ -118,10 +123,6 @@ ifeq ($(SONIC_INCLUDE_SYSTEM_TELEMETRY),y)
 INCLUDE_SYSTEM_TELEMETRY = y
 endif
 
-ifeq ($(SONIC_INCLUDE_RESTAPI),y)
-INCLUDE_RESTAPI = y
-endif
-
 ifeq ($(SONIC_ENABLE_SYNCD_RPC),y)
 ENABLE_SYNCD_RPC = y
 endif
@@ -130,31 +131,22 @@ ifeq ($(SONIC_INSTALL_DEBUG_TOOLS),y)
 INSTALL_DEBUG_TOOLS = y
 endif
 
-ifeq ($(SONIC_INCLUDE_SFLOW),y)
-INCLUDE_SFLOW = y
+ifeq ($(SONIC_INCLUDE_ROUTER_ADVERTISER),y)
+INCLUDE_ROUTER_ADVERTISER = y
 endif
 
-ifeq ($(SONIC_INCLUDE_NAT),y)
-INCLUDE_NAT = y
+ifeq ($(SONIC_INCLUDE_SNMP),y)
+INCLUDE_SNMP = y
 endif
 
+ifeq ($(SONIC_BUILD_LINUX_KERNEL),y)
+BUILD_LINUX_KERNEL = y
+endif
 
 include $(RULES_PATH)/functions
 
-ifeq ($(SONIC_USE_PDDF_FRAMEWORK),y)
-PDDF_SUPPORT = y
-else
-PDDF_SUPPORT = n
-endif
-export PDDF_SUPPORT
-
 include $(RULES_PATH)/*.mk
 ifneq ($(CONFIGURED_PLATFORM), undefined)
-ifeq ($(PDDF_SUPPORT), y)
-PDDF_DIR = pddf
-PLATFORM_PDDF_PATH = platform/$(PDDF_DIR)
-include $(PLATFORM_PDDF_PATH)/rules.mk
-endif
 include $(PLATFORM_PATH)/rules.mk
 endif
 
@@ -168,6 +160,18 @@ ifeq ($(PASSWORD),)
 override PASSWORD := $(DEFAULT_PASSWORD)
 else
 $(warning PASSWORD given on command line: could be visible to other users)
+endif
+
+ifeq ($(CLIUSER),)
+override CLIUSER := $(DEFAULT_CLIUSER)
+else
+$(warning CLIUSER given on command line: could be visible to other users)
+endif
+
+ifeq ($(CLIUSER_PASSWORD),)
+override CLIUSER_PASSWORD := $(DEFAULT_CLIUSER_PASSWORD)
+else
+$(warning CLIUSER_PASSWORD given on command line: could be visible to other users)
 endif
 
 ifeq ($(SONIC_DEBUGGING_ON),y)
@@ -197,6 +201,50 @@ endif
 MAKEFLAGS += -j $(SONIC_BUILD_JOBS)
 export SONIC_CONFIG_MAKE_JOBS
 
+ifeq ($(CONFIGURED_PLATFORM),vs)
+export BUILD_MULTIASIC_KVM=$(BUILD_MULTIASIC_KVM)
+endif
+
+ifeq ($(CROSS_BUILD_ENVIRON),y)
+DEB_BUILD_OPTIONS_GENERIC += nocheck
+export $(dpkg-architecture -a$(CONFIGURED_ARCH))
+ifeq ($(ENABLE_PY2_MODULES),n)
+ANT_DEB_CROSS_PROFILES=nopython2
+endif
+ANT_DEB_CROSS_OPT := -a$(CONFIGURED_ARCH) -Pcross,nocheck,$(ANT_DEB_CROSS_PROFILES)
+ANT_DEB_CONFIG := CONFIG_SITE=/etc/dpkg-cross/cross-config.$(CONFIGURED_ARCH)
+
+VIRTENV_BASE_CROSS_PYTHON2 = /python_virtualenv/env2/
+VIRTENV_BASE_CROSS_PYTHON3 = /python_virtualenv/env3/
+VIRTENV_BIN_CROSS_PYTHON2 = $(VIRTENV_BASE_CROSS_PYTHON2)/bin/
+VIRTENV_BIN_CROSS_PYTHON3 = $(VIRTENV_BASE_CROSS_PYTHON3)/bin/
+VIRTENV_LIB_CROSS_PYTHON2 = $(VIRTENV_BASE_CROSS_PYTHON2)/lib/
+VIRTENV_LIB_CROSS_PYTHON3 = $(VIRTENV_BASE_CROSS_PYTHON3)/lib/
+
+CROSS_HOST_TYPE = $(shell dpkg-architecture -a $(CONFIGURED_ARCH) -q DEB_HOST_MULTIARCH)
+
+ifeq ($(CONFIGURED_ARCH),armhf)
+GOARCH=arm
+else ifeq ($(CONFIGURED_ARCH),arm64)
+GOARCH=arm64
+endif
+
+CROSS_COMPILE = $(CROSS_HOST_TYPE)-
+CC = $(CROSS_COMPILE)gcc
+CXX = $(CROSS_COMPILE)g++
+AR = $(CROSS_COMPILE)ar
+LD = $(CROSS_COMPILE)ld
+CROSS_LIB_PATH = /usr/$(CROSS_HOST_TYPE)/lib/
+CROSS_BIN_PATH = /usr/$(CROSS_HOST_TYPE)/bin/
+CROSS_PKGS_LIB_PATH = /usr/lib/$(CROSS_HOST_TYPE)
+
+CROSS_LIBPERL_VERSION = $(shell dpkg -s libperl-dev:$(CONFIGURED_ARCH)|grep Version|awk  '{split($$2,v,"-"); print v[1];}')
+CROSS_PERL_CORE_PATH = $(CROSS_PKGS_LIB_PATH)/perl/$(CROSS_LIBPERL_VERSION)/CORE/
+
+CROSS_COMPILE_FLAGS := CGO_ENABLED=1 GOOS=linux GOARCH=$(GOARCH) CROSS_COMPILE=$(CROSS_COMPILE) OVERRIDE_HOST_TYPE=$(CROSS_HOST_TYPE) CROSS_LIB_PATH=$(CROSS_LIB_PATH) CROSS_BIN_PATH=$(CROSS_BIN_PATH) CROSS_HOST_TYPE=$(CROSS_HOST_TYPE) CROSS_PKGS_LIB_PATH=$(CROSS_PKGS_LIB_PATH) CROSS_PERL_CORE_PATH=$(CROSS_PERL_CORE_PATH) CC=$(CC) CXX=$(CXX) AR=$(AR) LD=$(LD)
+
+endif
+
 ###############################################################################
 ## Routing stack related exports
 ###############################################################################
@@ -221,6 +269,8 @@ $(info "SONIC_CONFIG_MAKE_JOBS"          : "$(SONIC_CONFIG_MAKE_JOBS)")
 $(info "SONIC_USE_DOCKER_BUILDKIT"       : "$(SONIC_USE_DOCKER_BUILDKIT)")
 $(info "USERNAME"                        : "$(USERNAME)")
 $(info "PASSWORD"                        : "$(PASSWORD)")
+$(info "CLIUSER"                         : "$(CLIUSER)")
+$(info "CLIUSER_PASSWORD"                : "$(CLIUSER_PASSWORD)")
 $(info "ENABLE_DHCP_GRAPH_SERVICE"       : "$(ENABLE_DHCP_GRAPH_SERVICE)")
 $(info "SHUTDOWN_BGP_ON_START"           : "$(SHUTDOWN_BGP_ON_START)")
 $(info "ENABLE_PFCWD_ON_START"           : "$(ENABLE_PFCWD_ON_START)")
@@ -235,25 +285,28 @@ $(info "ENABLE_SYNCD_RPC"                : "$(ENABLE_SYNCD_RPC)")
 $(info "ENABLE_ORGANIZATION_EXTENSIONS"  : "$(ENABLE_ORGANIZATION_EXTENSIONS)")
 $(info "HTTP_PROXY"                      : "$(HTTP_PROXY)")
 $(info "HTTPS_PROXY"                     : "$(HTTPS_PROXY)")
-$(info "ENABLE_ZTP"                      : "$(ENABLE_ZTP)")
 $(info "SONIC_DEBUGGING_ON"              : "$(SONIC_DEBUGGING_ON)")
 $(info "SONIC_PROFILING_ON"              : "$(SONIC_PROFILING_ON)")
 $(info "KERNEL_PROCURE_METHOD"           : "$(KERNEL_PROCURE_METHOD)")
 $(info "BUILD_TIMESTAMP"                 : "$(BUILD_TIMESTAMP)")
 $(info "BUILD_LOG_TIMESTAMP"             : "$(BUILD_LOG_TIMESTAMP)")
 $(info "SONIC_IMAGE_VERSION"             : "$(SONIC_IMAGE_VERSION)")
+$(info "LAI_VERSION"                     : "$(LAI_VERSION)")
 $(info "BLDENV"                          : "$(BLDENV)")
 $(info "VS_PREPARE_MEM"                  : "$(VS_PREPARE_MEM)")
 $(info "INCLUDE_MGMT_FRAMEWORK"          : "$(INCLUDE_MGMT_FRAMEWORK)")
-$(info "INCLUDE_ICCPD"                   : "$(INCLUDE_ICCPD)")
 $(info "INCLUDE_SYSTEM_TELEMETRY"        : "$(INCLUDE_SYSTEM_TELEMETRY)")
 $(info "INCLUDE_HOST_SERVICE"            : "$(INCLUDE_HOST_SERVICE)")
-$(info "INCLUDE_RESTAPI"                 : "$(INCLUDE_RESTAPI)")
-$(info "INCLUDE_SFLOW"                   : "$(INCLUDE_SFLOW)")
-$(info "INCLUDE_NAT"                     : "$(INCLUDE_NAT)")
+$(info "INCLUDE_ROUTER_ADVERTISER"       : "$(INCLUDE_ROUTER_ADVERTISER)")
+$(info "INCLUDE_SNMP"                    : "$(INCLUDE_SNMP)")
 $(info "INCLUDE_KUBERNETES"              : "$(INCLUDE_KUBERNETES)")
 $(info "TELEMETRY_WRITABLE"              : "$(TELEMETRY_WRITABLE)")
-$(info "PDDF_SUPPORT"                    : "$(PDDF_SUPPORT)")
+$(info "BUILD_LINUX_KERNEL"              : "$(BUILD_LINUX_KERNEL)")
+$(info "MULTIARCH_QEMU_ENVIRON"          : "$(MULTIARCH_QEMU_ENVIRON)")
+ifeq ($(CONFIGURED_PLATFORM),vs)
+$(info "BUILD_MULTIASIC_KVM"             : "$(BUILD_MULTIASIC_KVM)")
+endif
+$(info "CROSS_BUILD_ENVIRON"             : "$(CROSS_BUILD_ENVIRON)")
 $(info )
 else
 $(info SONiC Build System for $(CONFIGURED_PLATFORM):$(CONFIGURED_ARCH))
@@ -464,8 +517,8 @@ $(addprefix $(DEBS_PATH)/, $(SONIC_DPKG_DEBS)) : $(DEBS_PATH)/% : .platform $$(a
 		if [ -f ./autogen.sh ]; then ./autogen.sh $(LOG); fi
 		$(SETUP_OVERLAYFS_FOR_DPKG_ADMINDIR)
 		$(if $($*_DPKG_TARGET),
-			${$*_BUILD_ENV} DEB_BUILD_OPTIONS="${DEB_BUILD_OPTIONS_GENERIC} ${$*_DEB_BUILD_OPTIONS}" dpkg-buildpackage -rfakeroot -b -us -uc -j$(SONIC_CONFIG_MAKE_JOBS) --as-root -T$($*_DPKG_TARGET) --admindir $$mergedir $(LOG),
-			${$*_BUILD_ENV} DEB_BUILD_OPTIONS="${DEB_BUILD_OPTIONS_GENERIC} ${$*_DEB_BUILD_OPTIONS}" dpkg-buildpackage -rfakeroot -b -us -uc -j$(SONIC_CONFIG_MAKE_JOBS) --admindir $$mergedir $(LOG)
+			${$*_BUILD_ENV} DEB_BUILD_OPTIONS="${DEB_BUILD_OPTIONS_GENERIC} ${$*_DEB_BUILD_OPTIONS}" $(ANT_DEB_CONFIG) $(CROSS_COMPILE_FLAGS) dpkg-buildpackage -rfakeroot -b $(ANT_DEB_CROSS_OPT) -us -uc -j$(SONIC_CONFIG_MAKE_JOBS) --as-root -T$($*_DPKG_TARGET) --admindir $$mergedir $(LOG),
+			${$*_BUILD_ENV} DEB_BUILD_OPTIONS="${DEB_BUILD_OPTIONS_GENERIC} ${$*_DEB_BUILD_OPTIONS}" $(ANT_DEB_CONFIG) $(CROSS_COMPILE_FLAGS) dpkg-buildpackage -rfakeroot -b $(ANT_DEB_CROSS_OPT) -us -uc -j$(SONIC_CONFIG_MAKE_JOBS) --admindir $$mergedir $(LOG)
 		)
 		popd $(LOG_SIMPLE)
 		# Clean up
@@ -532,7 +585,15 @@ $(SONIC_INSTALL_DEBS) : $(DEBS_PATH)/%-install : .platform $$(addsuffix -install
 			{ while dpkg -s $(firstword $(subst _, ,$(basename $(deb)))) | grep "^Version: $(word 2, $(subst _, ,$(basename $(deb))))" &> /dev/null; do echo "waiting for $(deb) to be uninstalled" $(LOG); sleep 1; done } )
 		# put a lock here because dpkg does not allow installing packages in parallel
 		if mkdir $(DEBS_PATH)/dpkg_lock &> /dev/null; then
+ifneq ($(CROSS_BUILD_ENVIRON),y)
 			{ sudo DEBIAN_FRONTEND=noninteractive dpkg -i $(DEBS_PATH)/$* $(LOG) && rm -d $(DEBS_PATH)/dpkg_lock && break; } || { rm -d $(DEBS_PATH)/dpkg_lock && exit 1 ; }
+else
+			# Relocate debian packages python libraries to the cross python virtual env location
+			{ sudo DEBIAN_FRONTEND=noninteractive dpkg -i $(if $(findstring $(LINUX_HEADERS),$*),--force-depends) $(DEBS_PATH)/$* $(LOG) && \
+			rm -rf tmp && mkdir tmp && dpkg -x $(DEBS_PATH)/$* tmp && (sudo cp -rf tmp/usr/lib/python2*/dist-packages/* $(VIRTENV_LIB_CROSS_PYTHON2)/python2*/site-packages/ 2>/dev/null || true) && \
+			(sudo cp -rf tmp/usr/lib/python3/dist-packages/* $(VIRTENV_LIB_CROSS_PYTHON3)/python3.*/site-packages/ 2>/dev/null || true) && \
+			rm -d $(DEBS_PATH)/dpkg_lock && break; } || { set +e; rm -d $(DEBS_PATH)/dpkg_lock; sudo lsof /var/lib/dpkg/lock-frontend; ps aux; exit 1 ; }
+endif
 		fi
 	done
 	$(FOOTER)
@@ -604,8 +665,17 @@ $(addprefix $(PYTHON_WHEELS_PATH)/, $(SONIC_PYTHON_WHEELS)) : $(PYTHON_WHEELS_PA
 		pushd $($*_SRC_PATH) $(LOG_SIMPLE)
 		# apply series of patches if exist
 		if [ -f ../$(notdir $($*_SRC_PATH)).patch/series ]; then QUILT_PATCHES=../$(notdir $($*_SRC_PATH)).patch quilt push -a; fi
-		if [ ! "$($*_TEST)" = "n" ]; then python$($*_PYTHON_VERSION) setup.py test $(LOG); fi
+ifneq ($(CROSS_BUILD_ENVIRON),y)
+		# if [ ! "$($*_TEST)" = "n" ]; then python$($*_PYTHON_VERSION) setup.py test $(LOG); fi
 		python$($*_PYTHON_VERSION) setup.py bdist_wheel $(LOG)
+else
+		{
+			export PATH=$(VIRTENV_BIN_CROSS_PYTHON$($*_PYTHON_VERSION)):${PATH}
+			python$($*_PYTHON_VERSION) setup.py build $(LOG)
+			#if [ ! "$($*_TEST)" = "n" ]; then python$($*_PYTHON_VERSION) setup.py test $(LOG); fi
+			python$($*_PYTHON_VERSION) setup.py bdist_wheel $(LOG)
+		}
+endif
 		# clean up
 		if [ -f ../$(notdir $($*_SRC_PATH)).patch/series ]; then quilt pop -a -f; [ -d .pc ] && rm -rf .pc; fi
 		popd $(LOG_SIMPLE)
@@ -631,7 +701,12 @@ $(SONIC_INSTALL_WHEELS) : $(PYTHON_WHEELS_PATH)/%-install : .platform $$(addsuff
 	# put a lock here to avoid race conditions
 	while true; do
 	if mkdir $(PYTHON_WHEELS_PATH)/pip_lock &> /dev/null; then
+ifneq ($(CROSS_BUILD_ENVIRON),y)
 	{ sudo -E pip$($*_PYTHON_VERSION) install $(PYTHON_WHEELS_PATH)/$* $(LOG) && rm -d $(PYTHON_WHEELS_PATH)/pip_lock && break; } || { rm -d $(PYTHON_WHEELS_PATH)/pip_lock && exit 1 ; }
+else
+	# Link python script and data expected location to the cross python virtual env istallation locations
+	{ PATH=$(VIRTENV_BIN_CROSS_PYTHON$($*_PYTHON_VERSION)):${PATH} sudo -E $(VIRTENV_BIN_CROSS_PYTHON$($*_PYTHON_VERSION))/pip$($*_PYTHON_VERSION) install $(PYTHON_WHEELS_PATH)/$* $(LOG) && $(if $(findstring $(SONIC_CONFIG_ENGINE_PY3),$*),(sudo ln -s $(VIRTENV_BIN_CROSS_PYTHON$($*_PYTHON_VERSION))/sonic-cfggen /usr/local/bin/sonic-cfggen 2>/dev/null || true), true ) && $(if $(findstring $(SONIC_YANG_MODELS_PY3),$*),(sudo ln -s $(VIRTENV_BASE_CROSS_PYTHON3)/yang-models /usr/local/yang-models 2>/dev/null || true), true ) && rm -d $(PYTHON_WHEELS_PATH)/pip_lock && break; } || { rm -d $(PYTHON_WHEELS_PATH)/pip_lock && exit 1 ; }
+endif
 	fi
 	done
 	$(FOOTER)
@@ -841,10 +916,10 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
         $$(addprefix $(IMAGE_DISTRO_DEBS_PATH)/,$$($$*_LAZY_INSTALLS)) \
         $(addprefix $(IMAGE_DISTRO_DEBS_PATH)/,$(INITRAMFS_TOOLS) \
                 $(LINUX_KERNEL) \
+                $(NXP_KERNEL) \
                 $(SONIC_DEVICE_DATA) \
                 $(IFUPDOWN2) \
                 $(KDUMP_TOOLS) \
-                $(NTP) \
                 $(LIBPAM_TACPLUS) \
                 $(LIBNSS_TACPLUS) \
                 $(MONIT) \
@@ -852,10 +927,11 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
                 $(PYTHON_SWSSCOMMON) \
                 $(PYTHON3_SWSSCOMMON) \
                 $(SONIC_UTILITIES_DATA) \
-                $(SONIC_HOST_SERVICES_DATA)) \
+                $(SONIC_HOST_SERVICES_DATA) \
+                $(BASH_TACPLUS) \
+                $(AUDISP_TACPLUS)) \
         $$(addprefix $(TARGET_PATH)/,$$($$*_DOCKERS)) \
         $$(addprefix $(FILES_PATH)/,$$($$*_FILES)) \
-        $(if $(findstring y,$(ENABLE_ZTP)),$(addprefix $(IMAGE_DISTRO_DEBS_PATH)/,$(SONIC_ZTP))) \
         $(if $(findstring y,$(INCLUDE_HOST_SERVICE)),$(addprefix $(IMAGE_DISTRO_DEBS_PATH)/,$(SONIC_HOST_SERVICE))) \
         $(addprefix $(PYTHON_WHEELS_PATH)/,$(SONIC_UTILITIES_PY3)) \
         $(addprefix $(PYTHON_WHEELS_PATH)/,$(SONIC_PY_COMMON_PY2)) \
@@ -866,8 +942,6 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
         $(addprefix $(PYTHON_WHEELS_PATH)/,$(SONIC_PLATFORM_COMMON_PY3)) \
         $(addprefix $(PYTHON_WHEELS_PATH)/,$(REDIS_DUMP_LOAD_PY2)) \
         $(addprefix $(PYTHON_WHEELS_PATH)/,$(SONIC_PLATFORM_API_PY2)) \
-        $(if $(findstring y,$(PDDF_SUPPORT)),$(addprefix $(PYTHON_WHEELS_PATH)/,$(PDDF_PLATFORM_API_BASE_PY2))) \
-        $(if $(findstring y,$(PDDF_SUPPORT)),$(addprefix $(PYTHON_WHEELS_PATH)/,$(PDDF_PLATFORM_API_BASE_PY3))) \
         $(addprefix $(PYTHON_WHEELS_PATH)/,$(SONIC_YANG_MODELS_PY3)) \
         $(addprefix $(PYTHON_WHEELS_PATH)/,$(SONIC_CTRMGRD)) \
         $(addprefix $(FILES_PATH)/,$($(SONIC_CTRMGRD)_FILES)) \
@@ -882,21 +956,19 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
 	export initramfs_tools="$(IMAGE_DISTRO_DEBS_PATH)/$(INITRAMFS_TOOLS)"
 	export linux_kernel="$(IMAGE_DISTRO_DEBS_PATH)/$(LINUX_KERNEL)"
 	export onie_recovery_image="$(FILES_PATH)/$(ONIE_RECOVERY_IMAGE)"
+	export onie_recovery_kvm_4asic_image="$(FILES_PATH)/$(ONIE_RECOVERY_KVM_4ASIC_IMAGE)"
+	export onie_recovery_kvm_6asic_image="$(FILES_PATH)/$(ONIE_RECOVERY_KVM_4ASIC_IMAGE)"
 	export kversion="$(KVERSION)"
 	export image_type="$($*_IMAGE_TYPE)"
 	export sonicadmin_user="$(USERNAME)"
 	export sonic_asic_platform="$(patsubst %-$(CONFIGURED_ARCH),%,$(CONFIGURED_PLATFORM))"
 	export enable_organization_extensions="$(ENABLE_ORGANIZATION_EXTENSIONS)"
 	export enable_dhcp_graph_service="$(ENABLE_DHCP_GRAPH_SERVICE)"
-	export enable_ztp="$(ENABLE_ZTP)"
 	export include_system_telemetry="$(INCLUDE_SYSTEM_TELEMETRY)"
-	export include_restapi="$(INCLUDE_RESTAPI)"
 	export include_host_service="$(INCLUDE_HOST_SERVICE)"
-	export include_nat="$(INCLUDE_NAT)"
-	export include_sflow="$(INCLUDE_SFLOW)"
+	export include_router_advertiser="$(INCLUDE_ROUTER_ADVERTISER)"
+	export include_snmp="$(INCLUDE_SNMP)"
 	export include_mgmt_framework="$(INCLUDE_MGMT_FRAMEWORK)"
-	export include_iccpd="$(INCLUDE_ICCPD)"
-	export pddf_support="$(PDDF_SUPPORT)"
 	export shutdown_bgp_on_start="$(SHUTDOWN_BGP_ON_START)"
 	export default_buffer_model="$(SONIC_BUFFER_MODEL)"
 	export include_kubernetes="$(INCLUDE_KUBERNETES)"
@@ -1002,11 +1074,15 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
 	DEBUG_SRC_ARCHIVE_FILE="$(DBG_SRC_ARCHIVE_FILE)" \
 	USERNAME="$(USERNAME)" \
 	PASSWORD="$(PASSWORD)" \
+	CLIUSER="$(CLIUSER)" \
+	CLIUSER_PASSWORD="$(CLIUSER_PASSWORD)" \
 	IMAGE_TYPE=$($*_IMAGE_TYPE) \
 	TARGET_PATH=$(TARGET_PATH) \
 	SONIC_ENFORCE_VERSIONS=$(SONIC_ENFORCE_VERSIONS) \
 	TRUSTED_GPG_URLS=$(TRUSTED_GPG_URLS) \
 	PACKAGE_URL_PREFIX=$(PACKAGE_URL_PREFIX) \
+	MULTIARCH_QEMU_ENVIRON=$(MULTIARCH_QEMU_ENVIRON) \
+	CROSS_BUILD_ENVIRON=$(CROSS_BUILD_ENVIRON) \
 		./build_debian.sh $(LOG)
 
 	USERNAME="$(USERNAME)" \
@@ -1035,7 +1111,17 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
 
 SONIC_TARGET_LIST += $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS))
 
+
 ###############################################################################
+## One packet
+###############################################################################
+onepacket: $(TARGET_PATH)/$(SONIC_ONE_IMAGE)
+	$(HEADER)
+	${PLATFORM_PATH}/build_packet.sh $(LOG)
+	$(FOOTER)
+
+###############################################################################
+
 ## Clean targets
 ###############################################################################
 
@@ -1099,6 +1185,6 @@ jessie : $$(addprefix $(TARGET_PATH)/,$$(JESSIE_DOCKER_IMAGES)) \
 ## Standard targets
 ###############################################################################
 
-.PHONY : $(SONIC_CLEAN_DEBS) $(SONIC_CLEAN_FILES) $(SONIC_CLEAN_TARGETS) $(SONIC_CLEAN_STDEB_DEBS) $(SONIC_CLEAN_WHEELS) $(SONIC_PHONY_TARGETS) clean distclean configure
+.PHONY : $(SONIC_CLEAN_DEBS) $(SONIC_CLEAN_FILES) $(SONIC_CLEAN_TARGETS) $(SONIC_CLEAN_STDEB_DEBS) $(SONIC_CLEAN_WHEELS) $(SONIC_PHONY_TARGETS) clean distclean configure onepacket
 
 .INTERMEDIATE : $(SONIC_INSTALL_DEBS) $(SONIC_INSTALL_WHEELS) $(DOCKER_LOAD_TARGETS) docker-start .platform

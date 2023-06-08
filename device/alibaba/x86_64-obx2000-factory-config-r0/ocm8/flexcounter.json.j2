@@ -1,0 +1,75 @@
+{%- set ocm_attr_id_list = [
+                              "LAI_OCM_ATTR_SERIAL_NO",
+                              "LAI_OCM_ATTR_PART_NO",
+                              "LAI_OCM_ATTR_MFG_NAME",
+                              "LAI_OCM_ATTR_MFG_DATE",
+                              "LAI_OCM_ATTR_HARDWARE_VERSION",
+                              "LAI_OCM_ATTR_OPER_STATUS",
+                              "LAI_OCM_ATTR_EMPTY",
+                              "LAI_OCM_ATTR_REMOVABLE",
+                              "LAI_OCM_ATTR_SOFTWARE_VERSION",
+                              "LAI_OCM_ATTR_FIRMWARE_VERSION",
+                              "LAI_OCM_ATTR_FREQUENCY_GRANULARITY"] %}
+{%- set linecard_attr_id_list = [
+                              "LAI_LINECARD_ATTR_POWER_ADMIN_STATE",
+                              "LAI_LINECARD_ATTR_EMPTY",
+                              "LAI_LINECARD_ATTR_PART_NO",
+                              "LAI_LINECARD_ATTR_SERIAL_NO",
+                              "LAI_LINECARD_ATTR_HARDWARE_VERSION",
+                              "LAI_LINECARD_ATTR_MFG_DATE",
+                              "LAI_LINECARD_ATTR_REMOVABLE",
+                              "LAI_LINECARD_ATTR_LINECARD_TYPE",
+                              "LAI_LINECARD_ATTR_ADMIN_STATE",
+                              "LAI_LINECARD_ATTR_OPER_STATUS",
+                              "LAI_LINECARD_ATTR_RELAY",
+                              "LAI_LINECARD_ATTR_CPLD_VERSION",
+                              "LAI_LINECARD_ATTR_SCRIPT_VERSION",
+                              "LAI_LINECARD_ATTR_MFG_NAME",
+                              "LAI_LINECARD_ATTR_BAUD_RATE",
+                              "LAI_LINECARD_ATTR_SOFTWARE_VERSION",
+                              "LAI_LINECARD_ATTR_FPGA_VERSION",
+                              "LAI_LINECARD_ATTR_UCD_VERSION",
+                              "LAI_LINECARD_ATTR_TEMP_HIGH_ALARM_THRESHOLD",
+                              "LAI_LINECARD_ATTR_TEMP_HIGH_WARN_THRESHOLD",
+                              "LAI_LINECARD_ATTR_TEMP_LOW_ALARM_THRESHOLD",
+                              "LAI_LINECARD_ATTR_TEMP_LOW_WARN_THRESHOLD",
+                              "LAI_LINECARD_ATTR_SLOT_ID",
+                              "LAI_LINECARD_ATTR_LED_MODE",
+                              "LAI_LINECARD_ATTR_LED_FLASH_INTERVAL",
+                              "LAI_LINECARD_ATTR_LED_COLOR",
+                              "LAI_LINECARD_ATTR_EQUIPMENT_FAILURE",
+                              "LAI_LINECARD_ATTR_EQUIPMENT_MISMATCH"] %}
+{%- set linecard_gauge_id_list = [
+                              "LAI_LINECARD_STAT_MEMORY_AVAILABLE",
+                              "LAI_LINECARD_STAT_MEMORY_UTILIZED",
+                              "LAI_LINECARD_STAT_CPU_UTILIZATION",
+                              "LAI_LINECARD_STAT_TEMPERATURE"] %}
+[
+    {
+        "OCM_COUNTER_ID_LIST_STATUS": {
+{% for id in ocm_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_STATUS": {
+{% for id in linecard_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_GAUGE": {
+{% for id in linecard_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    }
+]

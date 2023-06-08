@@ -1,0 +1,15 @@
+[Unit]
+Description=chrony config service
+
+BindsTo=sonic.target
+
+After=sonic.target
+
+After=config-setup.service
+
+[Service]
+ExecStart=/usr/bin/chrony-config.sh
+RestartSec=30
+
+[Install]
+WantedBy=sonic.target

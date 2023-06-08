@@ -1,0 +1,28 @@
+#!/usr/bin/python3
+
+import argparse
+import json
+import jsonpatch
+
+def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument("-s", "--source", help="source config")
+    parser.add_argument("-d", "--destination", help="destination config")
+    parser.add_argument("-r", "--running", help="running config")
+    args = parser.parse_args()
+    fd_src = open(args.source)
+    fd_dest = open(args.destination)
+    fd_running = open(args.running)
+
+    src_data = json.load(fd_src)
+    dest_data = json.load(fd_dest)
+    running_data = json.load(fd_running)
+
+    patch = jsonpatch.JsonPatch.from_diff(src_data, dest_data)
+    if patch:
+        modified_data = jsonpatch.apply_patch(running_data, patch)
+        print(json.dumps(modified_data, indent=4))
+
+if __name__ == "__main__":
+    main()
+

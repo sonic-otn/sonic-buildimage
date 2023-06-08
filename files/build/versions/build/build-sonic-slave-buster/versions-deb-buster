@@ -10,7 +10,6 @@ gir1.2-harfbuzz-0.0==2.3.1-1
 gir1.2-pango-1.0==1.42.4-8~deb10u1
 iproute2==1.mlnx.4.4.2418
 iproute2-dev==1.mlnx.4.4.2418
-isc-dhcp-relay==4.4.1-2
 kernel-mft-dkms==4.16.0-105
 libatk-bridge2.0-dev==2.30.0-5
 libatk1.0-dev==2.30.0-2

@@ -1,0 +1,569 @@
+{%- set port_attr_id_list = [
+                             "LAI_PORT_ATTR_OPER_STATUS",
+                             "LAI_PORT_ATTR_ADMIN_STATE",
+                             "LAI_PORT_ATTR_RX_CD_RANGE",
+                             "LAI_PORT_ATTR_ROLL_OFF",
+                             "LAI_PORT_ATTR_LED_MODE",
+                             "LAI_PORT_ATTR_LED_FLASH_INTERVAL",
+                             "LAI_PORT_ATTR_LED_COLOR",
+                             "LAI_PORT_ATTR_LOS_THRESHOLD",
+                             "LAI_PORT_ATTR_OPTICAL_PORT_TYPE",
+                             "LAI_PORT_ATTR_EMPTY",
+                             "LAI_PORT_ATTR_REMOVABLE",
+                             "LAI_PORT_ATTR_EQUIPMENT_FAILURE",
+                             "LAI_PORT_ATTR_EQUIPMENT_MISMATCH",
+                             "LAI_PORT_ATTR_LOW_THRESHOLD",
+                             "LAI_PORT_ATTR_HIGH_THRESHOLD"] %}
+{%- set port_gauge_id_list = [
+                             "LAI_PORT_STAT_INPUT_POWER",
+                             "LAI_PORT_STAT_OUTPUT_POWER"] %}
+{%- set xcvr_attr_id_list = [
+                             "LAI_TRANSCEIVER_ATTR_ENABLED",
+                             "LAI_TRANSCEIVER_ATTR_OPER_STATUS",
+                             "LAI_TRANSCEIVER_ATTR_FEC_MODE",
+                             "LAI_TRANSCEIVER_ATTR_PRESENT",
+                             "LAI_TRANSCEIVER_ATTR_FORM_FACTOR",
+                             "LAI_TRANSCEIVER_ATTR_VENDOR_EXPECT",
+                             "LAI_TRANSCEIVER_ATTR_VENDOR",
+                             "LAI_TRANSCEIVER_ATTR_VENDOR_PART",
+                             "LAI_TRANSCEIVER_ATTR_PART_NO",
+                             "LAI_TRANSCEIVER_ATTR_VENDOR_REV",
+                             "LAI_TRANSCEIVER_ATTR_DATE_CODE",
+                             "LAI_TRANSCEIVER_ATTR_MFG_NAME",
+                             "LAI_TRANSCEIVER_ATTR_MFG_DATE",
+                             "LAI_TRANSCEIVER_ATTR_HARDWARE_VERSION",
+                             "LAI_TRANSCEIVER_ATTR_FIRMWARE_VERSION",
+                             "LAI_TRANSCEIVER_ATTR_ETHERNET_PMD",
+                             "LAI_TRANSCEIVER_ATTR_ETHERNET_PMD_PRECONF",
+                             "LAI_TRANSCEIVER_ATTR_FAULT_CONDITION",
+                             "LAI_TRANSCEIVER_ATTR_REMOVABLE",
+                             "LAI_TRANSCEIVER_ATTR_CONNECTOR_TYPE",
+                             "LAI_TRANSCEIVER_ATTR_SERIAL_NO",
+                             "LAI_TRANSCEIVER_ATTR_POWER_MODE",
+                             "LAI_TRANSCEIVER_ATTR_RESET",
+                             "LAI_TRANSCEIVER_ATTR_NUM_OF_LANE",
+                             "LAI_TRANSCEIVER_ATTR_UPGRADE_DOWNLOAD",
+                             "LAI_TRANSCEIVER_ATTR_SWITCH_FLASH_PARTITION",
+                             "LAI_TRANSCEIVER_ATTR_BACKUP_FLASH_PARTITION",
+                             "LAI_TRANSCEIVER_ATTR_UPGRADE_STATE",
+                             "LAI_TRANSCEIVER_ATTR_LASER_AGE",
+                             "LAI_TRANSCEIVER_ATTR_OPERATE_TIME",
+                             "LAI_TRANSCEIVER_ATTR_LOT_CODE",
+                             "LAI_TRANSCEIVER_ATTR_CLEI_CODE",
+                             "LAI_TRANSCEIVER_ATTR_POWER_CLASS",
+                             "LAI_TRANSCEIVER_ATTR_NEWWORK_BIT_RATE",
+                             "LAI_TRANSCEIVER_ATTR_HOST_BIT_RATE",
+                             "LAI_TRANSCEIVER_ATTR_SM_FIBER_LEN",
+                             "LAI_TRANSCEIVER_ATTR_MM_FIBER_LEN",
+                             "LAI_TRANSCEIVER_ATTR_COPPER_CABLE_LEN",
+                             "LAI_TRANSCEIVER_ATTR_MAX_WAVELENGTH",
+                             "LAI_TRANSCEIVER_ATTR_MIN_WAVELENGTH",
+                             "LAI_TRANSCEIVER_ATTR_MAX_TX_POWER",
+                             "LAI_TRANSCEIVER_ATTR_MAX_RX_POWER",
+                             "LAI_TRANSCEIVER_ATTR_MAX_OPER_TEMP",
+                             "LAI_TRANSCEIVER_ATTR_MIN_OPER_TEMP",
+                             "LAI_TRANSCEIVER_ATTR_VCC_HIGH_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_VCC_HIGH_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_VCC_LOW_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_VCC_LOW_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_RX_TOTAL_POWER_HIGH_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_RX_TOTAL_POWER_HIGH_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_RX_TOTAL_POWER_LOW_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_RX_TOTAL_POWER_LOW_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_OA_PUMP_CURRENT_HIGH_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_OA_PUMP_CURRENT_HIGH_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_OA_PUMP_CURRENT_LOW_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_OA_PUMP_CURRENT_LOW_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TX_BAIS_HIGH_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TX_BAIS_HIGH_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TX_BAIS_LOW_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TX_BAIS_LOW_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_EXTEND_MODULE_CODE",
+                             "LAI_TRANSCEIVER_ATTR_DATA_STATUS",
+                             "LAI_TRANSCEIVER_ATTR_ENCODE",
+                             "LAI_TRANSCEIVER_ATTR_BITRATE",
+                             "LAI_TRANSCEIVER_ATTR_EXTEND_BIT_RATE",
+                             "LAI_TRANSCEIVER_ATTR_WAVELENGTH",
+                             "LAI_TRANSCEIVER_ATTR_WAVELENGTH_TOLERANCE",
+                             "LAI_TRANSCEIVER_ATTR_OUI",
+                             "LAI_TRANSCEIVER_ATTR_RN",
+                             "LAI_TRANSCEIVER_ATTR_IDENTIFIER",
+                             "LAI_TRANSCEIVER_ATTR_CMIS_REVISION",
+                             "LAI_TRANSCEIVER_ATTR_TX_POWER_HIGH_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TX_POWER_LOW_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TX_POWER_HIGH_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TX_POWER_LOW_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_FREQUENCY_RANGE",
+                             "LAI_TRANSCEIVER_ATTR_TEMP_HIGH_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TEMP_HIGH_WARN_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TEMP_LOW_ALARM_THRESHOLD",
+                             "LAI_TRANSCEIVER_ATTR_TEMP_LOW_WARN_THRESHOLD"] %}
+{%- set xcvr_stat_id_list = [
+                             "LAI_TRANSCEIVER_STAT_FEC_UNCORRECTABLE_WORDS",
+                             "LAI_TRANSCEIVER_STAT_LOSS_TIME"] %}
+{%- set xcvr_gauge_id_list = ["LAI_TRANSCEIVER_STAT_INPUT_POWER",
+                              "LAI_TRANSCEIVER_STAT_OUTPUT_POWER",
+                              "LAI_TRANSCEIVER_STAT_LASER_BIAS_CURRENT",
+                              "LAI_TRANSCEIVER_STAT_TEMPERATURE",
+                              "LAI_TRANSCEIVER_STAT_PRE_FEC_BER",
+                              "LAI_TRANSCEIVER_STAT_POST_FEC_BER",
+                              "LAI_TRANSCEIVER_STAT_EDFA_BIAS_CURRENT",
+                              "LAI_TRANSCEIVER_STAT_LASER_BIAS_VOLTAGE",
+                              "LAI_TRANSCEIVER_STAT_CASE_TEMPERATURE",
+                              "LAI_TRANSCEIVER_STAT_POWER_CONSUMPTION",
+                              "LAI_TRANSCEIVER_STAT_TX_MOD_BIAS_XI",
+                              "LAI_TRANSCEIVER_STAT_TX_MOD_BIAS_XQ",
+                              "LAI_TRANSCEIVER_STAT_TX_MOD_BIAS_YI",
+                              "LAI_TRANSCEIVER_STAT_TX_MOD_BIAS_YQ",
+                              "LAI_TRANSCEIVER_STAT_TX_MOD_BIAS_XPH",
+                              "LAI_TRANSCEIVER_STAT_TX_MOD_BIAS_YPH"] %}
+{%- set pch_attr_id_list = [
+                              "LAI_PHYSICALCHANNEL_ATTR_TX_LASER",
+                              "LAI_PHYSICALCHANNEL_ATTR_OUTPUT_FREQUENCY"] %}
+{%- set pch_gauge_id_list = [
+                              "LAI_PHYSICALCHANNEL_STAT_OUTPUT_POWER",
+                              "LAI_PHYSICALCHANNEL_STAT_INPUT_POWER",
+                              "LAI_PHYSICALCHANNEL_STAT_LASER_BIAS_CURRENT"] %}
+{%- set och_attr_id_list = [
+                              "LAI_OCH_ATTR_FREQUENCY",
+                              "LAI_OCH_ATTR_TARGET_OUTPUT_POWER",
+                              "LAI_OCH_ATTR_OPERATIONAL_MODE",
+                              "LAI_OCH_ATTR_OPER_STATUS"] %}
+{%- set och_gauge_id_list = [
+                              "LAI_OCH_STAT_POLARIZATION_MODE_DISPERSION",
+                              "LAI_OCH_STAT_GROUP_DELAY",
+                              "LAI_OCH_STAT_INPUT_POWER",
+                              "LAI_OCH_STAT_CHROMATIC_DISPERSION",
+                              "LAI_OCH_STAT_OUTPUT_POWER",
+                              "LAI_OCH_STAT_LASER_BIAS_CURRENT",
+                              "LAI_OCH_STAT_SECOND_ORDER_POLARIZATION_MODE_DISPERSION",
+                              "LAI_OCH_STAT_OSNR",
+                              "LAI_OCH_STAT_SOP_VECTOR_S1",
+                              "LAI_OCH_STAT_SOP_VECTOR_S2",
+                              "LAI_OCH_STAT_SOP_VECTOR_S3",
+                              "LAI_OCH_STAT_SOP_CHANGE_RATE",
+                              "LAI_OCH_STAT_TX_LASER_AGE",
+                              "LAI_OCH_STAT_POLARIZATION_DEPENDENT_LOSS",
+                              "LAI_OCH_STAT_INPUT_SIGNAL_POWER",
+                              "LAI_OCH_STAT_EDFA_BIAS_CURRENT",
+                              "LAI_OCH_STAT_ACTUAL_FREQUENCY_OFFSET"] %}
+{%- set lch_attr_id_list = [
+                              "LAI_LOGICALCHANNEL_ATTR_LOGICAL_CHANNEL_TYPE",
+                              "LAI_LOGICALCHANNEL_ATTR_LOOPBACK_MODE",
+                              "LAI_LOGICALCHANNEL_ATTR_RATE_CLASS",
+                              "LAI_LOGICALCHANNEL_ATTR_TRIB_PROTOCOL",
+                              "LAI_LOGICALCHANNEL_ATTR_TEST_SIGNAL",
+                              "LAI_LOGICALCHANNEL_ATTR_ADMIN_STATE",
+                              "LAI_LOGICALCHANNEL_ATTR_LINK_STATE",
+                              "LAI_LOGICALCHANNEL_ATTR_LINK_DOWN_DELAY_MODE",
+                              "LAI_LOGICALCHANNEL_ATTR_LINK_DOWN_DELAY_HOLD_OFF",
+                              "LAI_LOGICALCHANNEL_ATTR_LINK_UP_DELAY_MODE",
+                              "LAI_LOGICALCHANNEL_ATTR_LINK_UP_DELAY_HOLD_OFF",
+                              "LAI_LOGICALCHANNEL_ATTR_LINK_UP_DELAY_ACTIVE_THRESHOLD",
+                              "LAI_LOGICALCHANNEL_ATTR_TEST_SIGNAL_PATTERN",
+                              "LAI_LOGICALCHANNEL_ATTR_TX_TEST_SIGNAL_PATTERN",
+                              "LAI_LOGICALCHANNEL_ATTR_RX_TEST_SIGNAL_PATTERN"] %}
+{%- set ethernet_attr_id_list = [
+                              "LAI_ETHERNET_ATTR_CLIENT_ALS",
+                              "LAI_ETHERNET_ATTR_ALS_DELAY",
+                              "LAI_ETHERNET_ATTR_MAINTENANCE",
+                              "LAI_ETHERNET_ATTR_CLIENT_RX_ALS",
+                              "LAI_ETHERNET_ATTR_CLIENT_RX_ALS_DELAY"] %}
+{%- set ethernet_stat_id_list = [
+                              "LAI_ETHERNET_STAT_IN_MAC_CONTROL_FRAMES",
+                              "LAI_ETHERNET_STAT_IN_MAC_PAUSE_FRAMES",
+                              "LAI_ETHERNET_STAT_IN_OVERSIZE_FRAMES",
+                              "LAI_ETHERNET_STAT_IN_UNDERSIZE_FRAMES",
+                              "LAI_ETHERNET_STAT_IN_JABBER_FRAMES",
+                              "LAI_ETHERNET_STAT_IN_FRAGMENT_FRAMES",
+                              "LAI_ETHERNET_STAT_IN_8021Q_FRAMES",
+                              "LAI_ETHERNET_STAT_IN_CRC_ERRORS",
+                              "LAI_ETHERNET_STAT_IN_BLOCK_ERRORS",
+                              "LAI_ETHERNET_STAT_OUT_MAC_CONTROL_FRAMES",
+                              "LAI_ETHERNET_STAT_OUT_MAC_PAUSE_FRAMES",
+                              "LAI_ETHERNET_STAT_OUT_8021Q_FRAMES",
+                              "LAI_ETHERNET_STAT_IN_PCS_BIP_ERRORS",
+                              "LAI_ETHERNET_STAT_IN_PCS_ERRORED_SECONDS",
+                              "LAI_ETHERNET_STAT_IN_PCS_SEVERELY_ERRORED_SECONDS",
+                              "LAI_ETHERNET_STAT_IN_PCS_UNAVAILABLE_SECONDS",
+                              "LAI_ETHERNET_STAT_OUT_PCS_BIP_ERRORS",
+                              "LAI_ETHERNET_STAT_OUT_CRC_ERRORS",
+                              "LAI_ETHERNET_STAT_OUT_BLOCK_ERRORS",
+                              "LAI_ETHERNET_STAT_TX_GOOD_FRAME",
+                              "LAI_ETHERNET_STAT_TX_GOOD_OCTETS",
+                              "LAI_ETHERNET_STAT_TX_GOOD_MULTICAST",
+                              "LAI_ETHERNET_STAT_TX_GOOD_BROADCAST",
+                              "LAI_ETHERNET_STAT_TX_GOOD_64B",
+                              "LAI_ETHERNET_STAT_TX_GOOD_65B_127B",
+                              "LAI_ETHERNET_STAT_TX_GOOD_128B_255B",
+                              "LAI_ETHERNET_STAT_TX_GOOD_256B_511B",
+                              "LAI_ETHERNET_STAT_TX_GOOD_512B_1023B",
+                              "LAI_ETHERNET_STAT_TX_GOOD_1024B_1518B",
+                              "LAI_ETHERNET_STAT_TX_GOOD_1519B_LTJ",
+                              "LAI_ETHERNET_STAT_TX_GOOD_JUMBO",
+                              "LAI_ETHERNET_STAT_TX_BAD_FRAME",
+                              "LAI_ETHERNET_STAT_TX_BAD_OCTETS",
+                              "LAI_ETHERNET_STAT_TX_BAD_MULTICAST",
+                              "LAI_ETHERNET_STAT_TX_BAD_BROADCAST",
+                              "LAI_ETHERNET_STAT_TX_BAD_LT_64B",
+                              "LAI_ETHERNET_STAT_TX_BAD_64B",
+                              "LAI_ETHERNET_STAT_TX_BAD_65B_127B",
+                              "LAI_ETHERNET_STAT_TX_BAD_128B_255B",
+                              "LAI_ETHERNET_STAT_TX_BAD_256B_511B",
+                              "LAI_ETHERNET_STAT_TX_BAD_512B_1023B",
+                              "LAI_ETHERNET_STAT_TX_BAD_1024B_1518B",
+                              "LAI_ETHERNET_STAT_TX_BAD_1519B_LTJ",
+                              "LAI_ETHERNET_STAT_TX_BAD_JUMBO",
+                              "LAI_ETHERNET_STAT_TX_OCTETS",
+                              "LAI_ETHERNET_STAT_TX_FRAME",
+                              "LAI_ETHERNET_STAT_TX_BROADCAST",
+                              "LAI_ETHERNET_STAT_TX_MULTICAST",
+                              "LAI_ETHERNET_STAT_TX_CRC_ALIGN",
+                              "LAI_ETHERNET_STAT_TX_UNDER_SIZE",
+                              "LAI_ETHERNET_STAT_TX_OVER_SIZE",
+                              "LAI_ETHERNET_STAT_TX_FRAGMENT",
+                              "LAI_ETHERNET_STAT_TX_JABBER",
+                              "LAI_ETHERNET_STAT_TX_64B",
+                              "LAI_ETHERNET_STAT_TX_65B_127B",
+                              "LAI_ETHERNET_STAT_TX_128B_255B",
+                              "LAI_ETHERNET_STAT_TX_256B_511B",
+                              "LAI_ETHERNET_STAT_TX_512B_1023B",
+                              "LAI_ETHERNET_STAT_TX_1024B_1518B",
+                              "LAI_ETHERNET_STAT_TX_1519B_MAX",
+                              "LAI_ETHERNET_STAT_RX_GOOD_FRAME",
+                              "LAI_ETHERNET_STAT_RX_GOOD_OCTETS",
+                              "LAI_ETHERNET_STAT_RX_GOOD_FRAME",
+                              "LAI_ETHERNET_STAT_RX_GOOD_MULTICAST",
+                              "LAI_ETHERNET_STAT_RX_GOOD_BROADCAST",
+                              "LAI_ETHERNET_STAT_RX_GOOD_64B",
+                              "LAI_ETHERNET_STAT_RX_GOOD_65B_127B",
+                              "LAI_ETHERNET_STAT_RX_GOOD_128B_255B",
+                              "LAI_ETHERNET_STAT_RX_GOOD_256B_511B",
+                              "LAI_ETHERNET_STAT_RX_GOOD_512B_1023B",
+                              "LAI_ETHERNET_STAT_RX_GOOD_1024B_1518B",
+                              "LAI_ETHERNET_STAT_RX_GOOD_1519B_LTJ",
+                              "LAI_ETHERNET_STAT_RX_GOOD_JUMBO",
+                              "LAI_ETHERNET_STAT_RX_BAD_FRAME",
+                              "LAI_ETHERNET_STAT_RX_BAD_OCTETS",
+                              "LAI_ETHERNET_STAT_RX_BAD_MULTICAST",
+                              "LAI_ETHERNET_STAT_RX_BAD_BROADCAST",
+                              "LAI_ETHERNET_STAT_RX_BAD_LT_64B",
+                              "LAI_ETHERNET_STAT_RX_BAD_64B",
+                              "LAI_ETHERNET_STAT_RX_BAD_65B_127B",
+                              "LAI_ETHERNET_STAT_RX_BAD_128B_255B",
+                              "LAI_ETHERNET_STAT_RX_BAD_256B_511B",
+                              "LAI_ETHERNET_STAT_RX_BAD_512B_1023B",
+                              "LAI_ETHERNET_STAT_RX_BAD_1024B_1518B",
+                              "LAI_ETHERNET_STAT_RX_BAD_1519B_LTJ",
+                              "LAI_ETHERNET_STAT_RX_BAD_JUMBO",
+                              "LAI_ETHERNET_STAT_RX_OCTETS",
+                              "LAI_ETHERNET_STAT_RX_FRAME",
+                              "LAI_ETHERNET_STAT_RX_BROADCAST",
+                              "LAI_ETHERNET_STAT_RX_MULTICAST",
+                              "LAI_ETHERNET_STAT_RX_CRC_ALIGN",
+                              "LAI_ETHERNET_STAT_RX_64B",
+                              "LAI_ETHERNET_STAT_RX_65B_127B",
+                              "LAI_ETHERNET_STAT_RX_128B_255B",
+                              "LAI_ETHERNET_STAT_RX_256B_511B",
+                              "LAI_ETHERNET_STAT_RX_512B_1023B",
+                              "LAI_ETHERNET_STAT_RX_1024B_1518B",
+                              "LAI_ETHERNET_STAT_RX_1519B_MAX",
+                              "LAI_ETHERNET_STAT_LAST_CLEAN_UP"] %}
+{%- set lldp_attr_id_list = [
+                              "LAI_LLDP_ATTR_ENABLED",
+                              "LAI_LLDP_ATTR_SNOOPING",
+                              "LAI_LLDP_ATTR_NEIGHBOR_SYSTEM_NAME",
+                              "LAI_LLDP_ATTR_NEIGHBOR_SYSTEM_DESCRIPTION",
+                              "LAI_LLDP_ATTR_NEIGHBOR_CHASSIS_ID",
+                              "LAI_LLDP_ATTR_NEIGHBOR_CHASSIS_ID_TYPE",
+                              "LAI_LLDP_ATTR_NEIGHBOR_ID",
+                              "LAI_LLDP_ATTR_NEIGHBOR_LAST_UPDATE",
+                              "LAI_LLDP_ATTR_NEIGHBOR_PORT_ID",
+                              "LAI_LLDP_ATTR_NEIGHBOR_PORT_ID_TYPE",
+                              "LAI_LLDP_ATTR_NEIGHBOR_PORT_DESCRIPTION",
+                              "LAI_LLDP_ATTR_NEIGHBOR_MANAGEMENT_ADDRESS",
+                              "LAI_LLDP_ATTR_NEIGHBOR_MANAGEMENT_ADDRESS_TYPE"] %}
+{%- set otn_attr_id_list = [
+                              "LAI_OTN_ATTR_TTI_MSG_TRANSMIT",
+                              "LAI_OTN_ATTR_TTI_MSG_EXPECTED",
+                              "LAI_OTN_ATTR_TTI_MSG_RECV",
+                              "LAI_OTN_ATTR_RDI_MSG",
+                              "LAI_OTN_ATTR_TTI_MSG_AUTO",
+                              "LAI_OTN_ATTR_DELAY_MEASUREMENT_ENABLED",
+                              "LAI_OTN_ATTR_DELAY_MEASUREMENT_MODE",
+                              "LAI_OTN_ATTR_MAINTENANCE"] %}
+{%- set otn_stat_id_list = [
+                              "LAI_OTN_STAT_ERRORED_SECONDS",
+                              "LAI_OTN_STAT_SEVERELY_ERRORED_SECONDS",
+                              "LAI_OTN_STAT_UNAVAILABLE_SECONDS",
+                              "LAI_OTN_STAT_ERRORED_BLOCKS",
+                              "LAI_OTN_STAT_FEC_UNCORRECTABLE_BLOCKS",
+                              "LAI_OTN_STAT_FEC_CORRECTED_BITS",
+                              "LAI_OTN_STAT_BACKGROUND_BLOCK_ERRORS",
+                              "LAI_OTN_STAT_SM_BEI",
+                              "LAI_OTN_STAT_CODE_VIOLATIONS"] %}
+{%- set otn_gauge_id_list = [
+                              "LAI_OTN_STAT_ESNR",
+                              "LAI_OTN_STAT_PRE_FEC_BER",
+                              "LAI_OTN_STAT_Q_VALUE",
+                              "LAI_OTN_STAT_POST_FEC_BER",
+                              "LAI_OTN_STAT_DELAY",
+                              "LAI_OTN_STAT_Q_MARGIN"] %}
+{%- set linecard_attr_id_list = [
+                              "LAI_LINECARD_ATTR_ADMIN_STATE",
+                              "LAI_LINECARD_ATTR_BOARD_MODE",
+                              "LAI_LINECARD_ATTR_OPER_STATUS",
+                              "LAI_LINECARD_ATTR_RELAY",
+                              "LAI_LINECARD_ATTR_HOSTNAME",
+                              "LAI_LINECARD_ATTR_CPLD_VERSION",
+                              "LAI_LINECARD_ATTR_SCRIPT_VERSION",
+                              "LAI_LINECARD_ATTR_MFG_NAME",
+                              "LAI_LINECARD_ATTR_BAUD_RATE",
+                              "LAI_LINECARD_ATTR_SOFTWARE_VERSION",
+                              "LAI_LINECARD_ATTR_FPGA_VERSION",
+                              "LAI_LINECARD_ATTR_UCD_VERSION",
+                              "LAI_LINECARD_ATTR_TEMP_HIGH_ALARM_THRESHOLD",
+                              "LAI_LINECARD_ATTR_TEMP_HIGH_WARN_THRESHOLD",
+                              "LAI_LINECARD_ATTR_TEMP_LOW_ALARM_THRESHOLD",
+                              "LAI_LINECARD_ATTR_TEMP_LOW_WARN_THRESHOLD",
+                              "LAI_LINECARD_ATTR_SLOT_ID",
+                              "LAI_LINECARD_ATTR_LED_MODE",
+                              "LAI_LINECARD_ATTR_LED_FLASH_INTERVAL",
+                              "LAI_LINECARD_ATTR_LED_COLOR",
+                              "LAI_LINECARD_ATTR_EQUIPMENT_FAILURE",
+                              "LAI_LINECARD_ATTR_EQUIPMENT_MISMATCH"] %}
+{%- set linecard_gauge_id_list = [
+                              "LAI_LINECARD_STAT_MEMORY_AVAILABLE",
+                              "LAI_LINECARD_STAT_MEMORY_UTILIZED",
+                              "LAI_LINECARD_STAT_CPU_UTILIZATION",
+                              "LAI_LINECARD_STAT_TEMPERATURE"] %}
+{%- set assignment_attr_id_list = ["LAI_ASSIGNMENT_ATTR_DESCRIPTION",
+                              "LAI_ASSIGNMENT_ATTR_ALLOCATION",
+                              "LAI_ASSIGNMENT_ATTR_TRIBUTARY_SLOT_INDEX",
+                              "LAI_ASSIGNMENT_ATTR_MAPPING"] %}
+{%- set interface_stat_id_list = ["LAI_INTERFACE_STAT_OUT_MULTICAST_PKTS",
+                                  "LAI_INTERFACE_STAT_IN_OCTETS",
+                                  "LAI_INTERFACE_STAT_OUT_PKTS",
+                                  "LAI_INTERFACE_STAT_OUT_BROADCAST_PKTS",
+                                  "LAI_INTERFACE_STAT_OUT_OCTETS",
+                                  "LAI_INTERFACE_STAT_LAST_CLEAR",
+                                  "LAI_INTERFACE_STAT_IN_PKTS",
+                                  "LAI_INTERFACE_STAT_IN_MULTICAST_PKTS",
+                                  "LAI_INTERFACE_STAT_IN_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_BROADCAST_PKTS",
+                                  "LAI_INTERFACE_STAT_OUT_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_CRC_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_UNDERSIZE_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_1024_1518_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_256_511_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_65_127_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_128_255_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_512_1023_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_FRAMES_64_OCTETS",
+                                  "LAI_INTERFACE_STAT_IN_OVERSIZE_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_JABBER_FRAMES",
+                                  "LAI_INTERFACE_STAT_CARRIER_TRANSITIONS",
+                                  "LAI_INTERFACE_STAT_IN_8021Q_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_BLOCK_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_CARRIER_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_DISCARDS",
+                                  "LAI_INTERFACE_STAT_IN_FCS_ERRORS",
+                                  "LAI_INTERFACE_STAT_IN_FRAGMENT_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_INTERRUPTED_TX",
+                                  "LAI_INTERFACE_STAT_IN_LATE_COLLISION",
+                                  "LAI_INTERFACE_STAT_IN_MAC_CONTROL_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_MAC_ERRORS_RX",
+                                  "LAI_INTERFACE_STAT_IN_MAC_PAUSE_FRAMES",
+                                  "LAI_INTERFACE_STAT_IN_MAXSIZE_EXCEEDED",
+                                  "LAI_INTERFACE_STAT_IN_SINGLE_COLLISION",
+                                  "LAI_INTERFACE_STAT_IN_SYMBOL_ERROR",
+                                  "LAI_INTERFACE_STAT_IN_UNICAST_PKTS",
+                                  "LAI_INTERFACE_STAT_IN_UNKNOWN_PROTOS",
+                                  "LAI_INTERFACE_STAT_OUT_8021Q_FRAMES",
+                                  "LAI_INTERFACE_STAT_OUT_DISCARDS",
+                                  "LAI_INTERFACE_STAT_OUT_MAC_CONTROL_FRAMES",
+                                  "LAI_INTERFACE_STAT_OUT_MAC_ERRORS_TX",
+                                  "LAI_INTERFACE_STAT_OUT_MAC_PAUSE_FRAMES",
+                                  "LAI_INTERFACE_STAT_OUT_UNICAST_PKTS"] %}
+[
+    {
+        "PORT_COUNTER_ID_LIST_STATUS": {
+{% for id in port_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "PORT_COUNTER_ID_LIST_GAUGE": {
+{% for id in port_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "TRANSCEIVER_COUNTER_ID_LIST_STATUS": {
+{% for id in xcvr_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "TRANSCEIVER_COUNTER_ID_LIST_GAUGE": {
+{% for id in xcvr_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "TRANSCEIVER_COUNTER_ID_LIST_COUNTER": {
+{% for id in xcvr_stat_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "PHYSICALCH_COUNTER_ID_LIST_STATUS": {
+{% for id in pch_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "PHYSICALCH_COUNTER_ID_LIST_GAUGE": {
+{% for id in pch_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OPTICALCH_COUNTER_ID_LIST_STATUS": {
+{% for id in och_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OPTICALCH_COUNTER_ID_LIST_GAUGE": {
+{% for id in och_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "LOGICALCH_COUNTER_ID_LIST_STATUS": {
+{% for id in lch_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "ETHERNET_COUNTER_ID_LIST_STATUS": {
+{% for id in ethernet_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "ETHERNET_COUNTER_ID_LIST_COUNTER": {
+{% for id in ethernet_stat_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "LLDP_COUNTER_ID_LIST_STATUS": {
+{% for id in lldp_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OTN_COUNTER_ID_LIST_STATUS": {
+{% for id in otn_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OTN_COUNTER_ID_LIST_COUNTER": {
+{% for id in otn_stat_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "OTN_COUNTER_ID_LIST_GAUGE": {
+{% for id in otn_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_STATUS": {
+{% for id in linecard_attr_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_GAUGE": {
+{% for id in linecard_gauge_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "ASSIGNMENT_COUNTER_ID_LIST_STATUS": {
+{% for id in assignment_attr_id_list %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    },
+    {
+        "INTERFACE_COUNTER_ID_LIST_COUNTER": {
+{% for id in interface_stat_id_list  %}
+            "attr{{loop.index}}": "{{ id }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        },
+        "OP": "SET"
+    }
+]

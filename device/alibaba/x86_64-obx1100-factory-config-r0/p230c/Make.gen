@@ -1,0 +1,17 @@
+.ONESHELL:
+SHELL = /bin/bash
+.SHELLFLAGS += -e
+n ?= 0
+all:
+	@(n=$(n);                                                 \
+          slot=`expr $$n + 1`;                                    \
+          $${P230C_HOME}/parser.py -i $${slot}                    \
+                     -t P230C                                     \
+                     -n $$n                                       \
+                     -m $${BOARD_MODE}                            \
+                     -T $${TEMPLATE_FILE}                         \
+                     -l logicalchannel_config.ini                 \
+                     -p port_config.ini                           \
+                     -k p230c                                     \
+                     -d $${TEMPLATE_DIR} > config_db$$n.json;     \
+          n=`expr $$n + 1`;)

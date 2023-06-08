@@ -1,0 +1,11 @@
+#Resotre all user accounts
+if [ -d /host/user_accounts ]; then
+    mv /host/user_accounts/* /etc/
+    users=`cat /etc/passwd | grep clish_start | grep -v admin | cut -d\: -f1`
+    for user in ${users}; do
+        mkdir -p /home/${user}
+        chown -R ${user}:${user} /home/${user}
+    done
+    rm -rf /host/user_accounts
+fi
+

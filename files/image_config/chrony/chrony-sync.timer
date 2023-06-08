@@ -1,0 +1,13 @@
+[Unit]
+Description=chrony-sync until chrony has started
+PartOf=chrony-sync.service
+
+[Timer]
+OnUnitActiveSec=60
+Unit=chrony-sync.service
+
+[Install]
+WantedBy=timers.target
+
+WantedBy=chrony.target
+

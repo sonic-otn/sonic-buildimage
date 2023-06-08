@@ -11,9 +11,6 @@
 check program bgp|zebra with path "/usr/bin/process_checker bgp /usr/lib/frr/zebra"
     if status != 0 for 5 times within 5 cycles then alert repeat every 1 cycles
 
-check program bgp|fpmsyncd with path "/usr/bin/process_checker bgp fpmsyncd"
-    if status != 0 for 5 times within 5 cycles then alert repeat every 1 cycles
-
 check program bgp|bgpd with path "/usr/bin/process_checker bgp /usr/lib/frr/bgpd"
     if status != 0 for 5 times within 5 cycles then alert repeat every 1 cycles
 
