@@ -1,0 +1,27 @@
+From 49236452b1d7e3a01642891cbef2acf2a655057e Mon Sep 17 00:00:00 2001
+From: Jenkins <jenkins@obx-sonic011158130130.NA62>
+Date: Tue, 6 Dec 2022 10:29:11 +0800
+Subject: [PATCH] create a group with the same name as the username
+
+---
+ nss_tacplus.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/nss_tacplus.c b/nss_tacplus.c
+index c11b43c..f8f4f30 100644
+--- a/nss_tacplus.c
++++ b/nss_tacplus.c
+@@ -487,8 +487,8 @@ static int create_or_modify_local_user(const char *name, int level, bool existin
+     while(lvl >= MIN_TACACS_USER_PRIV) {
+         user = &useradd_grp_list[lvl];
+         if(user->info && user->secondary_grp && user->shell) {
+-            snprintf(buf, len, "%s -G %s \"%s\" -g %d -c \"%s\" -d /home/%s -m -s %s",
+-                command, user->secondary_grp, name, user->gid, user->info, name, user->shell);
++            snprintf(buf, len, "%s -G %s \"%s\" -c \"%s\" -d /home/%s -m -s %s",
++                command, user->secondary_grp, name, user->info, name, user->shell);
+             if(debug) syslog(LOG_DEBUG, "%s", buf);
+             fp = popen(buf, "r");
+             if(!fp || -1 == pclose(fp)) {
+-- 
+2.7.4
+

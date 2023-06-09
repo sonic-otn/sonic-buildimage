@@ -1,0 +1,25 @@
+From 23b7ecfb63f79f28dc6345cfde039b9fe9eff1f1 Mon Sep 17 00:00:00 2001
+From: Jenkins <jenkins@obx-sonic011158130130.NA62>
+Date: Fri, 25 Nov 2022 09:50:59 +0800
+Subject: [PATCH] cross-compile-changes
+
+---
+ debian/rules | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/debian/rules b/debian/rules
+index 903f416..c37c385 100755
+--- a/debian/rules
++++ b/debian/rules
+@@ -14,7 +14,7 @@ override_dh_gencontrol:
+ 	dh_gencontrol -- $(SUBSTVARS)
+ 
+ override_dh_auto_build:
+-	dh_auto_build -- LINKTYPE=dynamic USELZO=on
++	dh_auto_build -- LINKTYPE=dynamic USELZO=on TARGET=$(TARGET_ARCH)
+ 
+ override_dh_install:
+ 	dh_install
+-- 
+2.7.4
+

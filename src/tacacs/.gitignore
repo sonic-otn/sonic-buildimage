@@ -1,4 +1,4 @@
-*
+
 !.gitignore
 audisp/*
 !audisp/Makefile
