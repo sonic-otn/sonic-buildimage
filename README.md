@@ -98,8 +98,18 @@ To build SONiC installer image and docker images, run the following commands:
     # Execute make configure once to configure ASIC
     make configure PLATFORM=[ASIC_VENDOR]
 
-    # Build SONiC image
-    make all
+    # (Optional) Set the default user and password
+    export USERNAME=root
+    export PASSWORD=root
+    export CLIUSER=admin 
+    export CLIUSER_PASSWORD=admin
+
+    # Build SONiC-OTN VS image
+    make configure PLATFORM=vs 
+    BUILD_MULTIASIC_KVM=y BUILD_LINUX_KERNEL=y make target/sonic-vs.img.gz
+
+    # RUN the virtual image
+    Please refer to the `SONiC-OTN-VM.md` file to run it on virtual machine 
 
 ## Usage for ARM Architecture
 To build Arm32 bit for (ARMHF) plaform
