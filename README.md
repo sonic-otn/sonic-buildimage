@@ -71,13 +71,10 @@ Configure your system to allow running the 'docker' command without 'sudo':
 	 `sudo gpasswd -a ${USER} docker`
     Log out and log back in so that your group membership is re-evaluated
 
-## SAI Version
-Please refer to [SONiC roadmap](https://github.com/Azure/SONiC/wiki/Sonic-Roadmap-Planning) on the SAI version for each SONiC release.
-
 ## Clone or fetch the code repository with all git submodules
 To clone the code repository recursively, assuming git version 1.9 or newer:
 
-    git clone https://github.com/Azure/sonic-buildimage.git
+    git clone https://github.com/zhengweitang-zwt/sonic-buildimage.git
 
 ## Usage
 
@@ -89,14 +86,11 @@ To build SONiC installer image and docker images, run the following commands:
     # Enter the source directory
     cd sonic-buildimage
 
-    # (Optional) Checkout a specific branch. By default, it uses master branch. For example, to checkout the branch 201911, use "git checkout 201911"
-    git checkout [branch_name]
-
     # Execute make init once after cloning the repo, or after fetching remote repo with submodule updates
     make init
 
     # Execute make configure once to configure ASIC
-    make configure PLATFORM=[ASIC_VENDOR]
+    make configure PLATFORM=vs 
 
     # (Optional) Set the default user and password
     export USERNAME=root
@@ -105,8 +99,7 @@ To build SONiC installer image and docker images, run the following commands:
     export CLIUSER_PASSWORD=admin
 
     # Build SONiC-OTN VS image
-    make configure PLATFORM=vs 
-    BUILD_MULTIASIC_KVM=y BUILD_LINUX_KERNEL=y make target/sonic-vs.img.gz
+    make target/sonic-vs.img.gz
 
     # RUN the virtual image
     Please refer to the `SONiC-OTN-VM.md` file to run it on virtual machine 
