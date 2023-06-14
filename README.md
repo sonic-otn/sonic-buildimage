@@ -99,7 +99,7 @@ To build SONiC installer image and docker images, run the following commands:
     export CLIUSER_PASSWORD=admin
 
     # Build SONiC-OTN VS image
-    make target/sonic-vs.img.gz
+    BUILD_MULTIASIC_KVM=y make target/sonic-vs.img.gz
 
     # RUN the virtual image
     Please refer to the `SONiC-OTN-VM.md` file to run it on virtual machine 

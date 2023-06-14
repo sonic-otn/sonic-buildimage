@@ -15,7 +15,7 @@ make init
 3. Config platform type
 
 ```
-make configure PLATFORM=vs
+BUILD_MULTIASIC_KVM=y BUILD_LINUX_KERNEL=y make configure PLATFORM=vs
 ```
 
 4. Build kvm image
