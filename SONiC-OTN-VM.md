@@ -28,7 +28,7 @@ make target/sonic-vs.img.gz
 
 ```
 ONIE image: onie-recovery-x86_64-kvm_x86_64_4_asic-r0.iso
-Refer to `platfrom/vs/onie.mk`, you can download it from https://sonicstorage.blob.core.windows.net/packages/onie/onie-recovery-x86_64-kvm_x86_64-r0.iso?sv=2015-04-05&sr=b&sig=XMAk1cttBFM369CMbihe5oZgXwe4uaDVfwg4CTLT%2F5U%3D&se=2155-10-13T10%3A40%3A13Z&sp=r
+Refer to `platfrom/vs/onie.mk`, you can download it from https://sonicstorage.blob.core.windows.net/packages/onie/onie-recovery-x86_64-kvm_x86_64_4_asic-r0.iso?sv=2020-04-08&st=2021-08-27T22%3A41%3A07Z&se=2030-08-28T22%3A41%3A00Z&sr=b&sp=r&sig=zyaX7rHnE5jXldpgrnWq1nvsfmMTrVCSuESZqrIxDLc%3D
 
 AONOS image: sonic-4asic-vs.img, sonic-installer.img
 you can find the `sonic-4asic-vs.img` in the root folder of your project, and `sonic-4asic-vs.img` in the `target` folder
