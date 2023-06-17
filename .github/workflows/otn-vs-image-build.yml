@@ -1,0 +1,26 @@
+name: sonic-otn
+
+on:
+  push:
+    branches: [ "202012" ]
+  pull_request:
+    branches: [ "202012" ]
+
+jobs:
+  build:
+
+    runs-on: sonic-otn
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: build
+      run: |
+          make init
+          make configure PLATFORM=vs 
+          export USERNAME=root
+          export PASSWORD=root
+          export CLIUSER=admin 
+          export CLIUSER_PASSWORD=admin
+          BUILD_MULTIASIC_KVM=y make target/sonic-vs.img.gz
+
