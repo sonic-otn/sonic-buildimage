@@ -1,6 +1,7 @@
 name: sonic-otn
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "202012" ]
   pull_request:
