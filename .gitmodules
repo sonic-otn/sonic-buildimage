@@ -1,6 +1,6 @@
 [submodule "sonic-swss-common"]
 	path = src/sonic-swss-common
-	url = https://github.com/zhengweitang-zwt/sonic-swss-common
+	url = https://github.com/sonic-otn/sonic-swss-common
 [submodule "sonic-linux-kernel"]
 	path = src/sonic-linux-kernel
 	url = https://github.com/sonic-net/sonic-linux-kernel
@@ -30,16 +30,16 @@
 	url = https://github.com/p4lang/ptf.git
 [submodule "src/sonic-utilities"]
 	path = src/sonic-utilities
-	url = https://github.com/zhengweitang-zwt/sonic-utilities
+	url = https://github.com/sonic-otn/sonic-utilities
 [submodule "platform/broadcom/sonic-platform-modules-arista"]
 	path = platform/broadcom/sonic-platform-modules-arista
 	url = https://github.com/aristanetworks/sonic
 [submodule "src/sonic-platform-common"]
 	path = src/sonic-platform-common
-	url = https://github.com/zhengweitang-zwt/sonic-platform-common
+	url = https://github.com/sonic-otn/sonic-platform-common
 [submodule "src/sonic-platform-daemons"]
 	path = src/sonic-platform-daemons
-	url = https://github.com/zhengweitang-zwt/sonic-platform-daemons
+	url = https://github.com/sonic-otn/sonic-platform-daemons
 [submodule "src/sonic-platform-pde"]
 	path = src/sonic-platform-pde
 	url = https://github.com/sonic-net/sonic-platform-pdk-pde
@@ -67,7 +67,7 @@
 	url = https://github.com/secdev/scapy.git
 [submodule "src/sonic-mgmt-framework"]
 	path = src/sonic-mgmt-framework
-	url = https://github.com/zhengweitang-zwt/sonic-mgmt-framework
+	url = https://github.com/sonic-otn/sonic-mgmt-framework
 [submodule "src/sonic-ztp"]
 	path = src/sonic-ztp
 	url = https://github.com/sonic-net/sonic-ztp
@@ -77,7 +77,7 @@
 	branch = master
 [submodule "src/sonic-mgmt-common"]
 	path = src/sonic-mgmt-common
-	url = https://github.com/zhengweitang-zwt/sonic-mgmt-common.git
+	url = https://github.com/sonic-otn/sonic-mgmt-common.git
 [submodule "src/wpasupplicant/sonic-wpa-supplicant"]
 	path = src/wpasupplicant/sonic-wpa-supplicant
 	url = https://github.com/sonic-net/sonic-wpa-supplicant.git
@@ -105,7 +105,7 @@
 	url = https://github.com/sonic-net/sonic-host-services
 [submodule "src/sonic-gnmi"]
 	path = src/sonic-gnmi
-	url = https://github.com/zhengweitang-zwt/sonic-gnmi.git
+	url = https://github.com/sonic-otn/sonic-gnmi.git
 [submodule "src/sonic-genl-packet"]
 	path = src/sonic-genl-packet
 	url = https://github.com/sonic-net/sonic-genl-packet
