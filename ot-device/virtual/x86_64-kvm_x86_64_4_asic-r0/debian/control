@@ -1,0 +1,11 @@
+Source: sonic
+Maintainer: Shuotian Cheng <shuche@microsoft.com>
+Section: net
+Priority: optional
+Standards-Version: 1.0.0
+Build-Depends: debhelper (>=9)
+
+Package: kvm-4-asic
+Architecture: all
+Description: This package contains kvm configuration.
+

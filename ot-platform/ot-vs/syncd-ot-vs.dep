@@ -1,0 +1,11 @@
+#DPKG FRK
+DPATH       := $($(SYNCD_OT_VS)_PATH)
+DEP_FILES   := $(SONIC_COMMON_FILES_LIST) ot-platform/ot-vs/syncd-ot-vs.mk ot-platform/ot-vs/syncd-ot-vs.dep
+DEP_FILES   += $(SONIC_COMMON_BASE_FILES_LIST)
+DEP_FILES   += $(shell git ls-files $(DPATH))
+
+$(SYNCD_OT_VS)_CACHE_MODE  := GIT_CONTENT_SHA 
+$(SYNCD_OT_VS)_DEP_FLAGS   := $(SONIC_COMMON_FLAGS_LIST)
+$(SYNCD_OT_VS)_DEP_FILES   := $(DEP_FILES)
+
+$(eval $(call add_dbg_docker,$(SYNCD_OT_VS),$(SYNCD_OT_VS_DBG)))

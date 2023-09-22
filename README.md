@@ -185,6 +185,9 @@ The supported ASIC vendors are:
 * PLATFORM=innovium
 * PLATFORM=vs
 
+The supported OTN vendors are:
+* PLATFORM=ot-vs
+
 ## Usage for ARM Architecture
 
 ARM build has dependency in docker version 18.

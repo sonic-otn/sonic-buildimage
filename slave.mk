@@ -48,7 +48,9 @@ DPKG_ADMINDIR_PATH = $(BUILD_WORKDIR)/dpkg
 SLAVE_DIR ?= sonic-slave-$(BLDENV)
 
 CONFIGURED_PLATFORM := $(shell [ -f .platform ] && cat .platform || echo generic)
-PLATFORM_PATH = platform/$(CONFIGURED_PLATFORM)
+IS_OTN_PLATFORM := $(shell echo $(CONFIGURED_PLATFORM) | grep 'ot-')
+PLATFORM_ROOT := $(if $(IS_OTN_PLATFORM),ot-platform,platform)
+PLATFORM_PATH = $(PLATFORM_ROOT)/$(CONFIGURED_PLATFORM)
 CONFIGURED_ARCH := $(shell [ -f .arch ] && cat .arch || echo amd64)
 ifeq ($(PLATFORM_ARCH),)
 	override PLATFORM_ARCH = $(CONFIGURED_ARCH)
@@ -133,8 +135,12 @@ list :
 ###############################################################################
 ## Include other rules
 ###############################################################################
-
+ifneq ($(IS_OTN_PLATFORM),)
+include $(RULES_PATH)/config-ot
+else
 include $(RULES_PATH)/config
+endif
+
 -include $(RULES_PATH)/config.user
 
 

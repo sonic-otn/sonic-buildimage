@@ -1,0 +1,325 @@
+{%- set LINECARD_FIELDS = [
+    'linecard-type',
+    'admin-state',
+    'board-mode',
+    'reboot-type',
+    'hostname',
+    'baud-rate',
+    'led-flash-interval']%}
+{%- set PORT_FIELDS = [
+    'admin-state',
+    'rx-cd-range',
+    'roll-off',
+    'los-threshold',
+    'low-threshold',
+    'high-threshold'] %}
+{%- set TRANSCEIVER_FIELDS = [
+    'enabled',
+    'vendor-expect',
+    'fec-mode',
+    'upgrade-download',
+    'switch-flash-partition',
+    'backup-flash-partition',
+    'ethernet-pmd-preconf',
+    'power-mode',
+    'reset'] %}
+{%- set LOGICAL_CHANNEL_FIELDS = [
+    'admin-state',
+    'loopback-mode',
+    'test-signal-pattern',
+    'tx-test-signal-pattern',
+    'rx-test-signal-pattern',
+    'link-down-delay-mode',
+    'link-down-delay-hold-off'] %}
+{%- set OTN_FIELDS = [
+    'tti-msg-expected',
+    'tti-msg-transmit',
+    'tti-msg-auto',
+    'delay-measurement-enabled',
+    'delay-measurement-mode',
+    'maintenance'] %}
+{%- set ETHERNET_FIELDS = [
+    'client-als',
+    'als-delay',
+    'client-rx-als',
+    'client-rx-als-delay',
+    'maintenance'] %}
+{%- set OCH_FIELDS = [
+    'operational-mode',
+    'frequency',
+    'target-output-power'] %}
+{%- set LLDP_FIELDS = [
+    'enabled'] %}
+{%- set AMPLIFIER_FIELDS = [
+    'name',
+    'target-gain',
+    'min-gain',
+    'max-gain',
+    'target-gain-tilt',
+    'amp-mode',
+    'target-output-power',
+    'max-output-power',
+    'enabled',
+    'fiber-type-profile',
+    'working-state',
+    'input-los-threshold',
+    'input-los-hysteresis',
+    'output-los-threshold',
+    'output-los-hysteresis',
+    'gain-low-threshold',
+    'gain-low-hysteresis',
+    'input-low-threshold',
+    'output-low-threshold',
+    'los-ase-delay'] %}
+{%- set OSC_FIELDS = [
+    'name',
+    'enabled',
+    'rx-low-threshold',
+    'rx-high-threshold',
+    'tx-low-threshold'] %}
+{%- set APS_FIELDS = [
+    'name',
+    'revertive',
+    'wait-to-restore-time',
+    'hold-off-time',
+    'primary-switch-threshold',
+    'primary-switch-hysteresis',
+    'secondary-switch-threshold',
+    'relative-switch-threshold',
+    'relative-switch-threshold-offset',
+    'force-to-port',
+    'alarm-hysteresis',
+    'collect-switch-info'] %}
+{%- set APS_PORT_FIELDS = [
+    'enabled',
+    'target-attenuation',
+    'power-low-threshold'] %}
+{%- set ATTENUATOR_FIELDS = [
+    'name',
+    'attenuation-mode',
+    'target-output-power',
+    'attenuation',
+    'enabled'] %}
+{
+    "LINECARD": {
+{% for key in LINECARD %}
+{%- set FIELDS = [] %}
+{%- for f in LINECARD_FIELDS %}
+{%- if LINECARD[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ LINECARD[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "PORT": {
+{% for key in PORT %}
+{%- set FIELDS = [] %}
+{%- for f in PORT_FIELDS %}
+{%- if PORT[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ PORT[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "TRANSCEIVER": {
+{% for key in TRANSCEIVER %}
+{%- set FIELDS = [] %}
+{%- for f in TRANSCEIVER_FIELDS %}
+{%- if TRANSCEIVER[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ TRANSCEIVER[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "LOGICAL_CHANNEL": {
+{% for key in LOGICAL_CHANNEL %}
+{%- set FIELDS = [] %}
+{%- for f in LOGICAL_CHANNEL_FIELDS %}
+{%- if LOGICAL_CHANNEL[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ LOGICAL_CHANNEL[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "OTN": {
+{% for key in OTN %}
+{%- set FIELDS = [] %}
+{%- for f in OTN_FIELDS %}
+{%- if OTN[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ OTN[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "ETHERNET": {
+{% for key in ETHERNET %}
+{%- set FIELDS = [] %}
+{%- for f in ETHERNET_FIELDS %}
+{%- if ETHERNET[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ ETHERNET[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "OCH": {
+{% for key in OCH %}
+{%- set FIELDS = [] %}
+{%- for f in OCH_FIELDS %}
+{%- if OCH[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ OCH[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "LLDP": {
+{% for key in LLDP %}
+{%- set FIELDS = [] %}
+{%- for f in LLDP_FIELDS %}
+{%- if LLDP[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ LLDP[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "AMPLIFIER": {
+{% for key in AMPLIFIER %}
+{%- set FIELDS = [] %}
+{%- for f in AMPLIFIER_FIELDS %}
+{%- if AMPLIFIER[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ AMPLIFIER[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "OSC": {
+{% for key in OSC %}
+{%- set FIELDS = [] %}
+{%- for f in OSC_FIELDS %}
+{%- if OSC[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ OSC[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "APS": {
+{% for key in APS %}
+{%- set FIELDS = [] %}
+{%- for f in APS_FIELDS %}
+{%- if APS[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ APS[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "APS_PORT": {
+{% for key in APS_PORT %}
+{%- set FIELDS = [] %}
+{%- for f in APS_PORT_FIELDS %}
+{%- if APS_PORT[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ APS_PORT[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    },
+    "ATTENUATOR": {
+{% for key in ATTENUATOR %}
+{%- set FIELDS = [] %}
+{%- for f in ATTENUATOR_FIELDS %}
+{%- if ATTENUATOR[key][f] is defined %}
+    {%- if FIELDS.append(f) %}{% endif %}
+{%- endif %}
+{%- endfor %}
+        "{{ key }}": {
+{% for field in FIELDS %}
+            "{{ field }}": "{{ ATTENUATOR[key][field] }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    }
+}

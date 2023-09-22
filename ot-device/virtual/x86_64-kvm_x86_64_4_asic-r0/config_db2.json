@@ -1,0 +1,437 @@
+{
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic_id": "2",
+            "hwsku": "vs_p230c"
+        }
+    },
+    "LOGICAL_CHANNEL": {
+        "CH301": {
+            "index": "301",
+            "channel-id": "301",
+            "transceiver": "TRANSCEIVER-1-3-C1",
+            "description": "GE-1-3-C1",
+            "alias": "CH301"
+        },
+        "CH302": {
+            "index": "302",
+            "channel-id": "302",
+            "transceiver": "TRANSCEIVER-1-3-C2",
+            "description": "GE-1-3-C2",
+            "alias": "CH302"
+        },
+        "CH303": {
+            "index": "303",
+            "channel-id": "303",
+            "transceiver": "TRANSCEIVER-1-3-C3",
+            "description": "GE-1-3-C3",
+            "alias": "CH303"
+        },
+        "CH304": {
+            "index": "304",
+            "channel-id": "304",
+            "transceiver": "TRANSCEIVER-1-3-C4",
+            "description": "GE-1-3-C4",
+            "alias": "CH304"
+        },
+        "CH315": {
+            "index": "315",
+            "channel-id": "315",
+            "transceiver": "TRANSCEIVER-1-3-L1",
+            "description": "OTUCN-1-3-L1",
+            "alias": "CH315"
+        },
+        "CH317": {
+            "index": "317",
+            "channel-id": "317",
+            "transceiver": "TRANSCEIVER-1-3-C1",
+            "description": "ODUCN-1-3-C1",
+            "alias": "CH317"
+        },
+        "CH318": {
+            "index": "318",
+            "channel-id": "318",
+            "transceiver": "TRANSCEIVER-1-3-C2",
+            "description": "ODUCN-1-3-C2",
+            "alias": "CH318"
+        },
+        "CH319": {
+            "index": "319",
+            "channel-id": "319",
+            "transceiver": "TRANSCEIVER-1-3-C3",
+            "description": "ODUCN-1-3-C3",
+            "alias": "CH319"
+        },
+        "CH320": {
+            "index": "320",
+            "channel-id": "320",
+            "transceiver": "TRANSCEIVER-1-3-C4",
+            "description": "ODUCN-1-3-C4",
+            "alias": "CH320"
+        }
+    },
+    "PORT": {
+        "PORT-1-3-L1": {
+            "index": "1",
+            "port-type": "LINE",
+            "port-id": "1",
+            "subcomponents": "TRANSCEIVER-1-3-L1",
+            "alias": "PORT-1-3-L1"
+        },
+        "PORT-1-3-C1": {
+            "index": "3",
+            "port-type": "CLIENT",
+            "port-id": "1",
+            "subcomponents": "TRANSCEIVER-1-3-C1",
+            "alias": "PORT-1-3-C1"
+        },
+        "PORT-1-3-C2": {
+            "index": "4",
+            "port-type": "CLIENT",
+            "port-id": "2",
+            "subcomponents": "TRANSCEIVER-1-3-C2",
+            "alias": "PORT-1-3-C2"
+        },
+        "PORT-1-3-C3": {
+            "index": "5",
+            "port-type": "CLIENT",
+            "port-id": "3",
+            "subcomponents": "TRANSCEIVER-1-3-C3",
+            "alias": "PORT-1-3-C3"
+        },
+        "PORT-1-3-C4": {
+            "index": "6",
+            "port-type": "CLIENT",
+            "port-id": "4",
+            "subcomponents": "TRANSCEIVER-1-3-C4",
+            "alias": "PORT-1-3-C4"
+        }
+    },
+    "LINECARD": {
+        "LINECARD-1-3": {
+            "board-mode": "L1_400G_CA_100GE",
+            "linecard-type": "P230C"
+        }
+    },
+    "TRANSCEIVER": {
+        "TRANSCEIVER-1-3-C1": {
+            "index": 1,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "parent": "PORT-1-3-C1",
+            "physical-channel": "TRANSCEIVER-1-3-C1|CH-1,TRANSCEIVER-1-3-C1|CH-2,TRANSCEIVER-1-3-C1|CH-3,TRANSCEIVER-1-3-C1|CH-4",
+            "logical-channel": "CH301,CH317",
+            "ethernet": "CH301",
+            "otn": "CH317",
+            "interface": "INTERFACE-1-3-C1"
+        },
+        "TRANSCEIVER-1-3-C2": {
+            "index": 2,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "parent": "PORT-1-3-C2",
+            "physical-channel": "TRANSCEIVER-1-3-C2|CH-1,TRANSCEIVER-1-3-C2|CH-2,TRANSCEIVER-1-3-C2|CH-3,TRANSCEIVER-1-3-C2|CH-4",
+            "logical-channel": "CH302,CH318",
+            "ethernet": "CH302",
+            "otn": "CH318",
+            "interface": "INTERFACE-1-3-C2"
+        },
+        "TRANSCEIVER-1-3-C3": {
+            "index": 3,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "parent": "PORT-1-3-C3",
+            "physical-channel": "TRANSCEIVER-1-3-C3|CH-1,TRANSCEIVER-1-3-C3|CH-2,TRANSCEIVER-1-3-C3|CH-3,TRANSCEIVER-1-3-C3|CH-4",
+            "logical-channel": "CH303,CH319",
+            "ethernet": "CH303",
+            "otn": "CH319",
+            "interface": "INTERFACE-1-3-C3"
+        },
+        "TRANSCEIVER-1-3-C4": {
+            "index": 4,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "parent": "PORT-1-3-C4",
+            "physical-channel": "TRANSCEIVER-1-3-C4|CH-1,TRANSCEIVER-1-3-C4|CH-2,TRANSCEIVER-1-3-C4|CH-3,TRANSCEIVER-1-3-C4|CH-4",
+            "logical-channel": "CH304,CH320",
+            "ethernet": "CH304",
+            "otn": "CH320",
+            "interface": "INTERFACE-1-3-C4"
+        },
+        "TRANSCEIVER-1-3-L1": {
+            "index": 5,
+            "port-type": "LINE",
+            "port-id": 1,
+            "parent": "PORT-1-3-L1",
+            "logical-channel": "CH315",
+            "otn": "CH315",
+            "och": "OCH-1-3-L1"
+        }
+    },
+    "PHYSICAL_CHANNEL": {
+        "TRANSCEIVER-1-3-C1|CH-1": {
+            "index": 1,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "lane-id": 1
+        },
+        "TRANSCEIVER-1-3-C1|CH-2": {
+            "index": 2,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "lane-id": 2
+        },
+        "TRANSCEIVER-1-3-C1|CH-3": {
+            "index": 3,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "lane-id": 3
+        },
+        "TRANSCEIVER-1-3-C1|CH-4": {
+            "index": 4,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "lane-id": 4
+        },
+        "TRANSCEIVER-1-3-C2|CH-1": {
+            "index": 5,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "lane-id": 1
+        },
+        "TRANSCEIVER-1-3-C2|CH-2": {
+            "index": 6,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "lane-id": 2
+        },
+        "TRANSCEIVER-1-3-C2|CH-3": {
+            "index": 7,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "lane-id": 3
+        },
+        "TRANSCEIVER-1-3-C2|CH-4": {
+            "index": 8,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "lane-id": 4
+        },
+        "TRANSCEIVER-1-3-C3|CH-1": {
+            "index": 9,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "lane-id": 1
+        },
+        "TRANSCEIVER-1-3-C3|CH-2": {
+            "index": 10,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "lane-id": 2
+        },
+        "TRANSCEIVER-1-3-C3|CH-3": {
+            "index": 11,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "lane-id": 3
+        },
+        "TRANSCEIVER-1-3-C3|CH-4": {
+            "index": 12,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "lane-id": 4
+        },
+        "TRANSCEIVER-1-3-C4|CH-1": {
+            "index": 13,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "lane-id": 1
+        },
+        "TRANSCEIVER-1-3-C4|CH-2": {
+            "index": 14,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "lane-id": 2
+        },
+        "TRANSCEIVER-1-3-C4|CH-3": {
+            "index": 15,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "lane-id": 3
+        },
+        "TRANSCEIVER-1-3-C4|CH-4": {
+            "index": 16,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "lane-id": 4
+        }
+    },
+    "OCH": {
+        "OCH-1-3-L1": {
+            "index": 1,
+            "port-type": "LINE",
+            "port-id": 1
+        }
+    },
+    "LLDP": {
+        "CH301": {
+            "index": 301,
+            "channel-id": 301
+        },
+        "CH302": {
+            "index": 302,
+            "channel-id": 302
+        },
+        "CH303": {
+            "index": 303,
+            "channel-id": 303
+        },
+        "CH304": {
+            "index": 304,
+            "channel-id": 304
+        }
+    },
+    "ETHERNET": {
+        "CH301": {
+            "index": 301,
+            "channel-id": 301
+        },
+        "CH302": {
+            "index": 302,
+            "channel-id": 302
+        },
+        "CH303": {
+            "index": 303,
+            "channel-id": 303
+        },
+        "CH304": {
+            "index": 304,
+            "channel-id": 304
+        }
+    },
+    "OTN": {
+        "CH315": {
+            "index": 315,
+            "channel-id": 315
+        },
+        "CH317": {
+            "index": 317,
+            "channel-id": 317
+        },
+        "CH318": {
+            "index": 318,
+            "channel-id": 318
+        },
+        "CH319": {
+            "index": 319,
+            "channel-id": 319
+        },
+        "CH320": {
+            "index": 320,
+            "channel-id": 320
+        }
+    },
+    "INTERFACE": {
+        "INTERFACE-1-3-C1": {
+            "index": 1,
+            "type": "ethernetCsmacd",
+            "interface-type": "CLIENT",
+            "interface-id": 1,
+            "name": "INTERFACE-1-3-C1",
+            "transceiver": "TRANSCEIVER-1-3-C1",
+            "hardware-port": "PORT-1-3-C1"
+        },
+        "INTERFACE-1-3-C2": {
+            "index": 2,
+            "type": "ethernetCsmacd",
+            "interface-type": "CLIENT",
+            "interface-id": 2,
+            "name": "INTERFACE-1-3-C2",
+            "transceiver": "TRANSCEIVER-1-3-C2",
+            "hardware-port": "PORT-1-3-C2"
+        },
+        "INTERFACE-1-3-C3": {
+            "index": 3,
+            "type": "ethernetCsmacd",
+            "interface-type": "CLIENT",
+            "interface-id": 3,
+            "name": "INTERFACE-1-3-C3",
+            "transceiver": "TRANSCEIVER-1-3-C3",
+            "hardware-port": "PORT-1-3-C3"
+        },
+        "INTERFACE-1-3-C4": {
+            "index": 4,
+            "type": "ethernetCsmacd",
+            "interface-type": "CLIENT",
+            "interface-id": 4,
+            "name": "INTERFACE-1-3-C4",
+            "transceiver": "TRANSCEIVER-1-3-C4",
+            "hardware-port": "PORT-1-3-C4"
+        }
+    },
+    "ASSIGNMENT": {
+        "CH301|ASS1": {
+            "index": 1,
+            "channel-id": 301,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": 301
+        },
+        "CH302|ASS1": {
+            "index": 1,
+            "channel-id": 302,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": 302
+        },
+        "CH303|ASS1": {
+            "index": 1,
+            "channel-id": 303,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": 303
+        },
+        "CH304|ASS1": {
+            "index": 1,
+            "channel-id": 304,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": 304
+        },
+        "CH315|ASS1": {
+            "index": 1,
+            "channel-id": 315,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": 315
+        },
+        "CH317|ASS1": {
+            "index": 1,
+            "channel-id": 317,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": 317
+        },
+        "CH318|ASS1": {
+            "index": 1,
+            "channel-id": 318,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": 318
+        },
+        "CH319|ASS1": {
+            "index": 1,
+            "channel-id": 319,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": 319
+        },
+        "CH320|ASS1": {
+            "index": 1,
+            "channel-id": 320,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": 320
+        }
+    }
+}
