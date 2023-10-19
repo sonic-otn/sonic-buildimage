@@ -1,0 +1,69 @@
+{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files %}
+FROM docker-config-engine-bullseye
+
+ARG docker_container_name
+
+# Make apt-get non-interactive
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update &&       \
+    apt-get install -f -y   \
+        # Needed for installing netifaces Python package
+        build-essential     \
+        python3-dev
+
+{% if ( CONFIGURED_ARCH == "armhf" or CONFIGURED_ARCH == "arm64" ) %}
+# Fix for gcc/python/iputils-ping not found in arm docker
+RUN apt-get install -y   \
+        gcc              
+{% endif %}
+
+{% if ( CONFIGURED_ARCH == "armhf" or CONFIGURED_ARCH == "arm64" ) %}
+# Remove installed gcc
+RUN apt-get remove -y gcc
+{% endif %}
+
+{% if docker_ot_orchagent_debs.strip() -%}
+# Copy locally-built Debian package dependencies
+{{ copy_files("debs/", docker_ot_orchagent_debs.split(' '), "/debs/") }}
+
+# Install locally-built Debian packages and implicitly install their dependencies
+{{ install_debian_packages(docker_ot_orchagent_debs.split(' ')) }}
+{%- endif %}
+
+{% if docker_ot_orchagent_whls.strip() -%}
+# Copy locally-built Python wheel dependencies
+{{ copy_files("python-wheels/", docker_ot_orchagent_whls.split(' '), "/python-wheels/") }}
+
+# Install locally-built Python wheel dependencies
+{{ install_python_wheels(docker_ot_orchagent_whls.split(' ')) }}
+{% endif %}
+
+# Clean up
+RUN apt-get purge -y          \
+        build-essential       \
+        python3-dev        && \
+    apt-get clean -y       && \
+    apt-get autoclean -y   && \
+    apt-get autoremove -y  && \
+    rm -rf /debs ~/.cache
+
+COPY ["files/supervisor-proc-exit-listener", "/usr/bin"]
+
+# Copy all Jinja2 template files into the templates folder
+COPY ["*.j2", "/usr/share/sonic/templates/"]
+
+# Copy all regex json files and rsyslog_plugin.conf to rsyslog.d
+COPY ["*.json", "/etc/rsyslog.d/"]
+COPY ["files/rsyslog_plugin.conf.j2", "/etc/rsyslog.d/"]
+
+RUN sonic-cfggen -t /usr/share/sonic/templates/docker-init.j2 > /usr/bin/docker-init.sh
+RUN rm -f /usr/share/sonic/templates/docker-init.j2
+RUN chmod 755 /usr/bin/docker-init.sh
+
+# Create swss rsyslog_plugin conf file
+RUN j2 -f json /etc/rsyslog.d/rsyslog_plugin.conf.j2 /etc/rsyslog.d/events_info.json  > /etc/rsyslog.d/swss_events.conf
+RUN rm -f /etc/rsyslog.d/rsyslog_plugin.conf.j2
+RUN rm -f /etc/rsyslog.d/events_info.json
+
+ENTRYPOINT ["/usr/bin/docker-init.sh"]

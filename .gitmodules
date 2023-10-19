@@ -118,3 +118,6 @@
 [submodule "src/sonic-otairedis"]
 	path = src/sonic-otairedis
 	url = https://github.com/Weitang-Zheng/sonic-otairedis.git
+[submodule "src/sonic-otss"]
+	path = src/sonic-otss
+	url = https://github.com/Weitang-Zheng/sonic-otss.git
