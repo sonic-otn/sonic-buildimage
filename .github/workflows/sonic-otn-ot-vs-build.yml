@@ -1,0 +1,18 @@
+name: sonic-otn-ot-vs-build
+
+on:
+  push:
+    branches: [ "otn_pre_202411" ]
+  pull_request:
+    branches: [ "otn_pre_202411" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: make
+      run: make
+
