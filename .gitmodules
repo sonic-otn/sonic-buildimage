@@ -1,6 +1,6 @@
 [submodule "sonic-swss-common"]
 	path = src/sonic-swss-common
-	url = https://github.com/zhengweitang-zwt/sonic-swss-common.git
+	url = https://github.com/sonic-otn/sonic-swss-common.git
 [submodule "sonic-linux-kernel"]
 	path = src/sonic-linux-kernel
 	url = https://github.com/Azure/sonic-linux-kernel
@@ -12,10 +12,10 @@
 	url = https://github.com/Azure/sonic-snmpagent
 [submodule "src/sonic-utilities"]
 	path = src/sonic-utilities
-	url = https://github.com/zhengweitang-zwt/sonic-utilities.git
+	url = https://github.com/sonic-otn/sonic-utilities.git
 [submodule "src/sonic-platform-common"]
 	path = src/sonic-platform-common
-	url = https://github.com/zhengweitang-zwt/sonic-platform-common.git
+	url = https://github.com/sonic-otn/sonic-platform-common.git
 [submodule "src/sonic-frr/frr"]
 	path = src/sonic-frr/frr
 	url = https://github.com/Azure/sonic-frr.git
@@ -25,22 +25,22 @@
 	url = https://github.com/p/redis-dump-load.git
 [submodule "src/sonic-mgmt-framework"]
 	path = src/sonic-mgmt-framework
-	url = https://github.com/zhengweitang-zwt/sonic-mgmt-framework.git
+	url = https://github.com/sonic-otn/sonic-mgmt-framework.git
 [submodule "src/sonic-telemetry"]
 	path = src/sonic-telemetry
-	url = https://github.com/zhengweitang-zwt/sonic-telemetry.git
+	url = https://github.com/sonic-otn/sonic-telemetry.git
 [submodule "src/sonic-mgmt-common"]
 	path = src/sonic-mgmt-common
-	url = https://github.com/zhengweitang-zwt/sonic-mgmt-common.git
+	url = https://github.com/sonic-otn/sonic-mgmt-common.git
 [submodule "sonic-swss"]
 	path = src/sonic-swss
-	url = https://github.com/zhengweitang-zwt/sonic-olss.git
+	url = https://github.com/sonic-otn/sonic-olss.git
 [submodule "src/sonic-lairedis"]
 	path = src/sonic-lairedis
-	url = https://github.com/zhengweitang-zwt/sonic-lairedis.git
+	url = https://github.com/sonic-otn/sonic-lairedis.git
 [submodule "sonic-platform-daemons"]
 	path = src/sonic-platform-daemons
-	url = https://github.com/zhengweitang-zwt/sonic-platform-daemons.git
+	url = https://github.com/sonic-otn/sonic-platform-daemons.git
 [submodule "sonic-dbsyncd"]
 	path = src/sonic-dbsyncd
 	url = https://github.com/Azure/sonic-dbsyncd
