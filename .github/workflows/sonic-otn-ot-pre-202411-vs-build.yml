@@ -17,7 +17,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      path: ./${{github.run_number}}_${{ github.sha }}
+      with:
+        path: ./${{github.run_number}}_${{ github.sha }}
 
     - name: build
       run: |
