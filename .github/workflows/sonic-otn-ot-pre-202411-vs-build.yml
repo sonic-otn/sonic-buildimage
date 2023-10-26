@@ -14,11 +14,12 @@ concurrency:
 jobs:
   build:
     runs-on: sonic-otn-server
+    defaults:
+      run:
+        working-directory: ./${{github.run_number}}_${{ github.sha }}
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        path: ./${{github.run_number}}_${{ github.sha }}
 
     - name: build
       run: |
