@@ -5,6 +5,7 @@ on:
     branches: [ "otn_pre_202411" ]
   pull_request:
     branches: [ "otn_pre_202411" ]
+  workflow_dispatch:
 
 jobs:
   build:
