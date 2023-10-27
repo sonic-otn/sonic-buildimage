@@ -1,0 +1,40 @@
+name: otn-legacy-vs-build
+
+on:
+  push:
+    branches: [ "otn_legacy" ]
+  pull_request:
+    branches: [ "otn_legacy" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: sonic-otn-server
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        path: legacy_${{github.run_number}}
+
+    - name: build
+      run: |
+          cd legacy_${{github.run_number}}
+          make init
+          make configure PLATFORM=vs 
+          export USERNAME=root
+          export PASSWORD=root
+          export CLIUSER=admin 
+          export CLIUSER_PASSWORD=admin
+          BUILD_MULTIASIC_KVM=y make target/sonic-vs.img.gz
+
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v3
+      with:
+        name: otn-legacy-artifact
+        path: |
+          legacy_${{github.run_number}}/sonic-installer.img
+          legacy_${{github.run_number}}/target/*.img.gz
