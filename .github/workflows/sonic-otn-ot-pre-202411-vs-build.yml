@@ -16,13 +16,16 @@ jobs:
     runs-on: sonic-otn-server
     defaults:
       run:
-        working-directory: ./${{github.run_number}}_${{ github.sha }}
+        # working-directory: ./${{github.run_number}}
+        working-directory: test1
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        path: test
 
-    - name: build
-      run: |
-          make init
-          make configure PLATFORM=ot-vs 
-          BUILD_MULTIASIC_KVM=y make target/sonic-ot-vs.img.gz
+    # - name: build
+    #   run: |
+    #       make init
+    #       make configure PLATFORM=ot-vs 
+    #       BUILD_MULTIASIC_KVM=y make target/sonic-ot-vs.img.gz
