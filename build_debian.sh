@@ -326,7 +326,9 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
     tcpdump                 \
     dbus                    \
     ntpstat                 \
-    openssh-server          \
+    openssh-sftp-server=1:7.9p1-10+deb10u2 \
+    openssh-client=1:7.9p1-10+deb10u2 \
+    openssh-server=1:7.9p1-10+deb10u2 \
     python                  \
     python-apt              \
     traceroute              \
