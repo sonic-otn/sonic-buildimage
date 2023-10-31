@@ -26,3 +26,11 @@ jobs:
           make init
           make configure PLATFORM=ot-vs 
           BUILD_MULTIASIC_KVM=y make target/sonic-ot-vs.img.gz
+
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v3
+      with:
+        name: otn-202411-artifact
+        path: |
+          202411_${{github.run_number}}/sonic-installer.img
+          202411_${{github.run_number}}/target/*.img.gz
