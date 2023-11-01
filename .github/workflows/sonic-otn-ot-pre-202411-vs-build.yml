@@ -25,7 +25,7 @@ jobs:
           cd 202411_${{github.run_number}}
           make init
           make configure PLATFORM=ot-vs 
-          BUILD_MULTIASIC_KVM=y make target/sonic-ot-vs.img.gz
+          KERNEL_PROCURE_METHOD=download make target/sonic-ot-vs.img.gz
 
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v3
