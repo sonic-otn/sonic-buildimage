@@ -490,8 +490,6 @@ done < files/image_config/sysctl/sysctl-net.conf
 sudo augtool --autosave "$sysctl_net_cmd_string" -r $FILESYSTEM_ROOT
 
 # Upgrade pip via PyPI and uninstall the Debian version
-sudo chroot $FILESYSTEM_ROOT pip3 config set global.index-url http://mirrors.aliyun.com/pypi/simple
-sudo chroot $FILESYSTEM_ROOT pip3 config set install.trusted-host mirrors.aliyun.com
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install --upgrade pip
 sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get purge -y python-pip python3-pip
 
