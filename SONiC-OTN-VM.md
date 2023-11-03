@@ -1,51 +1,38 @@
 
 
-# How to Build AONOS Virtual Machine
-
-
-1. Clone sonic-buildimage repo
+# Prerequisites
+* Install qemu
 ```
-git clone git@github.com:zhengweitang-zwt/sonic-buildimage.git
+sudo apt-get install qemu-kvm
 ```
-2. Clone sub-repos
+or
 ```
-make init
+brew install qemu
 ```
 
-3. Config platform type
 
-```
-BUILD_MULTIASIC_KVM=y BUILD_LINUX_KERNEL=y make configure PLATFORM=vs
-```
+* download sonic-otn virtual images
 
-4. Build kvm image
-
-```
-make target/sonic-vs.img.gz
+1. download ONIE image `onie-recovery-x86_64-kvm_x86_64_4_asic-r0.iso`
+```shell
+curl https://sonicstorage.blob.core.windows.net/packages/onie/onie-recovery-x86_64-kvm_x86_64_4_asic-r0.iso\?sv\=2020-04-08\&st\=2021-08-27T22%3A41%3A07Z\&se\=2030-08-28T22%3A41%3A00Z\&sr\=b\&sp\=r\&sig\=zyaX7rHnE5jXldpgrnWq1nvsfmMTrVCSuESZqrIxDLc%3D --output onie-recovery-x86_64-kvm_x86_64_4_asic-r0.iso
 ```
 
-5. Get vm binaries
+2. download installer images `sonic-installer.img` and `sonic-4asic-vs.img`  
+download these images from the github [actions](https://github.com/sonic-otn/sonic-buildimage/actions/workflows/otn-legacy-vs-image-build.yml) artifacts, for example this workflow [build#5](https://github.com/sonic-otn/sonic-buildimage/actions/runs/6740732168)
 
-```
-ONIE image: onie-recovery-x86_64-kvm_x86_64_4_asic-r0.iso
-Refer to `platfrom/vs/onie.mk`, you can download it from https://sonicstorage.blob.core.windows.net/packages/onie/onie-recovery-x86_64-kvm_x86_64_4_asic-r0.iso?sv=2020-04-08&st=2021-08-27T22%3A41%3A07Z&se=2030-08-28T22%3A41%3A00Z&sr=b&sp=r&sig=zyaX7rHnE5jXldpgrnWq1nvsfmMTrVCSuESZqrIxDLc%3D
-
-AONOS image: sonic-4asic-vs.img, sonic-installer.img
-you can find the `sonic-4asic-vs.img` in the root folder of your project, and `sonic-4asic-vs.img` in the `target` folder
-```
-
+  
+* (optional) build sonic-otn virtual images
+Build these images with steps in [readme](./README.md). Then you can find the `sonic-installer.img` and `sonic-4asic-vs.img` in the root and `target` folder
 
 
 # How to Start a Virtual Machine
 
-1. Install qemu
+1. Start VM via qemu
 ```
-sudo apt-get install qemu-kvm
-```
+gunzip -k sonic-4asic-vs.img.gz
 
-2. Start VM via qemu
-```
-sudo qemu-system-x86_64 -m 3072 -name onie -accel hvf -boot order=cd,once=d -cdrom ./onie-recovery-x86_64-kvm_x86_64_4_asic-r0.iso  -device e1000,netdev=onienet -netdev user,id=onienet,hostfwd=:0.0.0.0:3040-:22 -vnc 0.0.0.0:0 -vga std -drive file=./sonic-4asic-vs.img,media=disk,if=virtio,index=0 -drive file=./sonic-installer.img,if=virtio,index=1 -serial telnet:127.0.0.1:7000,server
+sudo qemu-system-x86_64 -m 3072 -name onie -accel hvf -boot order=cd,once=d -cdrom ./onie-recovery-x86_64-kvm_x86_64_4_asic-r0.iso  -device e1000,netdev=onienet -netdev user,id=onienet,hostfwd=:0.0.0.0:3040-:22 -vga std -drive file=./sonic-4asic-vs.img,media=disk,if=virtio,index=0 -drive file=./sonic-installer.img,if=virtio,index=1 -serial telnet:127.0.0.1:7000,server
 ```
 
 3. Open a new terminal, use console to login ONIE.
@@ -54,10 +41,8 @@ telnet 127.0.0.1 7000
 ```
 
 4. Choose entry: `ONIE: Embed ONIE`
-<img src="ONIE snapshot 1.jpg" alt="ONIE snapshot 1" style="zoom: 50%;" />
 
 5. Choose entry: `ONIE: Install OS`
-<img src="ONIE snapshot 2.jpg" alt="ONIE snapshot 2" style="zoom: 50%;" />
 
 6. Wait until AONOS image installed.
   
@@ -70,15 +55,10 @@ ONIE:/ # blkid
 /dev/vda2: LABEL="ONIE-BOOT" UUID="e0f5d6f2-64aa-4501-8123-62bed94e04ee"
 ```
 
-
 7. reboot
 ```
 ONIE:/ # reboot
 ```
-
-8. Boot from SONiC-OS partition.
-<img src="ONIE snapshot 3.jpg" alt="ONIE snapshot 3" style="zoom: 50%;" />
-
 
 # How to Login Virtual Machine
 
@@ -102,12 +82,6 @@ telnet 127.0.0.1 7000
     ```
     ssh root@localhost -p 3040
     ```
-
-# How does Virtual Machine simulate line-card and driver
-<img src="AONOS VM.png" alt="AONOS VM" style="zoom: 50%;" />
-
-
-
 
 # AONOS CLI Demo
 
