@@ -55,18 +55,24 @@
 Following is the instruction on how to build an [(ONIE)](https://github.com/opencomputeproject/onie) compatible network operating system (NOS) installer image for network switches, and also how to build docker images running inside the NOS. Note that SONiC image are build per ASIC platform. Switches using the same ASIC platform share a common image. For a list of supported switches and ASIC, please refer to this [list](https://github.com/Azure/SONiC/wiki/Supported-Devices-and-Platforms)
 
 # Hardware
-Any server can be a build image server. We are using a server with 1T hard disk. The OS is Ubuntu 16.04.
+Any server can be a build image server. We are using a server with 1T hard disk. The OS is Ubuntu 16.04 and Ubuntu 20.04.
 
 ## Prerequisites
 
-Install pip and jinja in host build machine, execute below commands if j2/j2cli is not available:
+For Ubuntu 16.04, Install pip and jinja in host build machine, execute below commands if j2/j2cli is not available:
 
     sudo apt-get install -y python-pip
     sudo python2 -m pip install -U pip==9.0.3
     sudo pip install --force-reinstall --upgrade jinja2>=2.10
     sudo pip install j2cli
 
-Configure your system to allow running the 'docker' command without 'sudo':
+For Ubuntu 20.04, 
+```shell
+sudo apt install -y python3-pip
+pip3 install --user j2cli
+```
+
+Install [Docker](https://docs.docker.com/engine/install/) and configure your and configure your system to allow running the 'docker' command without 'sudo':
     Add current user to the docker group
 	 `sudo gpasswd -a ${USER} docker`
     Log out and log back in so that your group membership is re-evaluated
@@ -74,7 +80,7 @@ Configure your system to allow running the 'docker' command without 'sudo':
 ## Clone or fetch the code repository with all git submodules
 To clone the code repository recursively, assuming git version 1.9 or newer:
 
-    git clone https://github.com/zhengweitang-zwt/sonic-buildimage.git
+    git clone -b otn_legacy https://github.com/sonic-otn/sonic-buildimage.git
 
 ## Usage
 
@@ -101,8 +107,8 @@ To build SONiC installer image and docker images, run the following commands:
     # Build SONiC-OTN VS image
     BUILD_MULTIASIC_KVM=y make target/sonic-vs.img.gz
 
-    # RUN the virtual image
-    Please refer to the `SONiC-OTN-VM.md` file to run it on virtual machine 
+## RUN the virtual image
+Please refer to the [SONiC-OTN-VM.md](./SONiC-OTN-VM.md) file to run it on a virtual machine 
 
 ## Usage for ARM Architecture
 To build Arm32 bit for (ARMHF) plaform
