@@ -88,6 +88,13 @@
 [![Nephos](https://dev.azure.com/mssonic/build/_apis/build/status/nephos/Azure.sonic-buildimage.official.nephos?branchName=201811&label=Nephos)](https://dev.azure.com/mssonic/build/_build/latest?definitionId=149&branchName=201811)
 [![VS](https://dev.azure.com/mssonic/build/_apis/build/status/vs/Azure.sonic-buildimage.official.vs?branchName=201811&label=VS)](https://dev.azure.com/mssonic/build/_build/latest?definitionId=142&branchName=201811)
 
+# Notice
+This branch is forked from native SONiC, and SONiC-OTN group are working on merging OTN implementations to this branch. 
+We cann't guarantee all OTN features are working on this branch until it's released.
+
+If you want to test and play with SONiC-OTN system on virtual machine, please switch to the [otn_legacy](https://github.com/sonic-otn/sonic-buildimage/tree/otn_legacy) branch.
+
+
 # sonic-buildimage
 
 ## Build SONiC Switch Images
