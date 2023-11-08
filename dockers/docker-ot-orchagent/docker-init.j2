@@ -13,6 +13,8 @@ CFGGEN_PARAMS=" \
     -t /usr/share/sonic/templates/supervisord.conf.j2,/etc/supervisor/conf.d/supervisord.conf
 "
 
+sonic-cfggen $CFGGEN_PARAMS
+
 # Executed platform specific initialization tasks.
 if [ -x /usr/share/sonic/platform/platform-init ]; then
     /usr/share/sonic/platform/platform-init

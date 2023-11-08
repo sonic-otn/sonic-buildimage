@@ -1,5 +1,5 @@
 [Unit]
-Description=switch state service
+Description=optical transport state service
 Requires=database{% if multi_instance == 'true' %}@%i{% endif %}.service
 After=database{% if multi_instance == 'true' %}@%i{% endif %}.service
 Requires=updategraph.service
@@ -13,9 +13,9 @@ StartLimitBurst=3
 [Service]
 User=root
 Environment=sonic_asic_platform={{ sonic_asic_platform }}
-ExecStartPre=/usr/local/bin/swss.sh start{% if multi_instance == 'true' %} %i{% endif %}
-ExecStart=/usr/local/bin/swss.sh wait{% if multi_instance == 'true' %} %i{% endif %}
-ExecStop=/usr/local/bin/swss.sh stop{% if multi_instance == 'true' %} %i{% endif %}
+ExecStartPre=/usr/local/bin/otss.sh start{% if multi_instance == 'true' %} %i{% endif %}
+ExecStart=/usr/local/bin/otss.sh wait{% if multi_instance == 'true' %} %i{% endif %}
+ExecStop=/usr/local/bin/otss.sh stop{% if multi_instance == 'true' %} %i{% endif %}
 RestartSec=30
 
 [Install]
