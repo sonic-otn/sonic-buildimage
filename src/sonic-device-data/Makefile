@@ -3,6 +3,7 @@ SHELL = /bin/bash
 .SHELLFLAGS += -e
 
 MAIN_TARGET = sonic-device-data_$(SONIC_DEVICE_DATA_VERSION_FULL)_all.deb
+DEVICE_ROOT := $(if $(shell cat ../../.platform | grep 'ot-'),ot-device,device)
 
 $(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
 	pushd ./src
@@ -12,8 +13,9 @@ $(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
 
 	# Create a new dir and copy all ONIE-platform-string-named dirs into it
 	mkdir ./device
-	cp -r -L ../../../device/*/* ./device/
+	cp -r -L ../../../${DEVICE_ROOT}/*/* ./device/
 
+ifeq ($(DEVICE_ROOT), device)
 	# Create hwsku for virtual switch
 	for d in `find -L ../../../device -maxdepth 3 -mindepth 3 -type d | grep -vE "(plugins|led-code)"`; do \
 		cp -Lr $$d device/x86_64-kvm_x86_64-r0/ ; \
@@ -24,6 +26,7 @@ $(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
 		grep -v ^# device/x86_64-kvm_x86_64-r0/$$(basename $$d)/port_config.ini | awk '{i=i+1;print "eth"i":"$$2}' > device/x86_64-kvm_x86_64-r0/$$(basename $$d)/lanemap.ini
 
 	done;
+endif
 
 	# Build the package
 ifeq ($(CROSS_BUILD_ENVIRON), y)

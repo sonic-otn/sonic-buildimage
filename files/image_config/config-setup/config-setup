@@ -429,7 +429,12 @@ boot_config()
     # file system to trigger. pending_config_initialization will remain set
     # for multi-npu platforms if we reach this case.
     if [[ ($NUM_ASIC -gt 1) ]]; then
-        return 0
+        # For otn platform, do config initialization here
+        if [[ $PALTFROM_ASIC = ot-* ]]; then
+            echo "init otn configuration"
+        else
+            return 0
+        fi
     fi	
 
     if [ -e /tmp/pending_config_initialization ] || [ -e  ${CONFIG_SETUP_INITIALIZATION_FLAG} ]; then
@@ -466,6 +471,7 @@ ASIC_CONF=/usr/share/sonic/device/$PLATFORM/asic.conf
 if [[ -f "$ASIC_CONF" ]]; then
     source $ASIC_CONF
 fi
+PALTFROM_ASIC=`cat /usr/share/sonic/device/$PLATFORM/platform_asic`
 
 
 CMD=$1
