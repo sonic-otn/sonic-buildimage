@@ -4,34 +4,34 @@
 
 function stopplatform1()
 {
-    debug "shutdown syncd process ..."
-    /usr/bin/docker exec -i syncd$DEV /usr/bin/syncd_request_shutdown --cold
+    debug "shutdown syncd-ot process ..."
+    /usr/bin/docker exec -i syncd-ot$DEV /usr/bin/syncd_request_shutdown --cold
 
-    # wait until syncd quits gracefully or force syncd to exit after 
+    # wait until syncd-ot quits gracefully or force syncd-ot to exit after 
     # waiting for 20 seconds
     start_in_secs=${SECONDS}
     end_in_secs=${SECONDS}
     timer_threshold=20
-    while docker top syncd$DEV | grep -q /usr/bin/syncd \
+    while docker top syncd-ot$DEV | grep -q /usr/bin/syncd-ot \
             && [[ $((end_in_secs - start_in_secs)) -le $timer_threshold ]]; do
         sleep 0.1
         end_in_secs=${SECONDS}
     done
 
     if [[ $((end_in_secs - start_in_secs)) -gt $timer_threshold ]]; then
-        debug "syncd process in container syncd$DEV did not exit gracefully" 
+        debug "syncd-ot process in container syncd-ot$DEV did not exit gracefully" 
     fi
 
-    /usr/bin/docker exec -i syncd$DEV /bin/sync
-    debug "Finished shutdown syncd process ..."
+    /usr/bin/docker exec -i syncd-ot$DEV /bin/sync
+    debug "Finished shutdown syncd-ot process ..."
 }
 
 OP=$1
 DEV=$2
 
-SERVICE="syncd"
-DEBUGLOG="/tmp/swss-syncd-debug$DEV.log"
-LOCKFILE="/tmp/swss-syncd-lock$DEV"
+SERVICE="syncd-ot"
+DEBUGLOG="/tmp/swss-syncd-ot-debug$DEV.log"
+LOCKFILE="/tmp/swss-syncd-ot-lock$DEV"
 NAMESPACE_PREFIX="asic"
 if [ "$DEV" ]; then
     NET_NS="$NAMESPACE_PREFIX$DEV" #name of the network namespace

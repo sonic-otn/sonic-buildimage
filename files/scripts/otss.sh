@@ -92,9 +92,9 @@ stop() {
 
 DEV=$2
 
-SERVICE="swss"
-DEBUGLOG="/tmp/swss-syncd-debug$DEV.log"
-LOCKFILE="/tmp/swss-syncd-lock$DEV"
+SERVICE="otss"
+DEBUGLOG="/tmp/otss-syncd-debug$DEV.log"
+LOCKFILE="/tmp/otss-syncd-lock$DEV"
 NAMESPACE_PREFIX="asic"
 if [ "$DEV" ]; then
     NET_NS="$NAMESPACE_PREFIX$DEV" #name of the network namespace
