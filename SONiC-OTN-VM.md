@@ -302,3 +302,17 @@ CommonOutput Optical Power(dBm)              : 3066.0
 
 root@sonic:~# 
 ```
+# AONOS Restconf and Telemetry Demo
+
+You can test Restconf with these commands in the OS:
+
+```curl -u admin:admin -k https://localhost/restconf/data/openconfig-platform:components```
+
+```curl -u admin:admin -k https://localhost/restconf/data/openconfig-interfaces:interfaces```
+
+You can test telemetry with these commands in the telemetry container:
+```docker exec -ti telemetry bash```
+
+```gnmi_get -alsologtostderr -insecure -notls -xpath_target OC-YANG -xpath /openconfig-interfaces:interfaces/interface[name=INTERFACE-1-1-C1]/state -target_addr 127.0.0.1:8081```
+
+```gnmi_get -alsologtostderr -insecure -notls -xpath_target OC-YANG -xpath /openconfig-platform:components/component[name=TRANSCEIVER-1-1-L1]/state -target_addr 127.0.0.1:8081```
