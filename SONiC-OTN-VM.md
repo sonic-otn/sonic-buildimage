@@ -19,7 +19,7 @@ curl https://sonicstorage.blob.core.windows.net/packages/onie/onie-recovery-x86_
 ```
 
 2. download installer images `sonic-installer.img` and `sonic-4asic-vs.img`  
-download these images from the github [actions](https://github.com/sonic-otn/sonic-buildimage/actions/workflows/otn-legacy-vs-image-build.yml) artifacts, for example this workflow [build#5](https://github.com/sonic-otn/sonic-buildimage/actions/runs/6740732168)
+download these images from the github [actions](https://github.com/sonic-otn/sonic-buildimage/actions/workflows/otn-legacy-vs-image-build.yml) artifacts, for example this workflow [build#9](https://github.com/sonic-otn/sonic-buildimage/actions/runs/7179185281)
 
   
 * (optional) build sonic-otn virtual images
@@ -316,3 +316,90 @@ You can test telemetry with these commands in the telemetry container:
 ```gnmi_get -alsologtostderr -insecure -notls -xpath_target OC-YANG -xpath /openconfig-interfaces:interfaces/interface[name=INTERFACE-1-1-C1]/state -target_addr 127.0.0.1:8081```
 
 ```gnmi_get -alsologtostderr -insecure -notls -xpath_target OC-YANG -xpath /openconfig-platform:components/component[name=TRANSCEIVER-1-1-L1]/state -target_addr 127.0.0.1:8081```
+
+You can test the telemetry dial-out with these commands:
+
+1. Run the commands in [test-telemetry-subscription.sh](./test-telemetry-subscription.sh) to delete the telemetry subscription and add a new subscription  
+
+2. Then you should be able to show the telemetry information via CLI, the telemetry server destination is `127.0.0.1:8082`
+```
+root@sonic:~# show telemetry info
+destinations  : 127.0.0.1:8082
+sensor-groups :
+  group-id : alarm_sensor_group
+    heartbeat-interval : 0
+    sample-interval    : 0
+    paths              : /openconfig-system:system/alarms/alarm/state
+  group-id : module_sensor_group
+    heartbeat-interval : 0
+    sample-interval    : 5000
+    paths              : /openconfig-transport-line-protection:aps/aps-modules/aps-module/ports,/openconfig-optical-amplifier:optical-amplifier/amplifiers/amplifier/state,/openconfig-optical-attenuator:optical-attenuator/attenuators/attenuator/state,/openconfig-optical-amplifier:optical-amplifier/supervisory-channels/supervisory-channel/state,/openconfig-platform:components/component/port/openconfig-transport-line-common:optical-port/state
+  group-id : platform_sensor_group
+    heartbeat-interval : 0
+    sample-interval    : 5000
+    paths              : /openconfig-platform:components/component/power-supply/state,/openconfig-platform:components/component/fan/state,/openconfig-platform:components/component/state,/openconfig-system:system/cpus/cpu/state
+  group-id : och_sensor_group
+    heartbeat-interval : 0
+    sample-interval    : 5000
+    paths              : /openconfig-platform:components/component/openconfig-terminal-device:optical-channel/state
+  group-id : ocm_sensor_group
+    heartbeat-interval : 0
+    sample-interval    : 5000
+    paths              : /openconfig-channel-monitor:channel-monitors/channel-monitor/channels
+  group-id : xcvr_sensor_group
+    heartbeat-interval : 0
+    sample-interval    : 5000
+    paths              : /openconfig-platform:components/component/openconfig-platform-transceiver:transceiver/state,/openconfig-platform:components/component/openconfig-platform-transceiver:transceiver/physical-channels/channel/state
+  group-id : otn_sensor_group
+    heartbeat-interval : 0
+    sample-interval    : 5000
+    paths              : /openconfig-terminal-device:terminal-device/logical-channels/channel/otn/state
+  group-id : ethernet_sensor_group
+    heartbeat-interval : 0
+    sample-interval    : 5000
+    paths              : /openconfig-interfaces:interfaces/interface/state/counters,/openconfig-terminal-device:terminal-device/logical-channels/channel/ethernet/state
+root@sonic:~#
+```
+
+3. Run the telemetry server to receive the data stream.
+```
+docker exec -ti telemetry bash
+dialout_server_cli -allow_no_client_auth -logtostderr -port 8082 -insecure -v 2
+I1212 20:26:34.035542      67 dialout_server.go:66] Created Server on localhost:8082
+I1212 20:26:34.035609      67 dialout_server_cli.go:90] Starting RPC server on address: localhost:8082
+== subscribeResponse:
+update: <
+  timestamp: 1702383999110043410
+  prefix: <
+    origin: "sonic"
+    target: "OC-YANG"
+  >
+  update: <
+    path: <
+      elem: <
+        name: "openconfig-terminal-device:terminal-device"
+      >
+      elem: <
+        name: "logical-channels"
+      >
+      elem: <
+        name: "channel"
+        key: <
+          key: "index"
+          value: "319"
+        >
+      >
+      elem: <
+        name: "otn"
+      >
+      elem: <
+        name: "state"
+      >
+    >
+    val: <
+      json_ietf_val: "{\"background-block-errors\":\"929\",\"code-violations\":\"929\",\"errored-blocks\":\"929\",\"errored-seconds\":\"929\",\"esnr\":{\"avg\":\"1\",\"instant\":\"1\",\"interval\":\"900000000000\",\"max\":\"1\",\"max-time\":\"1702383300950663263\",\"min\":\"1\",\"min-time\":\"1702383300950663263\"},\"fec-corrected-bits\":\"929\",\"fec-uncorrectable-blocks\":\"929\",\"post-fec-ber\":{\"avg\":\"1\",\"instant\":\"1\",\"interval\":\"900000000000\",\"max\":\"1\",\"max-time\":\"1702383300950663263\",\"min\":\"1\",\"min-time\":\"1702383300950663263\"},\"pre-fec-ber\":{\"avg\":\"1\",\"instant\":\"1\",\"interval\":\"900000000000\",\"max\":\"1\",\"max-time\":\"1702383300950663263\",\"min\":\"1\",\"min-time\":\"1702383300950663263\"},\"q-value\":{\"avg\":\"1\",\"instant\":\"1\",\"interval\":\"900000000000\",\"max\":\"1\",\"max-time\":\"1702383300950663263\",\"min\":\"1\",\"min-time\":\"1702383300950663263\"},\"severely-errored-seconds\":\"929\",\"unavailable-seconds\":\"929\"}"
+    >
+  >
+```
+
+
