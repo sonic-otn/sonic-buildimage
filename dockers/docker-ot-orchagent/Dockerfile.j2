@@ -49,6 +49,7 @@ RUN apt-get purge -y          \
     rm -rf /debs ~/.cache
 
 COPY ["files/supervisor-proc-exit-listener", "/usr/bin"]
+COPY ["orchagent.sh", "/usr/bin/"]
 
 # Copy all Jinja2 template files into the templates folder
 COPY ["*.j2", "/usr/share/sonic/templates/"]
