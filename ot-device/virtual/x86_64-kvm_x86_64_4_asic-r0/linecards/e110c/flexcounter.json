@@ -1,0 +1,738 @@
+
+[
+    {
+        "PORT_COUNTER_ID_LIST_STATUS": {
+
+            "attr1": "OTAI_PORT_ATTR_OPER_STATUS",
+
+
+            "attr2": "OTAI_PORT_ATTR_ADMIN_STATE",
+
+
+            "attr3": "OTAI_PORT_ATTR_EQUIPMENT_FAILURE",
+
+
+            "attr4": "OTAI_PORT_ATTR_EQUIPMENT_MISMATCH",
+
+
+            "attr5": "OTAI_PORT_ATTR_HIGH_THRESHOLD",
+
+
+            "attr6": "OTAI_PORT_ATTR_LED_COLOR",
+
+
+            "attr7": "OTAI_PORT_ATTR_LED_MODE",
+
+
+            "attr8": "OTAI_PORT_ATTR_LOS_THRESHOLD",
+
+
+            "attr9": "OTAI_PORT_ATTR_LOW_THRESHOLD",
+
+
+            "attr10": "OTAI_PORT_ATTR_ROLL_OFF",
+
+
+            "attr11": "OTAI_PORT_ATTR_RX_CD_RANGE",
+
+
+            "attr12": "OTAI_PORT_ATTR_EMPTY",
+
+
+            "attr13": "OTAI_PORT_ATTR_REMOVABLE",
+
+
+            "attr14": "OTAI_PORT_ATTR_INPUT_OFFSET",
+
+
+            "attr15": "OTAI_PORT_ATTR_OUTPUT_OFFSET",
+
+
+            "attr16": "OTAI_PORT_ATTR_OPTICAL_PORT_TYPE"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "INPORT_COUNTER_ID_LIST_GAUGE": {
+
+            "attr1": "OTAI_PORT_STAT_INPUT_POWER"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "OUTPORT_COUNTER_ID_LIST_GAUGE": {
+
+            "attr1": "OTAI_PORT_STAT_OUTPUT_POWER"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "OA_COUNTER_ID_LIST_STATUS": {
+
+            "attr1": "OTAI_OA_ATTR_OPER_STATUS",
+
+
+            "attr2": "OTAI_OA_ATTR_TYPE",
+
+
+            "attr3": "OTAI_OA_ATTR_TARGET_GAIN",
+
+
+            "attr4": "OTAI_OA_ATTR_MIN_GAIN",
+
+
+            "attr5": "OTAI_OA_ATTR_MAX_GAIN",
+
+
+            "attr6": "OTAI_OA_ATTR_TARGET_GAIN_TILT",
+
+
+            "attr7": "OTAI_OA_ATTR_GAIN_RANGE",
+
+
+            "attr8": "OTAI_OA_ATTR_AMP_MODE",
+
+
+            "attr9": "OTAI_OA_ATTR_TARGET_OUTPUT_POWER",
+
+
+            "attr10": "OTAI_OA_ATTR_MAX_OUTPUT_POWER",
+
+
+            "attr11": "OTAI_OA_ATTR_ENABLED",
+
+
+            "attr12": "OTAI_OA_ATTR_FIBER_TYPE_PROFILE",
+
+
+            "attr13": "OTAI_OA_ATTR_INGRESS_PORT",
+
+
+            "attr14": "OTAI_OA_ATTR_EGRESS_PORT",
+
+
+            "attr15": "OTAI_OA_ATTR_INPUT_LOS_THRESHOLD",
+
+
+            "attr16": "OTAI_OA_ATTR_INPUT_LOS_HYSTERESIS",
+
+
+            "attr17": "OTAI_OA_ATTR_OUTPUT_LOS_THRESHOLD",
+
+
+            "attr18": "OTAI_OA_ATTR_OUTPUT_LOS_HYSTERESIS",
+
+
+            "attr19": "OTAI_OA_ATTR_SERIAL_NO",
+
+
+            "attr20": "OTAI_OA_ATTR_PART_NO",
+
+
+            "attr21": "OTAI_OA_ATTR_MFG_NAME",
+
+
+            "attr22": "OTAI_OA_ATTR_MFG_DATE",
+
+
+            "attr23": "OTAI_OA_ATTR_EMPTY",
+
+
+            "attr24": "OTAI_OA_ATTR_REMOVABLE",
+
+
+            "attr25": "OTAI_OA_ATTR_EQUIPMENT_FAILURE",
+
+
+            "attr26": "OTAI_OA_ATTR_EQUIPMENT_MISMATCH",
+
+
+            "attr27": "OTAI_OA_ATTR_SOFTWARE_VERSION",
+
+
+            "attr28": "OTAI_OA_ATTR_FIRMWARE_VERSION",
+
+
+            "attr29": "OTAI_OA_ATTR_HARDWARE_VERSION",
+
+
+            "attr30": "OTAI_OA_ATTR_LOS_ASE_DELAY",
+
+
+            "attr31": "OTAI_OA_ATTR_ADMIN_STATE",
+
+
+            "attr32": "OTAI_OA_ATTR_GAIN_LOW_THRESHOLD",
+
+
+            "attr33": "OTAI_OA_ATTR_GAIN_LOW_HYSTERESIS",
+
+
+            "attr34": "OTAI_OA_ATTR_INPUT_LOW_THRESHOLD",
+
+
+            "attr35": "OTAI_OA_ATTR_OUTPUT_LOW_THRESHOLD",
+
+
+            "attr36": "OTAI_OA_ATTR_WORKING_STATE",
+
+
+            "attr37": "OTAI_OA_ATTR_INPUT_OFFSET_LINEP_RX",
+
+
+            "attr38": "OTAI_OA_ATTR_OUTPUT_OFFSET_LINEP_TX",
+
+
+            "attr39": "OTAI_OA_ATTR_INPUT_OFFSET_LINES_RX",
+
+
+            "attr40": "OTAI_OA_ATTR_OUTPUT_OFFSET_LINES_TX"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "OA_COUNTER_ID_LIST_GAUGE": {
+
+            "attr1": "OTAI_OA_STAT_ACTUAL_GAIN",
+
+
+            "attr2": "OTAI_OA_STAT_ACTUAL_GAIN_TILT",
+
+
+            "attr3": "OTAI_OA_STAT_TEMPERATURE",
+
+
+            "attr4": "OTAI_OA_STAT_INPUT_POWER_TOTAL",
+
+
+            "attr5": "OTAI_OA_STAT_INPUT_POWER_C_BAND",
+
+
+            "attr6": "OTAI_OA_STAT_INPUT_POWER_L_BAND",
+
+
+            "attr7": "OTAI_OA_STAT_OUTPUT_POWER_TOTAL",
+
+
+            "attr8": "OTAI_OA_STAT_OUTPUT_POWER_C_BAND",
+
+
+            "attr9": "OTAI_OA_STAT_OUTPUT_POWER_L_BAND",
+
+
+            "attr10": "OTAI_OA_STAT_LASER_BIAS_CURRENT",
+
+
+            "attr11": "OTAI_OA_STAT_OPTICAL_RETURN_LOSS",
+
+
+            "attr12": "OTAI_OA_STAT_LASER_TEC_CURRENT",
+
+
+            "attr13": "OTAI_OA_STAT_LASER_TEMPERATURE",
+
+
+            "attr14": "OTAI_OA_STAT_PANEL_INPUT_POWER_LINEP_RX",
+
+
+            "attr15": "OTAI_OA_STAT_PANEL_OUTPUT_POWER_LINEP_TX",
+
+
+            "attr16": "OTAI_OA_STAT_PANEL_INPUT_POWER_LINES_RX",
+
+
+            "attr17": "OTAI_OA_STAT_PANEL_OUTPUT_POWER_LINES_TX",
+
+
+            "attr18": "OTAI_OA_STAT_INGRESS_VOA_ATTEN"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "OSC_COUNTER_ID_LIST_STATUS": {
+
+            "attr1": "OTAI_OSC_ATTR_OPER_STATUS",
+
+
+            "attr2": "OTAI_OSC_ATTR_OUTPUT_FREQUENCY",
+
+
+            "attr3": "OTAI_OSC_ATTR_ADMIN_STATE",
+
+
+            "attr4": "OTAI_OSC_ATTR_ENABLED",
+
+
+            "attr5": "OTAI_OSC_ATTR_EMPTY",
+
+
+            "attr6": "OTAI_OSC_ATTR_MFG_DATE",
+
+
+            "attr7": "OTAI_OSC_ATTR_SERIAL_NO",
+
+
+            "attr8": "OTAI_OSC_ATTR_PART_NO",
+
+
+            "attr9": "OTAI_OSC_ATTR_MFG_NAME",
+
+
+            "attr10": "OTAI_OSC_ATTR_REMOVABLE",
+
+
+            "attr11": "OTAI_OSC_ATTR_EQUIPMENT_FAILURE",
+
+
+            "attr12": "OTAI_OSC_ATTR_EQUIPMENT_MISMATCH",
+
+
+            "attr13": "OTAI_OSC_ATTR_FIRMWARE_VERSION",
+
+
+            "attr14": "OTAI_OSC_ATTR_SOFTWARE_VERSION",
+
+
+            "attr15": "OTAI_OSC_ATTR_HARDWARE_VERSION",
+
+
+            "attr16": "OTAI_OSC_ATTR_RX_LOW_THRESHOLD",
+
+
+            "attr17": "OTAI_OSC_ATTR_RX_HIGH_THRESHOLD",
+
+
+            "attr18": "OTAI_OSC_ATTR_TX_LOW_THRESHOLD"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "OSC_COUNTER_ID_LIST_GAUGE": {
+
+            "attr1": "OTAI_OSC_STAT_INPUT_POWER",
+
+
+            "attr2": "OTAI_OSC_STAT_OUTPUT_POWER",
+
+
+            "attr3": "OTAI_OSC_STAT_LASER_BIAS_CURRENT",
+
+
+            "attr4": "OTAI_OSC_STAT_INPUT_OFFSET_LINEP_RX",
+
+
+            "attr5": "OTAI_OSC_STAT_OUTPUT_OFFSET_LINEP_TX",
+
+
+            "attr6": "OTAI_OSC_STAT_INPUT_OFFSET_LINES_RX",
+
+
+            "attr7": "OTAI_OSC_STAT_OUTPUT_OFFSET_LINES_TX",
+
+
+            "attr8": "OTAI_OSC_STAT_TEMPERATURE",
+
+
+            "attr9": "OTAI_OSC_STAT_PANEL_INPUT_POWER_LINEP_RX",
+
+
+            "attr10": "OTAI_OSC_STAT_PANEL_OUTPUT_POWER_LINEP_TX",
+
+
+            "attr11": "OTAI_OSC_STAT_PANEL_INPUT_POWER_LINES_RX",
+
+
+            "attr12": "OTAI_OSC_STAT_PANEL_OUTPUT_POWER_LINES_TX"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "APS_COUNTER_ID_LIST_STATUS": {
+
+            "attr1": "OTAI_APS_ATTR_ADMIN_STATE",
+
+
+            "attr2": "OTAI_APS_ATTR_TYPE",
+
+
+            "attr3": "OTAI_APS_ATTR_REVERTIVE",
+
+
+            "attr4": "OTAI_APS_ATTR_WAIT_TO_RESTORE_TIME",
+
+
+            "attr5": "OTAI_APS_ATTR_HOLD_OFF_TIME",
+
+
+            "attr6": "OTAI_APS_ATTR_PRIMARY_SWITCH_THRESHOLD",
+
+
+            "attr7": "OTAI_APS_ATTR_PRIMARY_SWITCH_HYSTERESIS",
+
+
+            "attr8": "OTAI_APS_ATTR_SECONDARY_SWITCH_THRESHOLD",
+
+
+            "attr9": "OTAI_APS_ATTR_RELATIVE_SWITCH_THRESHOLD",
+
+
+            "attr10": "OTAI_APS_ATTR_RELATIVE_SWITCH_THRESHOLD_OFFSET",
+
+
+            "attr11": "OTAI_APS_ATTR_FORCE_TO_PORT",
+
+
+            "attr12": "OTAI_APS_ATTR_ACTIVE_PATH",
+
+
+            "attr13": "OTAI_APS_ATTR_SERIAL_NO",
+
+
+            "attr14": "OTAI_APS_ATTR_PART_NO",
+
+
+            "attr15": "OTAI_APS_ATTR_MFG_NAME",
+
+
+            "attr16": "OTAI_APS_ATTR_MFG_DATE",
+
+
+            "attr17": "OTAI_APS_ATTR_OPER_STATUS",
+
+
+            "attr18": "OTAI_APS_ATTR_EMPTY",
+
+
+            "attr19": "OTAI_APS_ATTR_REMOVABLE",
+
+
+            "attr20": "OTAI_APS_ATTR_EQUIPMENT_FAILURE",
+
+
+            "attr21": "OTAI_APS_ATTR_EQUIPMENT_MISMATCH",
+
+
+            "attr22": "OTAI_APS_ATTR_FIRMWARE_VERSION",
+
+
+            "attr23": "OTAI_APS_ATTR_HARDWARE_VERSION",
+
+
+            "attr24": "OTAI_APS_ATTR_SOFTWARE_VERSION",
+
+
+            "attr25": "OTAI_APS_ATTR_ALARM_HYSTERESIS"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "APSPORT_COUNTER_ID_LIST_STATUS": {
+
+            "attr1": "OTAI_APSPORT_ATTR_ENABLED",
+
+
+            "attr2": "OTAI_APSPORT_ATTR_TARGET_ATTENUATION",
+
+
+            "attr3": "OTAI_APSPORT_ATTR_POWER_LOS_THRESHOLD",
+
+
+            "attr4": "OTAI_APSPORT_ATTR_POWER_LOW_THRESHOLD"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "APSPORT_COUNTER_ID_LIST_GAUGE": {
+
+            "attr1": "OTAI_APSPORT_STAT_OPTICAL_POWER",
+
+
+            "attr2": "OTAI_APSPORT_STAT_ATTENUATION"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "ATTENUATOR_COUNTER_ID_LIST_STATUS": {
+
+            "attr1": "OTAI_ATTENUATOR_ATTR_ATTENUATION_MODE",
+
+
+            "attr2": "OTAI_ATTENUATOR_ATTR_TARGET_OUTPUT_POWER",
+
+
+            "attr3": "OTAI_ATTENUATOR_ATTR_ATTENUATION",
+
+
+            "attr4": "OTAI_ATTENUATOR_ATTR_INGRESS_PORT",
+
+
+            "attr5": "OTAI_ATTENUATOR_ATTR_EGRESS_PORT",
+
+
+            "attr6": "OTAI_ATTENUATOR_ATTR_FIX_ATTENUATION",
+
+
+            "attr7": "OTAI_ATTENUATOR_ATTR_ENABLED"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "ATTENUATOR_COUNTER_ID_LIST_GAUGE": {
+
+            "attr1": "OTAI_ATTENUATOR_STAT_ACTUAL_ATTENUATION",
+
+
+            "attr2": "OTAI_ATTENUATOR_STAT_OUTPUT_POWER_TOTAL",
+
+
+            "attr3": "OTAI_ATTENUATOR_STAT_OPTICAL_RETURN_LOSS"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_STATUS": {
+
+            "attr1": "OTAI_LINECARD_ATTR_ADMIN_STATE",
+
+
+            "attr2": "OTAI_LINECARD_ATTR_OPER_STATUS",
+
+
+            "attr3": "OTAI_LINECARD_ATTR_RELAY",
+
+
+            "attr4": "OTAI_LINECARD_ATTR_CPLD_VERSION",
+
+
+            "attr5": "OTAI_LINECARD_ATTR_SCRIPT_VERSION",
+
+
+            "attr6": "OTAI_LINECARD_ATTR_MFG_NAME",
+
+
+            "attr7": "OTAI_LINECARD_ATTR_BAUD_RATE",
+
+
+            "attr8": "OTAI_LINECARD_ATTR_SOFTWARE_VERSION",
+
+
+            "attr9": "OTAI_LINECARD_ATTR_FPGA_VERSION",
+
+
+            "attr10": "OTAI_LINECARD_ATTR_UCD_VERSION",
+
+
+            "attr11": "OTAI_LINECARD_ATTR_TEMP_HIGH_ALARM_THRESHOLD",
+
+
+            "attr12": "OTAI_LINECARD_ATTR_TEMP_HIGH_WARN_THRESHOLD",
+
+
+            "attr13": "OTAI_LINECARD_ATTR_TEMP_LOW_ALARM_THRESHOLD",
+
+
+            "attr14": "OTAI_LINECARD_ATTR_TEMP_LOW_WARN_THRESHOLD",
+
+
+            "attr15": "OTAI_LINECARD_ATTR_SLOT_ID",
+
+
+            "attr16": "OTAI_LINECARD_ATTR_LED_MODE",
+
+
+            "attr17": "OTAI_LINECARD_ATTR_LED_FLASH_INTERVAL",
+
+
+            "attr18": "OTAI_LINECARD_ATTR_LED_COLOR",
+
+
+            "attr19": "OTAI_LINECARD_ATTR_EQUIPMENT_FAILURE",
+
+
+            "attr20": "OTAI_LINECARD_ATTR_EQUIPMENT_MISMATCH"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "LINECARD_COUNTER_ID_LIST_GAUGE": {
+
+            "attr1": "OTAI_LINECARD_STAT_MEMORY_AVAILABLE",
+
+
+            "attr2": "OTAI_LINECARD_STAT_MEMORY_UTILIZED",
+
+
+            "attr3": "OTAI_LINECARD_STAT_CPU_UTILIZATION",
+
+
+            "attr4": "OTAI_LINECARD_STAT_TEMPERATURE"
+
+
+        },
+        "OP": "SET"
+    },
+    {
+        "INTERFACE_COUNTER_ID_LIST_COUNTER": {
+
+            "attr1": "OTAI_INTERFACE_STAT_OUT_MULTICAST_PKTS",
+
+
+            "attr2": "OTAI_INTERFACE_STAT_IN_OCTETS",
+
+
+            "attr3": "OTAI_INTERFACE_STAT_OUT_PKTS",
+
+
+            "attr4": "OTAI_INTERFACE_STAT_OUT_BROADCAST_PKTS",
+
+
+            "attr5": "OTAI_INTERFACE_STAT_OUT_OCTETS",
+
+
+            "attr6": "OTAI_INTERFACE_STAT_LAST_CLEAR",
+
+
+            "attr7": "OTAI_INTERFACE_STAT_IN_PKTS",
+
+
+            "attr8": "OTAI_INTERFACE_STAT_IN_MULTICAST_PKTS",
+
+
+            "attr9": "OTAI_INTERFACE_STAT_IN_ERRORS",
+
+
+            "attr10": "OTAI_INTERFACE_STAT_IN_BROADCAST_PKTS",
+
+
+            "attr11": "OTAI_INTERFACE_STAT_OUT_ERRORS",
+
+
+            "attr12": "OTAI_INTERFACE_STAT_IN_CRC_ERRORS",
+
+
+            "attr13": "OTAI_INTERFACE_STAT_IN_UNDERSIZE_FRAMES",
+
+
+            "attr14": "OTAI_INTERFACE_STAT_IN_FRAMES_1024_1518_OCTETS",
+
+
+            "attr15": "OTAI_INTERFACE_STAT_IN_FRAMES_256_511_OCTETS",
+
+
+            "attr16": "OTAI_INTERFACE_STAT_IN_FRAMES_65_127_OCTETS",
+
+
+            "attr17": "OTAI_INTERFACE_STAT_IN_FRAMES_128_255_OCTETS",
+
+
+            "attr18": "OTAI_INTERFACE_STAT_IN_FRAMES_512_1023_OCTETS",
+
+
+            "attr19": "OTAI_INTERFACE_STAT_IN_FRAMES_64_OCTETS",
+
+
+            "attr20": "OTAI_INTERFACE_STAT_IN_OVERSIZE_FRAMES",
+
+
+            "attr21": "OTAI_INTERFACE_STAT_IN_JABBER_FRAMES",
+
+
+            "attr22": "OTAI_INTERFACE_STAT_CARRIER_TRANSITIONS",
+
+
+            "attr23": "OTAI_INTERFACE_STAT_IN_8021Q_FRAMES",
+
+
+            "attr24": "OTAI_INTERFACE_STAT_IN_BLOCK_ERRORS",
+
+
+            "attr25": "OTAI_INTERFACE_STAT_IN_CARRIER_ERRORS",
+
+
+            "attr26": "OTAI_INTERFACE_STAT_IN_DISCARDS",
+
+
+            "attr27": "OTAI_INTERFACE_STAT_IN_FCS_ERRORS",
+
+
+            "attr28": "OTAI_INTERFACE_STAT_IN_FRAGMENT_FRAMES",
+
+
+            "attr29": "OTAI_INTERFACE_STAT_IN_INTERRUPTED_TX",
+
+
+            "attr30": "OTAI_INTERFACE_STAT_IN_LATE_COLLISION",
+
+
+            "attr31": "OTAI_INTERFACE_STAT_IN_MAC_CONTROL_FRAMES",
+
+
+            "attr32": "OTAI_INTERFACE_STAT_IN_MAC_ERRORS_RX",
+
+
+            "attr33": "OTAI_INTERFACE_STAT_IN_MAC_PAUSE_FRAMES",
+
+
+            "attr34": "OTAI_INTERFACE_STAT_IN_MAXSIZE_EXCEEDED",
+
+
+            "attr35": "OTAI_INTERFACE_STAT_IN_SINGLE_COLLISION",
+
+
+            "attr36": "OTAI_INTERFACE_STAT_IN_SYMBOL_ERROR",
+
+
+            "attr37": "OTAI_INTERFACE_STAT_IN_UNICAST_PKTS",
+
+
+            "attr38": "OTAI_INTERFACE_STAT_IN_UNKNOWN_PROTOS",
+
+
+            "attr39": "OTAI_INTERFACE_STAT_OUT_8021Q_FRAMES",
+
+
+            "attr40": "OTAI_INTERFACE_STAT_OUT_DISCARDS",
+
+
+            "attr41": "OTAI_INTERFACE_STAT_OUT_MAC_CONTROL_FRAMES",
+
+
+            "attr42": "OTAI_INTERFACE_STAT_OUT_MAC_ERRORS_TX",
+
+
+            "attr43": "OTAI_INTERFACE_STAT_OUT_MAC_PAUSE_FRAMES",
+
+
+            "attr44": "OTAI_INTERFACE_STAT_OUT_UNICAST_PKTS"
+
+
+        },
+        "OP": "SET"
+    }
+]

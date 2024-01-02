@@ -41,4 +41,10 @@ if [[ "$NAMESPACE_ID" ]]; then
     ORCHAGENT_ARGS+="-f swss.asic$NAMESPACE_ID.rec -j otairedis.asic$NAMESPACE_ID.rec "
 fi
 
+hwsku=`sonic-cfggen -d -v "DEVICE_METADATA['localhost']['hwsku']"`
+if [ -n "$hwsku" ]
+then
+    ORCHAGENT_ARGS+="-c /etc/sonic/linecards/$hwsku/flexcounter.json "
+fi
+
 exec /usr/bin/orchagent ${ORCHAGENT_ARGS}
