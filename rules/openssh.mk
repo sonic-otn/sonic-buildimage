@@ -1,6 +1,6 @@
 # openssh package
 
-OPENSSH_VERSION = 8.4p1-5+deb11u2
+OPENSSH_VERSION = 8.4p1-5+deb11u3
 
 export OPENSSH_VERSION
 
