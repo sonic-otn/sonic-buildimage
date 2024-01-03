@@ -6,6 +6,11 @@ else
 	HOST_SERVICE_OPTS := --no-start --no-enable
 endif
 
+ifeq ($(IS_OTN_PLATFORM),)
+	CACLMGRD_SERVICE_OPTS := --no-start
+else
+	CACLMGRD_SERVICE_OPTS := --no-start --no-enable
+endif
 
 build:
 
@@ -13,7 +18,7 @@ build:
 	dh $@
 
 override_dh_installsystemd:
-	dh_installsystemd --no-start --name=caclmgrd
+	dh_installsystemd $(CACLMGRD_SERVICE_OPTS) --name=caclmgrd
 	dh_installsystemd --no-start --name=hostcfgd
 	dh_installsystemd --no-start --name=featured
 	dh_installsystemd --no-start --name=aaastatsd
