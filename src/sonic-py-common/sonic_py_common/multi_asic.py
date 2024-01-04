@@ -221,6 +221,9 @@ def get_all_namespaces():
             config_db = config_db_handle[namespace]
 
             metadata = config_db.get_table('DEVICE_METADATA')
+            if 'localhost' not in metadata:
+                continue
+            
             if metadata['localhost']['sub_role'] == FRONTEND_ASIC_SUB_ROLE:
                 front_ns.append(namespace)
             elif metadata['localhost']['sub_role'] == BACKEND_ASIC_SUB_ROLE:
