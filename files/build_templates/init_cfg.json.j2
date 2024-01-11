@@ -74,7 +74,11 @@
         "{{feature}}": {
             "state": "{{state}}",
             "delayed" : {{delayed | lower()}},
+        {%- if feature in ["bgp"] and sonic_asic_platform.startswith('ot-') %}
+            "has_global_scope": true,
+        {%- else %}
             "has_global_scope": {% if feature + '.service' in installer_services.split(' ') %}true{% else %}false{% endif %},
+        {%- endif %}
 {%- if feature in ["lldp"] %}
         {%- if sonic_asic_platform.startswith('ot-') %}
             "has_per_asic_scope": "False",
