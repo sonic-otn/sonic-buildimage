@@ -1,6 +1,6 @@
 #DPKG FRK
 DPATH       := $($(SYNCD_OT_VS)_PATH)
-DEP_FILES   := $(SONIC_COMMON_FILES_LIST) ot-platform/ot-vs/syncd-ot-vs.mk ot-platform/ot-vs/syncd-ot-vs.dep
+DEP_FILES   := $(SONIC_COMMON_FILES_LIST) platform/ot-vs/syncd-ot-vs.mk platform/ot-vs/syncd-ot-vs.dep
 DEP_FILES   += $(SONIC_COMMON_BASE_FILES_LIST)
 DEP_FILES   += $(shell git ls-files $(DPATH))
 

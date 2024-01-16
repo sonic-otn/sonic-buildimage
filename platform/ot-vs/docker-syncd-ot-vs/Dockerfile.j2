@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 
-RUN apt-get install -f -y iproute2 libcap2-bin gdb
+RUN apt-get install -f -y libcap2-bin
 
 COPY \
 {% for deb in docker_syncd_ot_vs_debs.split(' ') -%}
@@ -20,8 +20,6 @@ RUN dpkg -i \
 {% for deb in docker_syncd_ot_vs_debs.split(' ') -%}
 debs/{{ deb }}{{' '}}
 {%- endfor %}
-
-COPY ["start.sh", "/usr/bin/"]
 
 COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
 COPY ["files/supervisor-proc-exit-listener", "/usr/bin"]

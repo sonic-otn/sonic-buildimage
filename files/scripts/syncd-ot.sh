@@ -34,7 +34,7 @@ DEBUGLOG="/tmp/swss-syncd-ot-debug$DEV.log"
 LOCKFILE="/tmp/swss-syncd-ot-lock$DEV"
 NAMESPACE_PREFIX="asic"
 if [ "$DEV" ]; then
-    NET_NS="$NAMESPACE_PREFIX$DEV" #name of the network namespace
+    NET_NS="$NAMESPACE_PREFIX$DEV" 
     SONIC_DB_CLI="sonic-db-cli -n $NET_NS"
 else
     NET_NS=""

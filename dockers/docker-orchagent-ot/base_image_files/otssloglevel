@@ -41,4 +41,4 @@ if [[ ($NUM_ASIC -gt 1) ]]; then
     shift 2
 fi
 
-docker exec -$DOCKER_EXEC_FLAGS swss$DEV swssloglevel "$@"
+docker exec -$DOCKER_EXEC_FLAGS otss$DEV swssloglevel "$@"

@@ -23,20 +23,20 @@ RUN apt-get install -y   \
 RUN apt-get remove -y gcc
 {% endif %}
 
-{% if docker_ot_orchagent_debs.strip() -%}
+{% if docker_orchagent_ot_debs.strip() -%}
 # Copy locally-built Debian package dependencies
-{{ copy_files("debs/", docker_ot_orchagent_debs.split(' '), "/debs/") }}
+{{ copy_files("debs/", docker_orchagent_ot_debs.split(' '), "/debs/") }}
 
 # Install locally-built Debian packages and implicitly install their dependencies
-{{ install_debian_packages(docker_ot_orchagent_debs.split(' ')) }}
+{{ install_debian_packages(docker_orchagent_ot_debs.split(' ')) }}
 {%- endif %}
 
-{% if docker_ot_orchagent_whls.strip() -%}
+{% if docker_orchagent_ot_whls.strip() -%}
 # Copy locally-built Python wheel dependencies
-{{ copy_files("python-wheels/", docker_ot_orchagent_whls.split(' '), "/python-wheels/") }}
+{{ copy_files("python-wheels/", docker_orchagent_ot_whls.split(' '), "/python-wheels/") }}
 
 # Install locally-built Python wheel dependencies
-{{ install_python_wheels(docker_ot_orchagent_whls.split(' ')) }}
+{{ install_python_wheels(docker_orchagent_ot_whls.split(' ')) }}
 {% endif %}
 
 # Clean up

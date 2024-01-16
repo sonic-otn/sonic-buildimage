@@ -1,8 +1,7 @@
 # sonic kvm image
 
 SONIC_KVM_IMAGE = sonic-ot-vs.img.gz
-$(SONIC_KVM_IMAGE)_INSTALLS += $(SYSTEMD_SONIC_GENERATOR) \
-                               $(KVM_4_SLOT_FACTORY_CONFIG)
+$(SONIC_KVM_IMAGE)_INSTALLS += $(SYSTEMD_SONIC_GENERATOR) 
 $(SONIC_KVM_IMAGE)_MACHINE = ot-vs
 $(SONIC_KVM_IMAGE)_IMAGE_TYPE = kvm 
 ifeq ($(INSTALL_DEBUG_TOOLS),y)
