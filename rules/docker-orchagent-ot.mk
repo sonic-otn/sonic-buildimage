@@ -1,6 +1,6 @@
-# docker image for ot-orchagent
+# docker image for orchagent-ot
 
-DOCKER_OT_ORCHAGENT_STEM = docker-ot-orchagent
+DOCKER_OT_ORCHAGENT_STEM = docker-orchagent-ot
 DOCKER_OT_ORCHAGENT = $(DOCKER_OT_ORCHAGENT_STEM).gz
 DOCKER_OT_ORCHAGENT_DBG = $(DOCKER_OT_ORCHAGENT_STEM)-$(DBG_IMAGE_MARK).gz
 

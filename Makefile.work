@@ -137,7 +137,6 @@ rules/config.user:
 	$(Q)echo -n ""
 
 include rules/config
-
 -include rules/config.user
 
 ifneq ($(DEFAULT_CONTAINER_REGISTRY),)

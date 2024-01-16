@@ -124,6 +124,7 @@ SONIC_DPKG_CACHE_SOURCE ?= /var/cache/sonic/artifacts
 # Default VS build memory preparation
 DEFAULT_VS_PREPARE_MEM = yes
 
+
 # INCLUDE_SYSTEM_TELEMETRY - build docker-sonic-telemetry for system telemetry support
 INCLUDE_SYSTEM_TELEMETRY = y
 

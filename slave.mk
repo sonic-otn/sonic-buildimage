@@ -133,8 +133,8 @@ list :
 ###############################################################################
 ## Include other rules
 ###############################################################################
-include $(RULES_PATH)/config
 
+include $(RULES_PATH)/config
 -include $(RULES_PATH)/config.user
 
 
