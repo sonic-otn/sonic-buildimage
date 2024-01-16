@@ -136,12 +136,7 @@ endif
 rules/config.user:
 	$(Q)echo -n ""
 
-#include different configurations based on target platform
-ifneq ($(shell echo $(CONFIGURED_PLATFORM) | grep 'ot-'),)
-include rules/config-ot
-else
 include rules/config
-endif
 
 -include rules/config.user
 
