@@ -25,7 +25,7 @@ jobs:
           cd 202411_${{github.run_number}}
           make init
           make configure PLATFORM=ot-vs 
-          make target/sonic-ot-vs.img.gz
+          make DEFAULT_PASSWORD=admin BUILD_MULTIASIC_KVM=y SONIC_USE_PDDF_FRAMEWORK=n INCLUDE_SFLOW=n INCLUDE_NAT=n INCLUDE_MACSEC=n INCLUDE_ROUTER_ADVERTISER=n INCLUDE_TEAMD=n INCLUDE_MUX=n INCLUDE_FIPS=n target/sonic-ot-vs.img.gz
 
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v3
