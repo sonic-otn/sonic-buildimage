@@ -29,6 +29,9 @@ $(UPDATE_CHASSISDB_CONFIG_SCRIPT)_PATH = files/scripts
 SWSS_VARS_TEMPLATE = swss_vars.j2
 $(SWSS_VARS_TEMPLATE)_PATH = files/build_templates
 
+OTSS_VARS_TEMPLATE = otss_vars.j2
+$(OTSS_VARS_TEMPLATE)_PATH = files/build_templates
+
 COPP_CONFIG_TEMPLATE = copp_cfg.j2
 $(COPP_CONFIG_TEMPLATE)_PATH = files/image_config/copp
 
@@ -45,5 +48,6 @@ SONIC_COPY_FILES += $(CONFIGDB_LOAD_SCRIPT) \
                     $(SYSCTL_NET_CONFIG) \
                     $(UPDATE_CHASSISDB_CONFIG_SCRIPT) \
                     $(SWSS_VARS_TEMPLATE) \
+                    $(OTSS_VARS_TEMPLATE) \
                     $(RSYSLOG_PLUGIN_CONF_J2) \
                     $(COPP_CONFIG_TEMPLATE)

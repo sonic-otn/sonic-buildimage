@@ -298,6 +298,37 @@ do_config_initialization()
     sonic-db-cli CONFIG_DB SET "CONFIG_DB_INITIALIZED" "1"
 }
 
+# Create OTN device SONiC configuration for first time bootup, it will generate global configration from init_cfg,
+# and empty configruations for other asic namespaces
+do_otn_config_initialization()
+{
+    echo "init otn configuration"
+    need_reload_config=false
+
+    cfg_file_json_list=''
+    for cfg_file in $(get_config_db_file_list); do
+        cfg_file_json=${CONFIG_DB_PATH}${cfg_file}
+        if [ ! -e  $cfg_file_json ]; then
+            need_reload_config=true
+
+            if [ ${cfg_file_json} = ${CONFIG_DB_JSON} ]; then
+                generate_config factory ${CONFIG_DB_JSON}
+            else
+                # For otn device, usr can plugin any linecard, system will generate linecard configuration 
+                # when user start to provisioning a linecard. Generate an empty configuration file by default.
+                echo "{}" > ${cfg_file_json}
+            fi
+        fi
+        cfg_file_json_list+=','$cfg_file_json
+    done
+
+    if [ x"$need_reload_config" == x"true" ]; then
+        config reload -y -n $(cfg_file_json_list)
+    fi
+
+    sonic-db-cli CONFIG_DB SET "CONFIG_DB_INITIALIZED" "1"
+}
+
 # Restore config-setup post migration hooks from a backup copy
 copy_post_migration_hooks()
 {
@@ -429,6 +460,11 @@ boot_config()
     # file system to trigger. pending_config_initialization will remain set
     # for multi-npu platforms if we reach this case.
     if [[ ($NUM_ASIC -gt 1) ]]; then
+        # For otn platform, do config initialization here
+        if [[ $PALTFROM_ASIC = ot-* ]]; then
+            do_otn_config_initialization
+        fi
+
         return 0
     fi	
 
@@ -466,6 +502,7 @@ ASIC_CONF=/usr/share/sonic/device/$PLATFORM/asic.conf
 if [[ -f "$ASIC_CONF" ]]; then
     source $ASIC_CONF
 fi
+PALTFROM_ASIC=`cat /usr/share/sonic/device/$PLATFORM/platform_asic`
 
 
 CMD=$1
