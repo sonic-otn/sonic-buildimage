@@ -85,7 +85,7 @@ trap on_exit EXIT
 trap on_error ERR
 
 echo "Installing SONiC"
-
+exit 0
 /usr/bin/kvm -m $MEM \
     -name "onie" \
     -boot "order=cd,once=d" -cdrom "$ONIE_RECOVERY_ISO" \

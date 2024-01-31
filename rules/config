@@ -73,7 +73,7 @@ DEFAULT_PASSWORD = YourPaSsWoRd
 
 # SONIC_USE_PDDF_FRAMEWORK - Use PDDF generic drivers and plugins
 # Uncomment next line to enable:
-SONIC_USE_PDDF_FRAMEWORK = y
+SONIC_USE_PDDF_FRAMEWORK = n
 
 # SONIC_ROUTING_STACK - specify the routing-stack being elected to drive SONiC's control-plane.
 # Supported routing stacks on SONiC are:
@@ -137,7 +137,7 @@ INCLUDE_SYSTEM_TELEMETRY = n
 INCLUDE_ICCPD = n
 
 # INCLUDE_SFLOW - build docker-sflow for sFlow support
-INCLUDE_SFLOW = y
+INCLUDE_SFLOW = n
 
 # INCLUDE_MGMT_FRAMEWORK - build docker-sonic-mgmt-framework for CLI and REST server support
 INCLUDE_MGMT_FRAMEWORK = y
@@ -150,10 +150,10 @@ ENABLE_HOST_SERVICE_ON_START = y
 INCLUDE_RESTAPI ?= n
 
 # INCLUDE_NAT - build docker-nat for nat support
-INCLUDE_NAT = y
+INCLUDE_NAT = n
 
 # INCLUDE_DHCP_RELAY - build and install dhcp-relay package
-INCLUDE_DHCP_RELAY = y
+INCLUDE_DHCP_RELAY = n
 
 # INCLUDE_DHCP_SERVER - build and install dhcp-server package
 INCLUDE_DHCP_SERVER ?= n
@@ -169,19 +169,19 @@ ENABLE_AUTO_TECH_SUPPORT = y
 # ENABLE_TRANSLIB_WRITE = y
 
 # ENABLE_NATIVE_WRITE - Enable native write/config operations via the gNMI interface.
-ENABLE_NATIVE_WRITE = y
+ENABLE_NATIVE_WRITE = n
 
 # INCLUDE_MACSEC - build docker-macsec for macsec support
-INCLUDE_MACSEC = y
+INCLUDE_MACSEC = n
 
 # INCLUDE_GBSYNCD - build docker-gbsyncd-* for gearbox support
-INCLUDE_GBSYNCD ?= y
+INCLUDE_GBSYNCD ?= n
 
 # INCLUDE_TEAMD - build docker-teamd for LAG protocol support
-INCLUDE_TEAMD ?= y
+INCLUDE_TEAMD ?= n
 
 # INCLUDE_ROUTER_ADVERTISER - build docker-router-advertiser for router advertisements support
-INCLUDE_ROUTER_ADVERTISER ?= y
+INCLUDE_ROUTER_ADVERTISER ?= n
 
 # INCLUDE_KUBERNETES - if set to y kubernetes packages are installed to be able to
 # run as worker node in kubernetes cluster.
@@ -288,10 +288,10 @@ REGISTRY_SERVER ?= sonicdev-microsoft.azurecr.io
 REGISTRY_SERVER_PATH ?=
 
 # BUILD_MULTIASIC_KVM - if set to y multi-asic KVM images will be generated.
-BUILD_MULTIASIC_KVM = n
+BUILD_MULTIASIC_KVM = y
 
 # INCLUDE_MUX - build docker-mux for dual ToR (Gemini)
-INCLUDE_MUX = y
+INCLUDE_MUX = n
 
 # ENABLE_ASAN - enable address sanitizer
 ENABLE_ASAN ?= n
@@ -307,7 +307,7 @@ ENABLE_BOOTCHART = n
 
 # INCLUDE_FIPS - support FIPS feature, only for amd64 or arm64, armhf not supported yet
 # ENABLE_FIPS - support FIPS flag, if enabled, no additional config requred for the image to support FIPS
-INCLUDE_FIPS ?= y
+INCLUDE_FIPS ?= n
 ENABLE_FIPS ?= n
 
 # SONIC_SLAVE_DOCKER_DRIVER - set the sonic slave docker storage driver
