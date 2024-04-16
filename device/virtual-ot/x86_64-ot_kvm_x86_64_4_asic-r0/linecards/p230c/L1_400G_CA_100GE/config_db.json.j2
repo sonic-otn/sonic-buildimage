@@ -1,0 +1,436 @@
+{
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic_id": "{{ASIC_ID}}",
+            "hwsku": "p230c"
+        }
+    },
+    "LOGICAL_CHANNEL": {
+        "CH{{SLOT_ID}}01": {
+            "index": "{{SLOT_ID}}01",
+            "channel-id": "{{SLOT_ID}}01",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C1",
+            "description": "GE-1-{{SLOT_ID}}-C1",
+            "alias": "CH{{SLOT_ID}}01"
+        },
+        "CH{{SLOT_ID}}02": {
+            "index": "{{SLOT_ID}}02",
+            "channel-id": "{{SLOT_ID}}02",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C2",
+            "description": "GE-1-{{SLOT_ID}}-C2",
+            "alias": "CH{{SLOT_ID}}02"
+        },
+        "CH{{SLOT_ID}}03": {
+            "index": "{{SLOT_ID}}03",
+            "channel-id": "{{SLOT_ID}}03",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C3",
+            "description": "GE-1-{{SLOT_ID}}-C3",
+            "alias": "CH{{SLOT_ID}}03"
+        },
+        "CH{{SLOT_ID}}04": {
+            "index": "{{SLOT_ID}}04",
+            "channel-id": "{{SLOT_ID}}04",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C4",
+            "description": "GE-1-{{SLOT_ID}}-C4",
+            "alias": "CH{{SLOT_ID}}04"
+        },
+        "CH{{SLOT_ID}}15": {
+            "index": "{{SLOT_ID}}15",
+            "channel-id": "{{SLOT_ID}}15",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-L1",
+            "description": "OTUCN-1-{{SLOT_ID}}-L1",
+            "alias": "CH{{SLOT_ID}}15"
+        },
+        "CH{{SLOT_ID}}17": {
+            "index": "{{SLOT_ID}}17",
+            "channel-id": "{{SLOT_ID}}17",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C1",
+            "description": "ODUCN-1-{{SLOT_ID}}-C1",
+            "alias": "CH{{SLOT_ID}}17"
+        },
+        "CH{{SLOT_ID}}18": {
+            "index": "{{SLOT_ID}}18",
+            "channel-id": "{{SLOT_ID}}18",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C2",
+            "description": "ODUCN-1-{{SLOT_ID}}-C2",
+            "alias": "CH{{SLOT_ID}}18"
+        },
+        "CH{{SLOT_ID}}19": {
+            "index": "{{SLOT_ID}}19",
+            "channel-id": "{{SLOT_ID}}19",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C3",
+            "description": "ODUCN-1-{{SLOT_ID}}-C3",
+            "alias": "CH{{SLOT_ID}}19"
+        },
+        "CH{{SLOT_ID}}20": {
+            "index": "{{SLOT_ID}}10",
+            "channel-id": "{{SLOT_ID}}10",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C4",
+            "description": "ODUCN-1-{{SLOT_ID}}-C4",
+            "alias": "CH{{SLOT_ID}}20"
+        }
+    },
+    "PORT": {
+        "PORT-1-{{SLOT_ID}}-L1": {
+            "index": "1",
+            "port-type": "LINE",
+            "port-id": "1",
+            "subcomponents": "TRANSCEIVER-1-{{SLOT_ID}}-L1",
+            "alias": "PORT-1-{{SLOT_ID}}-L1"
+        },
+        "PORT-1-{{SLOT_ID}}-C1": {
+            "index": "3",
+            "port-type": "CLIENT",
+            "port-id": "1",
+            "subcomponents": "TRANSCEIVER-1-{{SLOT_ID}}-C1",
+            "alias": "PORT-1-{{SLOT_ID}}-C1"
+        },
+        "PORT-1-{{SLOT_ID}}-C2": {
+            "index": "4",
+            "port-type": "CLIENT",
+            "port-id": "2",
+            "subcomponents": "TRANSCEIVER-1-{{SLOT_ID}}-C2",
+            "alias": "PORT-1-{{SLOT_ID}}-C2"
+        },
+        "PORT-1-{{SLOT_ID}}-C3": {
+            "index": "5",
+            "port-type": "CLIENT",
+            "port-id": "3",
+            "subcomponents": "TRANSCEIVER-1-{{SLOT_ID}}-C3",
+            "alias": "PORT-1-{{SLOT_ID}}-C3"
+        },
+        "PORT-1-{{SLOT_ID}}-C4": {
+            "index": "6",
+            "port-type": "CLIENT",
+            "port-id": "4",
+            "subcomponents": "TRANSCEIVER-1-{{SLOT_ID}}-C4",
+            "alias": "PORT-1-{{SLOT_ID}}-C4"
+        }
+    },
+    "LINECARD": {
+        "LINECARD-1-{{SLOT_ID}}": {
+            "linecard-type": "P230C"
+        }
+    },
+    "TRANSCEIVER": {
+        "TRANSCEIVER-1-{{SLOT_ID}}-C1": {
+            "index": 1,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "parent": "PORT-1-{{SLOT_ID}}-C1",
+            "physical-channel": "TRANSCEIVER-1-{{SLOT_ID}}-C1|CH-1,TRANSCEIVER-1-{{SLOT_ID}}-C1|CH-2,TRANSCEIVER-1-{{SLOT_ID}}-C1|CH-3,TRANSCEIVER-1-{{SLOT_ID}}-C1|CH-4",
+            "logical-channel": "CH{{SLOT_ID}}01,CH{{SLOT_ID}}17",
+            "ethernet": "CH{{SLOT_ID}}01",
+            "otn": "CH{{SLOT_ID}}17",
+            "interface": "INTERFACE-1-{{SLOT_ID}}-C1"
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C2": {
+            "index": 2,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "parent": "PORT-1-{{SLOT_ID}}-C2",
+            "physical-channel": "TRANSCEIVER-1-{{SLOT_ID}}-C2|CH-1,TRANSCEIVER-1-{{SLOT_ID}}-C2|CH-2,TRANSCEIVER-1-{{SLOT_ID}}-C2|CH-3,TRANSCEIVER-1-{{SLOT_ID}}-C2|CH-4",
+            "logical-channel": "CH{{SLOT_ID}}02,CH{{SLOT_ID}}18",
+            "ethernet": "CH{{SLOT_ID}}02",
+            "otn": "CH{{SLOT_ID}}18",
+            "interface": "INTERFACE-1-{{SLOT_ID}}-C2"
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C3": {
+            "index": 3,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "parent": "PORT-1-{{SLOT_ID}}-C3",
+            "physical-channel": "TRANSCEIVER-1-{{SLOT_ID}}-C3|CH-1,TRANSCEIVER-1-{{SLOT_ID}}-C3|CH-2,TRANSCEIVER-1-{{SLOT_ID}}-C3|CH-3,TRANSCEIVER-1-{{SLOT_ID}}-C3|CH-4",
+            "logical-channel": "CH{{SLOT_ID}}03,CH{{SLOT_ID}}19",
+            "ethernet": "CH{{SLOT_ID}}03",
+            "otn": "CH{{SLOT_ID}}19",
+            "interface": "INTERFACE-1-{{SLOT_ID}}-C3"
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C4": {
+            "index": 4,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "parent": "PORT-1-{{SLOT_ID}}-C4",
+            "physical-channel": "TRANSCEIVER-1-{{SLOT_ID}}-C4|CH-1,TRANSCEIVER-1-{{SLOT_ID}}-C4|CH-2,TRANSCEIVER-1-{{SLOT_ID}}-C4|CH-3,TRANSCEIVER-1-{{SLOT_ID}}-C4|CH-4",
+            "logical-channel": "CH{{SLOT_ID}}04,CH{{SLOT_ID}}20",
+            "ethernet": "CH{{SLOT_ID}}04",
+            "otn": "CH{{SLOT_ID}}20",
+            "interface": "INTERFACE-1-{{SLOT_ID}}-C4"
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-L1": {
+            "index": 5,
+            "port-type": "LINE",
+            "port-id": 1,
+            "parent": "PORT-1-{{SLOT_ID}}-L1",
+            "logical-channel": "CH{{SLOT_ID}}15",
+            "otn": "CH{{SLOT_ID}}15",
+            "och": "OCH-1-{{SLOT_ID}}-L1"
+        }
+    },
+    "PHYSICAL_CHANNEL": {
+        "TRANSCEIVER-1-{{SLOT_ID}}-C1|CH-1": {
+            "index": 1,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "lane-id": 1
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C1|CH-2": {
+            "index": 2,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "lane-id": 2
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C1|CH-3": {
+            "index": 3,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "lane-id": 3
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C1|CH-4": {
+            "index": 4,
+            "port-type": "CLIENT",
+            "port-id": 1,
+            "lane-id": 4
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C2|CH-1": {
+            "index": 5,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "lane-id": 1
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C2|CH-2": {
+            "index": 6,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "lane-id": 2
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C2|CH-3": {
+            "index": 7,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "lane-id": 3
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C2|CH-4": {
+            "index": 8,
+            "port-type": "CLIENT",
+            "port-id": 2,
+            "lane-id": 4
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C3|CH-1": {
+            "index": 9,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "lane-id": 1
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C3|CH-2": {
+            "index": 10,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "lane-id": 2
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C3|CH-3": {
+            "index": 11,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "lane-id": 3
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C3|CH-4": {
+            "index": 12,
+            "port-type": "CLIENT",
+            "port-id": 3,
+            "lane-id": 4
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C4|CH-1": {
+            "index": 13,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "lane-id": 1
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C4|CH-2": {
+            "index": 14,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "lane-id": 2
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C4|CH-3": {
+            "index": 15,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "lane-id": 3
+        },
+        "TRANSCEIVER-1-{{SLOT_ID}}-C4|CH-4": {
+            "index": 16,
+            "port-type": "CLIENT",
+            "port-id": 4,
+            "lane-id": 4
+        }
+    },
+    "OCH": {
+        "OCH-1-{{SLOT_ID}}-L1": {
+            "index": 1,
+            "port-type": "LINE",
+            "port-id": 1
+        }
+    },
+    "LLDP": {
+        "CH{{SLOT_ID}}01": {
+            "index": {{SLOT_ID}}01,
+            "channel-id": {{SLOT_ID}}01
+        },
+        "CH{{SLOT_ID}}02": {
+            "index": {{SLOT_ID}}02,
+            "channel-id": {{SLOT_ID}}02
+        },
+        "CH{{SLOT_ID}}03": {
+            "index": {{SLOT_ID}}03,
+            "channel-id": {{SLOT_ID}}03
+        },
+        "CH{{SLOT_ID}}04": {
+            "index": {{SLOT_ID}}04,
+            "channel-id": {{SLOT_ID}}04
+        }
+    },
+    "ETHERNET": {
+        "CH{{SLOT_ID}}01": {
+            "index": {{SLOT_ID}}01,
+            "channel-id": {{SLOT_ID}}01
+        },
+        "CH{{SLOT_ID}}02": {
+            "index": {{SLOT_ID}}02,
+            "channel-id": {{SLOT_ID}}02
+        },
+        "CH{{SLOT_ID}}03": {
+            "index": {{SLOT_ID}}03,
+            "channel-id": {{SLOT_ID}}03
+        },
+        "CH{{SLOT_ID}}04": {
+            "index": {{SLOT_ID}}04,
+            "channel-id": {{SLOT_ID}}04
+        }
+    },
+    "OTN": {
+        "CH{{SLOT_ID}}15": {
+            "index": {{SLOT_ID}}15,
+            "channel-id": {{SLOT_ID}}15
+        },
+        "CH{{SLOT_ID}}17": {
+            "index": {{SLOT_ID}}17,
+            "channel-id": {{SLOT_ID}}17
+        },
+        "CH{{SLOT_ID}}18": {
+            "index": {{SLOT_ID}}18,
+            "channel-id": {{SLOT_ID}}18
+        },
+        "CH{{SLOT_ID}}19": {
+            "index": {{SLOT_ID}}19,
+            "channel-id": {{SLOT_ID}}19
+        },
+        "CH{{SLOT_ID}}20": {
+            "index": {{SLOT_ID}}10,
+            "channel-id": {{SLOT_ID}}10
+        }
+    },
+    "INTERFACE": {
+        "INTERFACE-1-{{SLOT_ID}}-C1": {
+            "index": 1,
+            "type": "ethernetCsmacd",
+            "interface-type": "CLIENT",
+            "interface-id": 1,
+            "name": "INTERFACE-1-{{SLOT_ID}}-C1",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C1",
+            "hardware-port": "PORT-1-{{SLOT_ID}}-C1"
+        },
+        "INTERFACE-1-{{SLOT_ID}}-C2": {
+            "index": 2,
+            "type": "ethernetCsmacd",
+            "interface-type": "CLIENT",
+            "interface-id": 2,
+            "name": "INTERFACE-1-{{SLOT_ID}}-C2",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C2",
+            "hardware-port": "PORT-1-{{SLOT_ID}}-C2"
+        },
+        "INTERFACE-1-{{SLOT_ID}}-C3": {
+            "index": 3,
+            "type": "ethernetCsmacd",
+            "interface-type": "CLIENT",
+            "interface-id": 3,
+            "name": "INTERFACE-1-{{SLOT_ID}}-C3",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C3",
+            "hardware-port": "PORT-1-{{SLOT_ID}}-C3"
+        },
+        "INTERFACE-1-{{SLOT_ID}}-C4": {
+            "index": 4,
+            "type": "ethernetCsmacd",
+            "interface-type": "CLIENT",
+            "interface-id": 4,
+            "name": "INTERFACE-1-{{SLOT_ID}}-C4",
+            "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C4",
+            "hardware-port": "PORT-1-{{SLOT_ID}}-C4"
+        }
+    },
+    "ASSIGNMENT": {
+        "CH{{SLOT_ID}}01|ASS1": {
+            "index": 1,
+            "channel-id": {{SLOT_ID}}01,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{SLOT_ID}}01
+        },
+        "CH{{SLOT_ID}}02|ASS1": {
+            "index": 1,
+            "channel-id": {{SLOT_ID}}02,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{SLOT_ID}}02
+        },
+        "CH{{SLOT_ID}}03|ASS1": {
+            "index": 1,
+            "channel-id": {{SLOT_ID}}03,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{SLOT_ID}}03
+        },
+        "CH{{SLOT_ID}}04|ASS1": {
+            "index": 1,
+            "channel-id": {{SLOT_ID}}04,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{SLOT_ID}}04
+        },
+        "CH{{SLOT_ID}}15|ASS1": {
+            "index": 1,
+            "channel-id": {{SLOT_ID}}15,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{SLOT_ID}}15
+        },
+        "CH{{SLOT_ID}}17|ASS1": {
+            "index": 1,
+            "channel-id": {{SLOT_ID}}17,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{SLOT_ID}}17
+        },
+        "CH{{SLOT_ID}}18|ASS1": {
+            "index": 1,
+            "channel-id": {{SLOT_ID}}18,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{SLOT_ID}}18
+        },
+        "CH{{SLOT_ID}}19|ASS1": {
+            "index": 1,
+            "channel-id": {{SLOT_ID}}19,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{SLOT_ID}}19
+        },
+        "CH{{SLOT_ID}}20|ASS1": {
+            "index": 1,
+            "channel-id": {{SLOT_ID}}10,
+            "id": 1,
+            "assignment-type": "LOGICAL_CHANNEL",
+            "logical-channel": {{SLOT_ID}}10
+        }
+    }
+}

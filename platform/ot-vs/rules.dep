@@ -1,0 +1,6 @@
+include $(PLATFORM_PATH)/syncd-ot-vs.dep
+include $(PLATFORM_PATH)/sonic-version.dep
+include $(PLATFORM_PATH)/docker-syncd-ot-vs.dep
+include $(PLATFORM_PATH)/one-image.dep
+include $(PLATFORM_PATH)/onie.dep
+include $(PLATFORM_PATH)/kvm-image.dep

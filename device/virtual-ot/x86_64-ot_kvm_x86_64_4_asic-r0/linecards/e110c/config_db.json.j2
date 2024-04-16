@@ -1,0 +1,322 @@
+{
+    "DEVICE_METADATA": {
+        "localhost": {
+            "asic_id": "{{ASIC_ID}}",
+            "hwsku": "e110c"
+        }
+    },
+    "LINECARD": {
+        "LINECARD-1-{{SLOT_ID}}": {
+            "linecard-type": "E110C"
+        }
+    },
+    "AMPLIFIER": {
+        "AMPLIFIER-1-{{SLOT_ID}}-1": {
+            "index": 1,
+            "id": 1,
+            "name": "AMPLIFIER-1-{{SLOT_ID}}-1",
+            "location": "1-{{SLOT_ID}}",
+            "component": "AMPLIFIER-1-{{SLOT_ID}}-1",
+            "parent": "LINECARD-1-{{SLOT_ID}}",
+            "subcomponents": "PORT-1-{{SLOT_ID}}-1-EDFAIN,PORT-1-{{SLOT_ID}}-1-EDFAOUT"
+        },
+        "AMPLIFIER-1-{{SLOT_ID}}-2": {
+            "index": 2,
+            "id": 2,
+            "name": "AMPLIFIER-1-{{SLOT_ID}}-2",
+            "location": "1-{{SLOT_ID}}",
+            "component": "AMPLIFIER-1-{{SLOT_ID}}-2",
+            "parent": "LINECARD-1-{{SLOT_ID}}",
+            "subcomponents": "PORT-1-{{SLOT_ID}}-2-EDFAIN,PORT-1-{{SLOT_ID}}-2-EDFAOUT"
+        }
+    },
+    "OSC": {
+        "OSC-1-{{SLOT_ID}}-1": {
+            "index": 1,
+            "id": 1,
+            "name": "OSC-1-{{SLOT_ID}}-1",
+            "location": "1-{{SLOT_ID}}",
+            "interface": "INTERFACE-1-{{SLOT_ID}}-1-OSC",
+            "parent": "LINECARD-1-{{SLOT_ID}}"
+        }
+    },
+    "INTERFACE": {
+        "INTERFACE-1-{{SLOT_ID}}-1-OSC": {
+            "index": 1,
+            "interface-type": "OSC",
+            "interface-id": 1,
+            "name": "INTERFACE-1-{{SLOT_ID}}-1-OSC"
+        }
+    },
+    "APS": {
+        "APS-1-{{SLOT_ID}}-1": {
+            "index": 1,
+            "id": 1,
+            "name": "APS-1-{{SLOT_ID}}-1",
+            "location": "1-{{SLOT_ID}}",
+            "parent": "LINECARD-1-{{SLOT_ID}}",
+            "subcomponents": "PORT-1-{{SLOT_ID}}-OLPSECOUT,PORT-1-{{SLOT_ID}}-OLPSECIN,PORT-1-{{SLOT_ID}}-OLPPRIOUT,PORT-1-{{SLOT_ID}}-OLPCOMIN,PORT-1-{{SLOT_ID}}-OLPCOMOUT,PORT-1-{{SLOT_ID}}-OLPPRIIN"
+        }
+    },
+    "APS_PORT": {
+        "APS-1-{{SLOT_ID}}-1_LinePrimaryIn": {
+            "index": 1,
+            "id": 1,
+            "port-type": "LINE_PRIMARY_IN"
+        },
+        "APS-1-{{SLOT_ID}}-1_LineSecondaryIn": {
+            "index": 2,
+            "id": 1,
+            "port-type": "LINE_SECONDARY_IN"
+        },
+        "APS-1-{{SLOT_ID}}-1_CommonIn": {
+            "index": 3,
+            "id": 1,
+            "port-type": "COMMON_IN"
+        },
+        "APS-1-{{SLOT_ID}}-1_LinePrimaryOut": {
+            "index": 4,
+            "id": 1,
+            "port-type": "LINE_PRIMARY_OUT"
+        },
+        "APS-1-{{SLOT_ID}}-1_LineSecondaryOut": {
+            "index": 5,
+            "id": 1,
+            "port-type": "LINE_SECONDARY_OUT"
+        },
+        "APS-1-{{SLOT_ID}}-1_CommonOutput": {
+            "index": 6,
+            "id": 1,
+            "port-type": "COMMON_OUTPUT"
+        }
+    },
+    "PORT": {
+        "PORT-1-{{SLOT_ID}}-1-EDFAIN": {
+            "index": 1,
+            "port-type": "EDFA_IN",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "AMPLIFIER-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-1-EDFAOUT": {
+            "index": 2,
+            "port-type": "EDFA_OUT",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "AMPLIFIER-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-2-EDFAIN": {
+            "index": 3,
+            "port-type": "EDFA_IN",
+            "port-id": 2,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "AMPLIFIER-1-{{SLOT_ID}}-2"
+        },
+        "PORT-1-{{SLOT_ID}}-2-EDFAOUT": {
+            "index": 4,
+            "port-type": "EDFA_OUT",
+            "port-id": 2,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "AMPLIFIER-1-{{SLOT_ID}}-2"
+        },
+        "PORT-1-{{SLOT_ID}}-OLPPRIIN": {
+            "index": 5,
+            "port-type": "OLP_PRI_IN",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "APS-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-OLPPRIOUT": {
+            "index": 6,
+            "port-type": "OLP_PRI_OUT",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "APS-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-OLPSECIN": {
+            "index": 7,
+            "port-type": "OLP_SEC_IN",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "APS-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-OLPSECOUT": {
+            "index": 8,
+            "port-type": "OLP_SEC_OUT",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "APS-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-OLPCOMIN": {
+            "index": 9,
+            "port-type": "OLP_COM_IN",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "APS-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-OLPCOMOUT": {
+            "index": 10,
+            "port-type": "OLP_COM_OUT",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "APS-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-EXTIN": {
+            "index": 11,
+            "port-type": "MD_EXP_IN",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-EXTOUT": {
+            "index": 12,
+            "port-type": "MD_EXP_OUT",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD33IN": {
+            "index": 13,
+            "port-type": "MD_IN",
+            "port-id": 33,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD33OUT": {
+            "index": 14,
+            "port-type": "MD_OUT",
+            "port-id": 33,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD38IN": {
+            "index": 15,
+            "port-type": "MD_IN",
+            "port-id": 38,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD38OUT": {
+            "index": 16,
+            "port-type": "MD_OUT",
+            "port-id": 38,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD43IN": {
+            "index": 17,
+            "port-type": "MD_IN",
+            "port-id": 43,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD43OUT": {
+            "index": 18,
+            "port-type": "MD_OUT",
+            "port-id": 43,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD48IN": {
+            "index": 19,
+            "port-type": "MD_IN",
+            "port-id": 48,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD48OUT": {
+            "index": 20,
+            "port-type": "MD_OUT",
+            "port-id": 48,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD53IN": {
+            "index": 21,
+            "port-type": "MD_IN",
+            "port-id": 53,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD53OUT": {
+            "index": 22,
+            "port-type": "MD_OUT",
+            "port-id": 53,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD58IN": {
+            "index": 23,
+            "port-type": "MD_IN",
+            "port-id": 58,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-MD58OUT": {
+            "index": 24,
+            "port-type": "MD_OUT",
+            "port-id": 58,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "MUX-1-{{SLOT_ID}}-1"
+        },
+        "PORT-1-{{SLOT_ID}}-L1IN": {
+            "index": 25,
+            "port-type": "LINE_IN",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "LINECARD-1-{{SLOT_ID}}"
+        },
+        "PORT-1-{{SLOT_ID}}-L1OUT": {
+            "index": 26,
+            "port-type": "LINE_OUT",
+            "port-id": 1,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "LINECARD-1-{{SLOT_ID}}"
+        },
+        "PORT-1-{{SLOT_ID}}-L2IN": {
+            "index": 27,
+            "port-type": "LINE_IN",
+            "port-id": 2,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "LINECARD-1-{{SLOT_ID}}"
+        },
+        "PORT-1-{{SLOT_ID}}-L2OUT": {
+            "index": 28,
+            "port-type": "LINE_OUT",
+            "port-id": 2,
+            "location": "1-{{SLOT_ID}}",
+            "parent": "LINECARD-1-{{SLOT_ID}}"
+        }
+    },
+    "ATTENUATOR": {
+        "ATTENUATOR-1-{{SLOT_ID}}-1": {
+            "index": 1,
+            "id": 1,
+            "name": "ATTENUATOR-1-{{SLOT_ID}}-1",
+            "component": "ATTENUATOR-1-{{SLOT_ID}}-1"
+        },
+        "ATTENUATOR-1-{{SLOT_ID}}-2": {
+            "index": 2,
+            "id": 2,
+            "name": "ATTENUATOR-1-{{SLOT_ID}}-2",
+            "component": "ATTENUATOR-1-{{SLOT_ID}}-2"
+        },
+        "ATTENUATOR-1-{{SLOT_ID}}-3": {
+            "index": 3,
+            "id": 3,
+            "name": "ATTENUATOR-1-{{SLOT_ID}}-3",
+            "component": "ATTENUATOR-1-{{SLOT_ID}}-3"
+        }
+    },
+    "MUX": {
+        "MUX-1-{{SLOT_ID}}-1": {
+            "index": 1,
+            "empty": "false",
+            "name": "MUX-1-{{SLOT_ID}}-1",
+            "oper-status": "ACTIVE",
+            "admin-state": "ENABLED",
+            "removable": "false",
+            "parent": "LINECARD-1-{{SLOT_ID}}"
+        }
+    }
+}
