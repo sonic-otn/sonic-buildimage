@@ -7,7 +7,11 @@ After=config-setup.service
 BindsTo=sonic.target
 After=sonic.target
 Before=ntp-config.service
+{% if sonic_asic_platform.startswith('ot-') %}
+After=otss{% if multi_instance == 'true' %}@%i{% endif %}.service
+{%- else %}
 After=swss{% if multi_instance == 'true' %}@%i{% endif %}.service
+{% endif %}
 After=interfaces-config.service
 StartLimitIntervalSec=1200
 StartLimitBurst=3

@@ -121,3 +121,9 @@
 [submodule "platform/marvell/sonic-platform-marvell"]
 	path = platform/marvell/sonic-platform-marvell
 	url = https://github.com/Marvell-switching/sonic-platform-arm64.git
+[submodule "src/sonic-otairedis"]
+	path = src/sonic-otairedis
+	url = https://github.com/sonic-otn/sonic-otairedis.git
+[submodule "src/sonic-otss"]
+	path = src/sonic-otss
+	url = https://github.com/sonic-otn/sonic-otss.git

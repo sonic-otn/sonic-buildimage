@@ -1,0 +1,12 @@
+
+SPATH       := $($(OTSS)_SRC_PATH)
+DEP_FILES   := $(SONIC_COMMON_FILES_LIST) rules/otss.mk rules/otss.dep   
+DEP_FILES   += $(SONIC_COMMON_BASE_FILES_LIST)
+SMDEP_FILES := $(addprefix $(SPATH)/,$(shell cd $(SPATH) && git ls-files))
+
+$(OTSS)_CACHE_MODE  := GIT_CONTENT_SHA 
+$(OTSS)_DEP_FLAGS   := $(SONIC_COMMON_FLAGS_LIST) $(ENABLE_ASAN)
+$(OTSS)_DEP_FILES   := $(DEP_FILES)
+$(OTSS)_SMDEP_FILES := $(SMDEP_FILES)
+$(OTSS)_SMDEP_PATHS := $(SPATH)
+
