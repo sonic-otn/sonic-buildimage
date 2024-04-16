@@ -85,7 +85,7 @@ Table of Contents
          * [LOGGER](#logger)
          * [WRED_PROFILE](#wred_profile)
          * [PASSWORD_HARDENING](#password_hardening)
-         * [SSH_SERVER](#ssh_server)  
+         * [SSH_SERVER](#ssh_server)
          * [SYSTEM_DEFAULTS table](#systemdefaults-table)
          * [RADIUS](#radius)
          * [Static DNS](#static-dns)
@@ -942,6 +942,8 @@ instance is supported in SONiC.
 {
 "DEVICE_METADATA": {
         "localhost": {
+        "asic_id": "06:00.0",
+        "asic_name": "asic0",
         "hwsku": "Force10-S6100",
         "default_bgp_status": "up",
         "docker_routing_config_mode": "unified",
@@ -1210,7 +1212,7 @@ The FG_NHG_PREFIX table provides the FG_NHG_PREFIX for which FG behavior is desi
 
 ### Hash
 
-Generic hash allows user to configure various aspects of hashing algorithm.  
+Generic hash allows user to configure various aspects of hashing algorithm.
 The configuration is applied globally for each ECMP and LAG on a switch.
 
 ***ECMP/LAG HASH***
@@ -1807,7 +1809,11 @@ optional attributes.
             "speed": "40000",
             "link_training": "off",
             "laser_freq": "191300",
-            "tx_power": "-27.3"
+            "tx_power": "-27.3",
+            "dom_polling": "enabled",
+            "coreId": "1",
+            "corePortId": "1",
+            "numVoq": "8"
         },
         "Ethernet1": {
             "index": "1",
@@ -1819,7 +1825,11 @@ optional attributes.
             "speed": "40000",
             "link_training": "on",
             "laser_freq": "191300",
-            "tx_power": "-27.3"
+            "tx_power": "-27.3",
+            "dom_polling": "enabled",
+            "coreId": "0",
+            "corePortId": "14",
+            "numVoq": "8"
         },
         "Ethernet63": {
             "index": "63",
@@ -1829,7 +1839,11 @@ optional attributes.
             "alias": "fortyGigE1/4/16",
             "speed": "40000",
             "laser_freq": "191300",
-            "tx_power": "-27.3"
+            "tx_power": "-27.3",
+            "dom_polling": "disabled",
+            "coreId": "0",
+            "corePortId": "15",
+            "numVoq": "8"
         }
     }
 }
@@ -1845,7 +1859,8 @@ optional attributes.
             "mtu": "9100",
             "alias": "etp1a",
             "speed": "100000",
-            "subport": 1
+            "subport": 1,
+            "dom_polling": "enabled"
         },
         "Ethernet4": {
             "admin_status": "up",
@@ -1855,7 +1870,8 @@ optional attributes.
             "mtu": "9100",
             "alias": "etp1b",
             "speed": "100000",
-            "subport": 2
+            "subport": 2,
+            "dom_polling": "enabled"
         },
     }
 }

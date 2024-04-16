@@ -258,6 +258,7 @@ RUN apt-get update && apt-get install -y \
         python3-nose \
         python3-venv \
         gcovr \
+        lcov \
         python3-pytest-cov \
         python3-pytest-cov \
         python3-parse \
@@ -418,7 +419,9 @@ RUN apt-get update && apt-get install -y \
         auditd \
 # For protobuf
         protobuf-compiler \
-        libprotobuf-dev
+        libprotobuf-dev \
+# For sonic-dhcp6relay build
+        libjsoncpp-dev
 
 {%- if CROSS_BUILD_ENVIRON == "y" %}
 # Arm vs. amd64 versions conflict - remove amd64 packages
@@ -478,6 +481,10 @@ RUN patch -p1 -i /disable-non-manylinux.patch /usr/local/lib/python3.11/dist-pac
 
 # For building sonic-utilities
 RUN pip3 install fastentrypoints mock
+
+# For building sonic_ycabled
+# Note: Match version in bookworm
+RUN pip3 install grpcio==1.51.1 grpcio-tools==1.51.1
 
 # For running Python unit tests
 RUN pip3 install pytest-runner==5.2

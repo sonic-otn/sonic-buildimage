@@ -60,6 +60,15 @@
     "PORT_VALID_TYPE_TEST": {
         "desc": "PORT_VALID_TYPE_TEST no failure."
     },
+    "PORT_COREID_TYPE_TEST": {
+        "desc": "PORT_COREID_TYPE_TEST no failure."
+    },
+    "PORT_COREPORTID_TYPE_TEST": {
+        "desc": "PORT_COREPORTID_TYPE_TEST no failure."
+    },
+    "PORT_NUMVOQ_TYPE_TEST": {
+        "desc": "PORT_NUMVOQ_TYPE_TEST no failure."
+    },
     "PORT_INVALID_TYPE_TEST": {
         "desc": "PORT_INVALID_TYPE_TEST InvalidValue condition failure.",
         "eStrKey" : "InvalidValue",
@@ -134,6 +143,14 @@
          "eStrKey": "Range",
          "eStr": "0..8"
      },
+     "PORT_VALID_DOM_POLLING": {
+        "desc": "PORT_VALID_DOM_POLLING no failure."
+    },
+    "PORT_INVALID_DOM_POLLING": {
+        "desc": "PORT_INVALID_DOM_POLLING invalid condition failure.",
+        "eStrKey" : "InvalidValue",
+        "eStr": ["dom_polling"]
+    },
      "PORT_AUTO_FEC_TEST": {
          "desc": "PORT_AUTO_FEC_TEST validate auto mode in fec."
      }
