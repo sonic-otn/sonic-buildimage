@@ -3,8 +3,8 @@ Description=syncd-ot service
 Requires=database{% if multi_instance == 'true' %}@%i{% endif %}.service
 After=database{% if multi_instance == 'true' %}@%i{% endif %}.service
 After=otss{% if multi_instance == 'true' %}@%i{% endif %}.service
-Requires=updategraph.service
-After=updategraph.service
+Requires=config-setup.service
+After=config-setup.service
 After=interfaces-config.service
 BindsTo=sonic.target
 After=sonic.target
