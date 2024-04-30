@@ -1,0 +1,36 @@
+name: ot-pre-202411-vs-build
+
+on:
+  push:
+    branches: [ "otn_pre_202411" ]
+  pull_request:
+    branches: [ "otn_pre_202411" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: sonic-otn-server
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        path: 202411_${{github.run_number}}
+
+    - name: build
+      run: |
+          cd 202411_${{github.run_number}}
+          make init
+          make configure PLATFORM=vs
+          make SONIC_BUILD_JOBS=8 target/sonic-vs.img.gz 
+
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v3
+      with:
+        name: otn-202411-artifact
+        path: |
+          202411_${{github.run_number}}/sonic-installer.img
+          202411_${{github.run_number}}/target/*.img.gz
