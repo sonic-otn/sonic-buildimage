@@ -1,4 +1,4 @@
-name: ot-pre-202411-vs-build
+name: 202411-vs-build
 
 on:
   push:
