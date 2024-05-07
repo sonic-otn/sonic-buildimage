@@ -18,7 +18,11 @@
             "location": "1-{{SLOT_ID}}",
             "component": "AMPLIFIER-1-{{SLOT_ID}}-1",
             "parent": "LINECARD-1-{{SLOT_ID}}",
-            "subcomponents": "PORT-1-{{SLOT_ID}}-1-EDFAIN,PORT-1-{{SLOT_ID}}-1-EDFAOUT"
+            "subcomponents": "PORT-1-{{SLOT_ID}}-1-EDFAIN,PORT-1-{{SLOT_ID}}-1-EDFAOUT",
+            "target-gain": "15.0",
+            "target-gain-tilt": "0.0",
+            "enabled": "true",
+            "amp-mode": "CONSTANT_GAIN"
         },
         "AMPLIFIER-1-{{SLOT_ID}}-2": {
             "index": 2,
@@ -27,7 +31,21 @@
             "location": "1-{{SLOT_ID}}",
             "component": "AMPLIFIER-1-{{SLOT_ID}}-2",
             "parent": "LINECARD-1-{{SLOT_ID}}",
-            "subcomponents": "PORT-1-{{SLOT_ID}}-2-EDFAIN,PORT-1-{{SLOT_ID}}-2-EDFAOUT"
+            "subcomponents": "PORT-1-{{SLOT_ID}}-2-EDFAIN,PORT-1-{{SLOT_ID}}-2-EDFAOUT",
+            "target-gain": "15.0",
+            "target-gain-tilt": "0.0",
+            "enabled": "true",
+            "amp-mode": "CONSTANT_GAIN"
+        }
+    },
+    "LLDP": {
+        "INTERFACE-1-{{SLOT_ID}}-1-OSC": {
+            "channel-id": "1",
+            "enabled": "true",
+            "index": "1",
+            "name": "INTERFACE-1-{{SLOT_ID}}-1-OSC",
+            "port-id-expect": "INTERFACE-1-{{SLOT_ID}}-1-OSC",
+            "system-name-expect": "SONiC-OTN"
         }
     },
     "OSC": {
@@ -37,7 +55,8 @@
             "name": "OSC-1-{{SLOT_ID}}-1",
             "location": "1-{{SLOT_ID}}",
             "interface": "INTERFACE-1-{{SLOT_ID}}-1-OSC",
-            "parent": "LINECARD-1-{{SLOT_ID}}"
+            "parent": "LINECARD-1-{{SLOT_ID}}",
+            "enabled": "true"
         }
     },
     "INTERFACE": {
@@ -55,7 +74,13 @@
             "name": "APS-1-{{SLOT_ID}}-1",
             "location": "1-{{SLOT_ID}}",
             "parent": "LINECARD-1-{{SLOT_ID}}",
-            "subcomponents": "PORT-1-{{SLOT_ID}}-OLPSECOUT,PORT-1-{{SLOT_ID}}-OLPSECIN,PORT-1-{{SLOT_ID}}-OLPPRIOUT,PORT-1-{{SLOT_ID}}-OLPCOMIN,PORT-1-{{SLOT_ID}}-OLPCOMOUT,PORT-1-{{SLOT_ID}}-OLPPRIIN"
+            "subcomponents": "PORT-1-{{SLOT_ID}}-OLPSECOUT,PORT-1-{{SLOT_ID}}-OLPSECIN,PORT-1-{{SLOT_ID}}-OLPPRIOUT,PORT-1-{{SLOT_ID}}-OLPCOMIN,PORT-1-{{SLOT_ID}}-OLPCOMOUT,PORT-1-{{SLOT_ID}}-OLPPRIIN",
+            "force-to-port": "SECONDARY",
+            "hold-off-time": "2",
+            "primary-switch-threshold": "5.0",
+            "primary-switch-hysteresis": "1.0",
+            "relative-switch-threshold": "5.0",
+            "relative-switch-threshold-offset": "0.0"
         }
     },
     "APS_PORT": {
@@ -293,19 +318,22 @@
             "index": 1,
             "id": 1,
             "name": "ATTENUATOR-1-{{SLOT_ID}}-1",
-            "component": "ATTENUATOR-1-{{SLOT_ID}}-1"
+            "component": "ATTENUATOR-1-{{SLOT_ID}}-1",
+            "attenuation": "15.0"
         },
         "ATTENUATOR-1-{{SLOT_ID}}-2": {
             "index": 2,
             "id": 2,
             "name": "ATTENUATOR-1-{{SLOT_ID}}-2",
-            "component": "ATTENUATOR-1-{{SLOT_ID}}-2"
+            "component": "ATTENUATOR-1-{{SLOT_ID}}-2",
+            "attenuation": "15.0"
         },
         "ATTENUATOR-1-{{SLOT_ID}}-3": {
             "index": 3,
             "id": 3,
             "name": "ATTENUATOR-1-{{SLOT_ID}}-3",
-            "component": "ATTENUATOR-1-{{SLOT_ID}}-3"
+            "component": "ATTENUATOR-1-{{SLOT_ID}}-3",
+            "attenuation": "15.0"
         }
     },
     "MUX": {
