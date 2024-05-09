@@ -32,5 +32,5 @@ jobs:
       with:
         name: otn-202411-artifact
         path: |
-          202411_${{github.run_number}}/sonic-installer.img
-          202411_${{github.run_number}}/target/*.img.gz
+          202411_ot_${{github.run_number}}/sonic-installer.img
+          202411_ot_${{github.run_number}}/target/*.img.gz
