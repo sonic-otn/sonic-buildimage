@@ -193,7 +193,9 @@ The supported ASIC vendors are:
 * PLATFORM=vs
 
 The supported OTN vendors are:
-* PLATFORM=ot-vs
+* PLATFORM=ot-vs  
+  
+Please refer to [README.otn.md](./README.otn.md) for more sonic-otn information.
 
 ## Usage for ARM Architecture
 
