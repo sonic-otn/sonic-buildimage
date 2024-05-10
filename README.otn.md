@@ -154,3 +154,11 @@ admin@sonic:~$ docker exec -ti database1 bash
 root@sonic:/# redis-cli -n 6
 root@sonic:/# redis-cli -n 2
 ```
+
+5. deprovision the linecard with test script
+It will plug out the virtual linecard and flush all data in the database
+```
+./config_sonic_otn_linecard.sh 1 none
+./config_sonic_otn_linecard.sh 2 none
+
+```
