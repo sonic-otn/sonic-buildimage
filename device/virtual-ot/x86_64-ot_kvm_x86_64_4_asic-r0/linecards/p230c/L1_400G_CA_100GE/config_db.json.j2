@@ -11,35 +11,45 @@
             "channel-id": "{{SLOT_ID}}01",
             "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C1",
             "description": "GE-1-{{SLOT_ID}}-C1",
-            "alias": "CH{{SLOT_ID}}01"
+            "alias": "CH{{SLOT_ID}}01",
+            "admin-state": "MAINT",
+            "loopback-mode": "FACILITY"
         },
         "CH{{SLOT_ID}}02": {
             "index": "{{SLOT_ID}}02",
             "channel-id": "{{SLOT_ID}}02",
             "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C2",
             "description": "GE-1-{{SLOT_ID}}-C2",
-            "alias": "CH{{SLOT_ID}}02"
+            "alias": "CH{{SLOT_ID}}02",
+            "admin-state": "MAINT",
+            "loopback-mode": "FACILITY"
         },
         "CH{{SLOT_ID}}03": {
             "index": "{{SLOT_ID}}03",
             "channel-id": "{{SLOT_ID}}03",
             "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C3",
             "description": "GE-1-{{SLOT_ID}}-C3",
-            "alias": "CH{{SLOT_ID}}03"
+            "alias": "CH{{SLOT_ID}}03",
+            "admin-state": "MAINT",
+            "loopback-mode": "FACILITY"
         },
         "CH{{SLOT_ID}}04": {
             "index": "{{SLOT_ID}}04",
             "channel-id": "{{SLOT_ID}}04",
             "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-C4",
             "description": "GE-1-{{SLOT_ID}}-C4",
-            "alias": "CH{{SLOT_ID}}04"
+            "alias": "CH{{SLOT_ID}}04",
+            "admin-state": "MAINT",
+            "loopback-mode": "FACILITY"
         },
         "CH{{SLOT_ID}}15": {
             "index": "{{SLOT_ID}}15",
             "channel-id": "{{SLOT_ID}}15",
             "transceiver": "TRANSCEIVER-1-{{SLOT_ID}}-L1",
             "description": "OTUCN-1-{{SLOT_ID}}-L1",
-            "alias": "CH{{SLOT_ID}}15"
+            "alias": "CH{{SLOT_ID}}15",
+            "admin-state": "MAINT",
+            "loopback-mode": "FACILITY"
         },
         "CH{{SLOT_ID}}17": {
             "index": "{{SLOT_ID}}17",
@@ -122,7 +132,10 @@
             "logical-channel": "CH{{SLOT_ID}}01,CH{{SLOT_ID}}17",
             "ethernet": "CH{{SLOT_ID}}01",
             "otn": "CH{{SLOT_ID}}17",
-            "interface": "INTERFACE-1-{{SLOT_ID}}-C1"
+            "interface": "INTERFACE-1-{{SLOT_ID}}-C1",
+            "enabled": "false",
+            "ethernet-pmd-preconf": "ETH_100GBASE_CWDM4",
+            "fec-mode": "FEC_AUTO"
         },
         "TRANSCEIVER-1-{{SLOT_ID}}-C2": {
             "index": 2,
@@ -133,7 +146,10 @@
             "logical-channel": "CH{{SLOT_ID}}02,CH{{SLOT_ID}}18",
             "ethernet": "CH{{SLOT_ID}}02",
             "otn": "CH{{SLOT_ID}}18",
-            "interface": "INTERFACE-1-{{SLOT_ID}}-C2"
+            "interface": "INTERFACE-1-{{SLOT_ID}}-C2",
+            "enabled": "false",
+            "ethernet-pmd-preconf": "ETH_100GBASE_CWDM4",
+            "fec-mode": "FEC_AUTO"
         },
         "TRANSCEIVER-1-{{SLOT_ID}}-C3": {
             "index": 3,
@@ -144,7 +160,10 @@
             "logical-channel": "CH{{SLOT_ID}}03,CH{{SLOT_ID}}19",
             "ethernet": "CH{{SLOT_ID}}03",
             "otn": "CH{{SLOT_ID}}19",
-            "interface": "INTERFACE-1-{{SLOT_ID}}-C3"
+            "interface": "INTERFACE-1-{{SLOT_ID}}-C3",
+            "enabled": "false",
+            "ethernet-pmd-preconf": "ETH_100GBASE_CWDM4",
+            "fec-mode": "FEC_AUTO"
         },
         "TRANSCEIVER-1-{{SLOT_ID}}-C4": {
             "index": 4,
@@ -155,7 +174,10 @@
             "logical-channel": "CH{{SLOT_ID}}04,CH{{SLOT_ID}}20",
             "ethernet": "CH{{SLOT_ID}}04",
             "otn": "CH{{SLOT_ID}}20",
-            "interface": "INTERFACE-1-{{SLOT_ID}}-C4"
+            "interface": "INTERFACE-1-{{SLOT_ID}}-C4",
+            "enabled": "false",
+            "ethernet-pmd-preconf": "ETH_100GBASE_CWDM4",
+            "fec-mode": "FEC_AUTO"
         },
         "TRANSCEIVER-1-{{SLOT_ID}}-L1": {
             "index": 5,
@@ -164,7 +186,8 @@
             "parent": "PORT-1-{{SLOT_ID}}-L1",
             "logical-channel": "CH{{SLOT_ID}}15",
             "otn": "CH{{SLOT_ID}}15",
-            "och": "OCH-1-{{SLOT_ID}}-L1"
+            "och": "OCH-1-{{SLOT_ID}}-L1",
+            "enabled": "true"
         }
     },
     "PHYSICAL_CHANNEL": {
@@ -269,49 +292,66 @@
         "OCH-1-{{SLOT_ID}}-L1": {
             "index": 1,
             "port-type": "LINE",
-            "port-id": 1
+            "port-id": 1,
+            "frequency": "195875000",
+            "target-output-power": "0.5"
         }
     },
     "LLDP": {
         "CH{{SLOT_ID}}01": {
             "index": {{SLOT_ID}}01,
-            "channel-id": {{SLOT_ID}}01
+            "channel-id": {{SLOT_ID}}01,
+            "enabled": "true"
         },
         "CH{{SLOT_ID}}02": {
             "index": {{SLOT_ID}}02,
-            "channel-id": {{SLOT_ID}}02
+            "channel-id": {{SLOT_ID}}02,
+            "enabled": "true"
         },
         "CH{{SLOT_ID}}03": {
             "index": {{SLOT_ID}}03,
-            "channel-id": {{SLOT_ID}}03
+            "channel-id": {{SLOT_ID}}03,
+            "enabled": "true"
         },
         "CH{{SLOT_ID}}04": {
             "index": {{SLOT_ID}}04,
-            "channel-id": {{SLOT_ID}}04
+            "channel-id": {{SLOT_ID}}04,
+            "enabled": "true"
         }
     },
     "ETHERNET": {
         "CH{{SLOT_ID}}01": {
             "index": {{SLOT_ID}}01,
-            "channel-id": {{SLOT_ID}}01
+            "channel-id": {{SLOT_ID}}01,
+            "als-delay": "2000",
+            "maintenance": "LF"
         },
         "CH{{SLOT_ID}}02": {
             "index": {{SLOT_ID}}02,
-            "channel-id": {{SLOT_ID}}02
+            "channel-id": {{SLOT_ID}}02,
+            "als-delay": "2000",
+            "maintenance": "LF"
         },
         "CH{{SLOT_ID}}03": {
             "index": {{SLOT_ID}}03,
-            "channel-id": {{SLOT_ID}}03
+            "channel-id": {{SLOT_ID}}03,
+            "als-delay": "2000",
+            "maintenance": "LF"
         },
         "CH{{SLOT_ID}}04": {
             "index": {{SLOT_ID}}04,
-            "channel-id": {{SLOT_ID}}04
+            "channel-id": {{SLOT_ID}}04,
+            "als-delay": "2000",
+            "maintenance": "LF"
         }
     },
     "OTN": {
         "CH{{SLOT_ID}}15": {
             "index": {{SLOT_ID}}15,
-            "channel-id": {{SLOT_ID}}15
+            "channel-id": {{SLOT_ID}}15,
+            "tti-msg-auto": "false",
+            "tti-msg-expected": "SONIC-OTN:/1/1/L1",
+            "tti-msg-transmit": "SONIC-OTN:/1/1/L1"
         },
         "CH{{SLOT_ID}}17": {
             "index": {{SLOT_ID}}17,
