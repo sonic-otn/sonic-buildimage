@@ -118,7 +118,7 @@ admin@sonic:~$
 # Test provision a linecard
 We provide a test script to provision virtual linecards in the sonic-otn VM systems.
 
-1. copy the test script (config_sonic_otn_linecard.sh)[./config_sonic_otn_linecard.sh] to the sonic-otn system
+1. copy the test script [config_sonic_otn_linecard.sh](./config_sonic_otn_linecard.sh) to the sonic-otn system
 
 ```
 scp -P 10022 config_sonic_otn_linecard.sh admin@localhost:/home/admin
@@ -155,7 +155,7 @@ root@sonic:/# redis-cli -n 6
 root@sonic:/# redis-cli -n 2
 ```
 
-5. deprovision the linecard with test script
+5. deprovision the linecard with test script  
 It will plug out the virtual linecard and flush all data in the database
 ```
 ./config_sonic_otn_linecard.sh 1 none
