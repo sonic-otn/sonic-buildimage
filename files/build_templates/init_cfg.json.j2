@@ -32,7 +32,9 @@
 {% endif %}
     "BGP_DEVICE_GLOBAL": {
         "STATE": {
-            "tsa_enabled": "false"
+            "tsa_enabled": "false",
+            "wcmp_enabled": "false",
+            "idf_isolation_state": "unisolated"
         }
     },
 {%- set features = [("database", "always_enabled", false, "always_enabled"),
@@ -85,21 +87,20 @@
         "{{feature}}": {
             "state": "{{state}}",
             "delayed" : {{delayed | lower()}},
-        {%- if feature in ["bgp"] and sonic_asic_platform.startswith('ot-') %}
-            "has_global_scope": true,
-        {%- else %}
-            "has_global_scope": {% if feature + '.service' in installer_services.split(' ') %}true{% else %}false{% endif %},
-        {%- endif %}
 {%- if feature in ["lldp"] %}
         {%- if sonic_asic_platform.startswith('ot-') %}
+            "has_global_scope": true,
             "has_per_asic_scope": "False",
         {%- else %}
+            "has_global_scope": {% raw %}"{% if ('CHASSIS_METADATA' in DEVICE_RUNTIME_METADATA and DEVICE_RUNTIME_METADATA['CHASSIS_METADATA']['module_type'] in ['linecard']) %}False{% else %}True{% endif %}"{% endraw %},
             "has_per_asic_scope": {% raw %}"{% if not DEVICE_RUNTIME_METADATA['ETHERNET_PORTS_PRESENT'] or ('CHASSIS_METADATA' in DEVICE_RUNTIME_METADATA and DEVICE_RUNTIME_METADATA['CHASSIS_METADATA']['module_type'] in ['supervisor']) %}False{% else %}True{% endif %}"{% endraw %},
         {%- endif %}
 {%- else %}
         {%- if feature in ["bgp"] and sonic_asic_platform.startswith('ot-') %}
+            "has_global_scope": true,
             "has_per_asic_scope": "False",
         {%- else %}
+            "has_global_scope": {% if feature + '.service' in installer_services.split(' ') %}true{% else %}false{% endif %},
             "has_per_asic_scope": {% if feature + '@.service' in installer_services.split(' ') %}"True"{% else %}"False"{% endif %},
         {%- endif %}
 {%- endif %}

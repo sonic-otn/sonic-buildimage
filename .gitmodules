@@ -1,6 +1,3 @@
-[submodule "sonic-swss-common"]
-	path = src/sonic-swss-common
-	url = https://github.com/sonic-otn/sonic-swss-common
 [submodule "sonic-linux-kernel"]
 	path = src/sonic-linux-kernel
 	url = https://github.com/sonic-net/sonic-linux-kernel
@@ -121,6 +118,9 @@
 [submodule "platform/marvell/sonic-platform-marvell"]
 	path = platform/marvell/sonic-platform-marvell
 	url = https://github.com/Marvell-switching/sonic-platform-arm64.git
+[submodule "platform/innovium/sonic-platform-marvell"]
+	path = platform/innovium/sonic-platform-marvell
+	url = https://github.com/Marvell-switching/sonic-platform-marvell
 [submodule "src/sonic-otairedis"]
 	path = src/sonic-otairedis
 	url = https://github.com/sonic-otn/sonic-otairedis.git
