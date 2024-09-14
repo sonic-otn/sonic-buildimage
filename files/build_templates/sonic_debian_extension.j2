@@ -99,6 +99,11 @@ sudo mkdir -p $FILESYSTEM_ROOT_USR_SHARE_SONIC_FIRMWARE/
 # Keeping it generic. It should not harm anyways.
 sudo mkdir -p $FILESYSTEM_ROOT_USR_LIB_SYSTEMD_SYSTEM
 
+# Install sonic-nettools
+sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/sonic-nettools_*.deb || \
+    sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install -f
+sudo setcap 'cap_net_raw=+ep' $FILESYSTEM_ROOT/usr/bin/wol
+
 # Install a patched version of ifupdown2  (and its dependencies via 'apt-get -y install -f')
 sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/ifupdown2_*.deb || \
     sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install -f
@@ -131,6 +136,9 @@ sudo rm -rf $FILESYSTEM_ROOT/$REDIS_DUMP_LOAD_PY3_WHEEL_NAME
 
 # Install Python module for psutil
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install psutil
+
+# Install Python module for blkinfo
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install blkinfo
 
 # Install Python module for ipaddr
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install ipaddr
@@ -354,8 +362,7 @@ sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/sonic-db-cli_*.deb || \
     sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install -f
 
 
-{% if include_system_eventd == "y" %}
-{% if build_reduce_image_size != "y" or sonic_asic_platform != "broadcom" %}
+{% if include_system_eventd == "y" and build_reduce_image_size != "y" %}
 # Install sonic-rsyslog-plugin
 sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/sonic-rsyslog-plugin_*.deb || \
     sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install -f
@@ -375,7 +382,6 @@ sudo cp $BUILD_TEMPLATES/bgpd_regex.json $FILESYSTEM_ROOT_ETC/rsyslog.d/
 j2 -f json $BUILD_TEMPLATES/rsyslog_plugin.conf.j2 $BUILD_TEMPLATES/syncd_events_info.json | sudo tee $FILESYSTEM_ROOT_ETC/rsyslog.d/syncd_events.conf
 sudo cp $BUILD_TEMPLATES/syncd_regex.json $FILESYSTEM_ROOT_ETC/rsyslog.d/
 
-{% endif %}
 {% endif %}
 
 # Install custom-built monit package and SONiC configuration files
@@ -398,7 +404,7 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
 sudo cp $IMAGE_CONFIGS/smartmontools/smartmontools $FILESYSTEM_ROOT/etc/default/smartmontools
 
 # Install custom-built openssh sshd
-sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/openssh-server_${OPENSSH_VERSION}_*.deb $debs_path/openssh-client_${OPENSSH_VERSION}_*.deb $debs_path/openssh-sftp-server_${OPENSSH_VERSION}_*.deb
+sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/openssh-server_${OPENSSH_VERSION_FULL}_*.deb $debs_path/openssh-client_${OPENSSH_VERSION_FULL}_*.deb $debs_path/openssh-sftp-server_${OPENSSH_VERSION_FULL}_*.deb
 
 {% if sonic_asic_platform == 'broadcom' %}
 # Install custom-built flashrom
@@ -701,7 +707,7 @@ sudo LANG=C chroot $FILESYSTEM_ROOT systemctl disable midplane-network-dpu.servi
 # According to the issue: https://github.com/systemd/systemd/issues/19106, To disable ManageForeignRoutingPolicyRules to avoid the ip rules being deleted by systemd-networkd
 sudo sed -i 's/#ManageForeignRoutingPolicyRules=yes/ManageForeignRoutingPolicyRules=no/g' $FILESYSTEM_ROOT/etc/systemd/networkd.conf
 
-sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable systemd-networkd
+sudo ln -s /dev/null $FILESYSTEM_ROOT/etc/systemd/system/systemd-networkd.service
 sudo LANG=C chroot $FILESYSTEM_ROOT systemctl disable systemd-networkd-wait-online.service
 
 # Copy backend-acl script and service file
@@ -1007,6 +1013,7 @@ sudo LANG=C cp $SCRIPTS_DIR/asic_status.py $FILESYSTEM_ROOT/usr/local/bin/asic_s
 sudo LANG=C cp $SCRIPTS_DIR/startup_tsa_tsb.py $FILESYSTEM_ROOT/usr/local/bin/startup_tsa_tsb.py
 sudo LANG=C cp $SCRIPTS_DIR/otss.sh $FILESYSTEM_ROOT/usr/local/bin/otss.sh
 sudo LANG=C cp $SCRIPTS_DIR/syncd-ot.sh $FILESYSTEM_ROOT/usr/local/bin/syncd-ot.sh
+sudo LANG=C cp $SCRIPTS_DIR/sonic-dpu-mgmt-traffic.sh $FILESYSTEM_ROOT/usr/local/bin/sonic-dpu-mgmt-traffic.sh
 
 # Copy sonic-netns-exec script
 sudo LANG=C cp $SCRIPTS_DIR/sonic-netns-exec $FILESYSTEM_ROOT/usr/bin/sonic-netns-exec
@@ -1064,6 +1071,8 @@ for MLNX_CPLD_ARCHIVE in $MLNX_CPLD_ARCHIVES; do
 done
 sudo cp platform/mellanox/get_component_versions/get_component_versions.py $FILESYSTEM_ROOT/usr/bin/get_component_versions.py
 sudo chmod 755 $FILESYSTEM_ROOT/usr/bin/get_component_versions.py
+sudo cp platform/mellanox/cmis_host_mgmt/cmis_host_mgmt.py $FILESYSTEM_ROOT/usr/bin/cmis_host_mgmt.py
+sudo chmod 755 $FILESYSTEM_ROOT/usr/bin/cmis_host_mgmt.py
 j2 platform/mellanox/mlnx-fw-upgrade.j2 | sudo tee $FILESYSTEM_ROOT/usr/bin/mlnx-fw-upgrade.sh
 sudo chmod 755 $FILESYSTEM_ROOT/usr/bin/mlnx-fw-upgrade.sh
 
@@ -1079,8 +1088,15 @@ sudo LANG=C chroot $FILESYSTEM_ROOT systemctl enable nv-syncd-shared
 
 # Install required packages specific for mellanox platform
 sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install minicom xmlstarlet
+sudo mkdir -p $FILESYSTEM_ROOT/etc/minicom/
+sudo cp platform/mellanox/minirc.dfl $FILESYSTEM_ROOT/etc/minicom/
 
-sudo LANG=C chroot $FILESYSTEM_ROOT systemctl disable rshim.service
+# Install rshim script
+sudo install -m 755 platform/mellanox/rshim/files/rshim.sh $FILESYSTEM_ROOT/usr/bin/rshim.sh
+
+# Install rshim services
+sudo cp platform/mellanox/rshim/files/rshim@.service $FILESYSTEM_ROOT_USR_LIB_SYSTEMD_SYSTEM/
+sudo cp platform/mellanox/rshim/files/rshim-manager.service $FILESYSTEM_ROOT_USR_LIB_SYSTEMD_SYSTEM/
 {% endif %}
 
 {% if sonic_asic_platform == "nvidia-bluefield" %}

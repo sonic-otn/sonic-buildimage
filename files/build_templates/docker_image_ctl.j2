@@ -243,6 +243,9 @@ function postStartAction()
             fi
 
             if [[ "$BOOT_TYPE" == "fast" ]]; then
+                # Flush ASIC DB. On fast-boot there should be nothing in there.
+                # In the older versions there has been an issue where a queued FDB event might get into ASIC_DB causing syncd crash at boot.
+                $SONIC_DB_CLI ASIC_DB FLUSHDB
                 # this is the case when base OS version does not support fast-reboot with reconciliation logic (dump.rdb is absent)
                 # In this case, we need to set the flag to indicate fast-reboot is in progress. Set the key to expire in 3 minutes
                 $SONIC_DB_CLI STATE_DB SET "FAST_REBOOT|system" "1" "EX" "180"
@@ -267,6 +270,18 @@ function postStartAction()
             fi
             # set CONFIG_DB_INITIALIZED to indicate end of config load and migration
             $SONIC_DB_CLI CONFIG_DB SET "CONFIG_DB_INITIALIZED" "1"
+        fi
+
+        # In SUP, enforce CHASSIS_APP_DB.tsa_enabled to be in sync with BGP_DEVICE_GLOBAL.STATE.tsa_enabled
+        if [[ -z "$DEV" ]] && [[ -f /etc/sonic/chassisdb.conf ]]; then
+           tsa_cfg="$($SONIC_DB_CLI CONFIG_DB HGET "BGP_DEVICE_GLOBAL|STATE" "tsa_enabled")"
+           if [[ -n "$tsa_cfg" ]]; then
+              docker exec -i ${DOCKERNAME} $SONIC_DB_CLI CHASSIS_APP_DB HMSET "BGP_DEVICE_GLOBAL|STATE" tsa_enabled ${tsa_cfg}
+              OP_CODE=$?
+              if [ $OP_CODE -ne 0 ]; then
+                echo "Err: Cmd failed (exit code $OP_CODE). CHASSIS_APP_DB and CONFIG_DB may be incosistent wrt tsa_enabled"
+              fi
+           fi
         fi
 
         # Add redis UDS to the redis group and give read/write access to the group
@@ -331,7 +346,11 @@ start() {
     fi
 
     # Default rsyslog target IP for single ASIC platform
+{%- if docker_container_name == "dhcp_server" %}
+    SYSLOG_TARGET_IP=$(docker network inspect bridge --format={{ "'{{(index .IPAM.Config 0).Gateway}}'" }})
+{%- else %}
     SYSLOG_TARGET_IP=127.0.0.1
+{%- endif %}
     if [[ ($NUM_ASIC -gt 1) ]]; then
         SYSLOG_TARGET_IP=$(docker network inspect bridge --format={{ "'{{(index .IPAM.Config 0).Gateway}}'" }})
     fi
