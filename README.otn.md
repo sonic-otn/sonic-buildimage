@@ -162,3 +162,36 @@ It will plug out the virtual linecard and flush all data in the database
 ./config_sonic_otn_linecard.sh 2 none
 
 ```
+
+
+# Customize the dummy data in ot-vs platform
+
+1. Option 1, update the dummy json data
+User can customize the dummy data for each OTAI objects by editing the json files `/usr/include/vslib/otai_sim_data` in the syncd-ot container, then restart the `syncd` process.
+
+```
+docker exec -ti syncd-ot0 bash
+vi /usr/include/vslib/otai_sim_data/otai_oa_sim.json
+supervisorctl restart syncd
+```
+Note: if the OTAI attribute is an enum type, the value should be an integer representation of the enum value. For example. `OTAI_ADMIN_STATE_ENABLED` is the first enumerator, and the value is 0.
+
+You can verify the data is updated by retrieving the tables in state_db and counter_db.
+```
+admin@sonic:~$ docker exec -ti database0 bash
+root@sonic:/# redis-cli -n 6
+root@sonic:/# redis-cli -n 2
+```
+
+2. Option 2, configure the OTAI object in config_db
+User can set an OTAI object attributes in config_db, then the state of this OTAI object will be updated in state_db.
+
+For example, disable the transceiver of line port 1 on slot 2 optical linecard.
+```
+admin@sonic:~$ docker exec -ti database1 bash
+root@sonic:/# redis-cli -n 4 hset "TRANSCEIVER|TRANSCEIVER-1-2-L1" "enabled" "false"
+root@sonic:/# redis-cli -n 6 hget "TRANSCEIVER|TRANSCEIVER-1-2-L1" "enabled"
+"false"
+root@sonic:/#
+```
+
