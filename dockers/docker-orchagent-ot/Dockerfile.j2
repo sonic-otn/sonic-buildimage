@@ -63,9 +63,11 @@ RUN sonic-cfggen -t /usr/share/sonic/templates/docker-init.j2 > /usr/bin/docker-
 RUN rm -f /usr/share/sonic/templates/docker-init.j2
 RUN chmod 755 /usr/bin/docker-init.sh
 
-# Create swss rsyslog_plugin conf file
-RUN j2 -f json /etc/rsyslog.d/rsyslog_plugin.conf.j2 /etc/rsyslog.d/events_info.json  > /etc/rsyslog.d/swss_events.conf
-RUN rm -f /etc/rsyslog.d/rsyslog_plugin.conf.j2
-RUN rm -f /etc/rsyslog.d/events_info.json
+RUN mkdir -p /usr/share/sonic/templates/rsyslog_plugin
+
+# Copy rsyslog plugin configuration file and regexes to docker
+COPY ["swss_regex.json", "/etc/rsyslog.d/"]
+COPY ["events_info.json", "/usr/share/sonic/templates/rsyslog_plugin/"]
+COPY ["files/rsyslog_plugin.conf.j2", "/usr/share/sonic/templates/rsyslog_plugin/"]
 
 ENTRYPOINT ["/usr/bin/docker-init.sh"]
