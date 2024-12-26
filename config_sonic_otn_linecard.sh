@@ -35,11 +35,16 @@ else
 
     sudo /usr/local/bin/sonic-cfggen -j /etc/sonic/config_db$ASIC_ID.json  -n asic$ASIC_ID --write-to-db
 
-    echo "plugin the linecard $SLOT_ID ..."
-    sonic-db-cli -n asic$ASIC_ID STATE_DB hset "LINECARD|LINECARD-1-$SLOT_ID" "power-admin-state" "POWER_ENABLED" "oper-status" "INACTIVE" "empty" "false" "slot-status" "Ready" "linecard-type" "$LINECARD_TYPE_UPPERCASE"
-    sonic-db-cli -n asic$ASIC_ID STATE_DB hset "LINECARD|LINECARD-1-$SLOT_ID" "oper-status" "ACTIVE" 
     sudo systemctl start syncd-ot@$ASIC_ID.service
     sudo systemctl start otss@$ASIC_ID.service
+
+    sleep 5
+    echo "plugin the linecard $SLOT_ID and power enabled..."
+    sonic-db-cli -n asic$ASIC_ID STATE_DB hset "LINECARD|LINECARD-1-$SLOT_ID" "power-admin-state" "POWER_ENABLED" "empty" "false" "linecard-type" "$LINECARD_TYPE_UPPERCASE"
+    
+    sleep 5
+    echo "linecard otai library communication link status is up..."
+    docker exec syncd-ot$ASIC_ID touch /tmp/linkup 
 fi
 
 
