@@ -62,7 +62,7 @@ telnet 127.0.0.1 7000
 9. (Recommended) You can run the SONiC-OTN VM with bellow command directly.
 
 ```
-sudo qemu-system-x86_64 -name sonic-vs -m 3072 -smp cpus=2 -accel hvf -machine smm=off -drive file=sonic-4asic-ot-vs.img,if=virtio,index=0,media=disk,id=drive0 -cpu qemu64 -nic user,hostfwd=tcp::10022-:22,hostfwd=tcp::18080-:8080
+sudo qemu-system-x86_64 -name sonic-vs -m 3072 -smp cpus=2 -accel hvf -machine smm=off -drive file=sonic-4asic-ot-vs.img,if=virtio,index=0,media=disk,id=drive0 -cpu qemu64 -nic user,hostfwd=tcp::10022-:22,hostfwd=tcp::18080-:8080,restrict=off,model=virtio-net-pci
 ```    
 Note: you may need to change the `-accel hvf` to others hardware accelerator options, for example  `-accel KVM`
 

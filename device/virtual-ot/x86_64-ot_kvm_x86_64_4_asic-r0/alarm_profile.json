@@ -1,0 +1,1778 @@
+{
+    "SWUPG_FAIL": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "SOFTWARE UPGRADE FAIL"
+    },
+    "SWUPG_ACT": {
+        "Severity": "NOT_ALARMED",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "SOFTWARE UPGRADE ACTIVE"
+    },
+    "SWUPG_IP": {
+        "Severity": "NOT_ALARMED",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "SOFTWARE UPGRADE IN PROGRESS"
+    },
+    "FILETRANS_FAIL": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "FILE TRANSFER FAIL"
+    },
+    "SFTP_NOT_REACH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "SFTP SERVER UNREACHABLE"
+    },
+    "LOGIN_FAIL": {
+        "Severity": "NOT_ALARMED",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "CHASSIS LOGIN FAIL"
+    },
+    "NTP_NOT_REACH": {
+        "Severity": "MINOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "NTP SERVERS UNREACHABLE"
+    },
+    "CPU_USAGE_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CPU USAGE ALARM"
+    },
+    "MEM_USAGE_HIGH": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "MEMORY USAGE ALARM"
+    },
+    "TELEMETRY_NOT_REACH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "TELEMETRY TARGET SERVER UNREACHABLE"
+    },
+    "TRAPTAR_NOT_REACH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "SNMP TRAP SERVER UNREACHABLE"
+    },
+    "TACACS_NOT_REACH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "TACACS SERVER UNREACHABLE"
+    },
+    "DB_FAIL": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "CHASSIS DATABASE FAIL"
+    },
+    "DISK_FULL": {
+        "Severity": "MINOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "DISK SPACE ALERT"
+    },
+    "CHASSIS_TEMP_HIWAR": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CHASSIS TEMPERATURE HIGH warning"
+    },
+    "CHASSIS_TEMP_LOWAR": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CHASSIS TEMPERATURE LOW warning"
+    },
+    "CHASSIS_TEMP_HIALM": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CHASSIS TEMPERATURE HIGH alarm"
+    },
+    "CHASSIS_TEMP_LOALM": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CHASSIS TEMPERATURE LOW alarm"
+    },
+    "FAN_FAIL": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "FAN CARD FAIL"
+    },
+    "FAN_HIGH": {
+        "Severity": "NOT_ALARMED",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "FAN HIGH SPEED"
+    },
+    "FAN_LOW": {
+        "Severity": "NOT_ALARMED",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "FAN LOW SPEED"
+    },
+    "CRD_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "SLOT CARD MISMATCH"
+    },
+    "CRD_UNKNOWN": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "SLOT CARD UNKNWON"
+    },
+    "PSU_FAIL": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "PSU CARD FAIL"
+    },
+    "PSU_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "PSU CARD MISMATCH"
+    },
+    "CRD_UNKNOWN": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "SLOT CARD UNKNWON"
+    },
+    "CRD_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "SLOT CARD MISMATCH"
+    },
+    "CRD_UNKNOWN": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "SLOT CARD UNKNWON"
+    },
+    "CRD_NO_SUPP": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CARD NOT SUPPORTED"
+    },
+    "CRD_TEMP_HIWAR": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CARD TEMPERATURE HIGH warning"
+    },
+    "CRD_TEMP_LOWAR": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CARD TEMPERATURE LOW warning"
+    },
+    "CRD_TEMP_HIALM": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CARD TEMPERATURE HIGH alarm"
+    },
+    "CRD_TEMP_LOALM": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CARD TEMPERATURE LOW alarm"
+    },
+    "CRD_BOOT_FAIL": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "CARD BOOT FAIL"
+    },
+    "CRD_INIT": {
+        "Severity": "WARNING",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "CARD INITIALIZING"
+    },
+    "CRD_REBOOT": {
+        "Severity": "WARNING",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "CARD REBOOTING"
+    },
+    "TRANS_FAIL": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "LOAD UPGRADE FILE FAILED"
+    },
+    "UPGRADE_IP": {
+        "Severity": "WARNING",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "UPGRADE IN PROGRESS"
+    },
+    "UPGRADE_FAIL": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "UPGRADE FAILURE"
+    },
+    "UPGRADE_ACTIVE": {
+        "Severity": "WARNING",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "UPGRADE ACTIVE"
+    },
+    "CRD_READY": {
+        "Severity": "WARNING",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "CARD READY"
+    },
+    "SLOT_COMM_FAIL": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "SLOT COMMUNICATION FAIL"
+    },
+    "CRD_MISS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "CARD MISSING"
+    },
+    "SLOT_COMM_FAIL": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "SLOT COMMUNICATION FAIL"
+    },
+    "FEC_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FEC MISMATCH"
+    },
+    "ADMIN_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "ADMIN MISMATCH"
+    },
+    "ALS_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "ALS STATE MISMATCH"
+    },
+    "LSR_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "LASER STATE MISMATCH"
+    },
+    "FREQ_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Frequency MISMATCH"
+    },
+    "BOARD_INIT": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardInit"
+    },
+    "BOARD_LOAD_FILE_FAILED": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardLoadFileFailed"
+    },
+    "BOARD_LOADING": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardLoading"
+    },
+    "BOARD_LOAD_FAILED": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardLoadFailed"
+    },
+    "BOARD_LOAD_ACTIVE": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardLoadActive"
+    },
+    "BOARD_MINFPGA_MISSING": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardMinFpgaMissing"
+    },
+    "BOARD_READY": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardReady"
+    },
+    "BOARD_MAXFPGA_MISSING": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardMaxFpgaMissing"
+    },
+    "BOARD_BOOT_FAILED": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardBootFailed"
+    },
+    "HARD_BAD": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "HARD-BAD"
+    },
+    "FPGAMAX_TEMP_HIALARM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FPGA-MAX Temp Hi Alarm"
+    },
+    "FPGAMAX_TEMP_HIWARN": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FPGA-MAX Temp Hi Warn"
+    },
+    "FPGAMAX_TEMP_LOWWARN": {
+        "Severity": "MINOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FPGA-MAX Temp Low Warn"
+    },
+    "FPGAMAX_TEMP_LOWALARM": {
+        "Severity": "MINOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FPGA-MAX Temp Low Alarm"
+    },
+    "BOARD_MODE_SWITCH": {
+        "Severity": "MINOR",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "BoardModeSwitch"
+    },
+    "BOARD_UPGRADE_DONE": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "Board Upgrade and reboot"
+    },
+    "AC1200_MISSING": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "AC1200Missing"
+    },
+    "AC1200_COMMUNICATION_FAILED": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "AC1200CommunicationFailed"
+    },
+    "HI_TEMP_ALARM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "HiTempAlarm"
+    },
+    "LOW_TEMP_ALARM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "LowTempAlarm"
+    },
+    "HI_TEMP_WARNING": {
+        "Severity": "MINOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "HiTempWarning"
+    },
+    "LOW_TEMP_WARNING": {
+        "Severity": "MINOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "LowTempWarning"
+    },
+    "WL5E_FAULT": {
+        "Severity": "MINOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "WL5EFault"
+    },
+    "WL5E_ABNORMAL": {
+        "Severity": "MINOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "WL5EAbnormal"
+    },
+    "LOOPBACK_TERMINAL": {
+        "Severity": "WARNING",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "LoopbackTerminal"
+    },
+    "LOOPBACK_FACILITY": {
+        "Severity": "WARNING",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "LoopbackFacility"
+    },
+    "TRANSCEIVER_FAILED": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "TRANSCEIVER FAIL"
+    },
+    "RX_LOS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "RX-LOS"
+    },
+    "RX_LOL": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "RX-LOL"
+    },
+    "TX_FAIL": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "TX-FAIL"
+    },
+    "TX_LOS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "TX-LOS"
+    },
+    "TX_PWR_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "TX-PWR-HIGH"
+    },
+    "TX_PWR_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "TX-PWR-LOW"
+    },
+    "RX_PWR_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "RX-PWR-HIGH"
+    },
+    "RX_PWR_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "RX-PWR-LOW"
+    },
+    "PORT_INIT": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "PortINIT"
+    },
+    "XCVR_MISSING": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "TRANSCEIVER MISSING"
+    },
+    "XCVR_UNSUPPORTED": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "XCVRUnsupported"
+    },
+    "XCVR_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "XCVRMismatch"
+    },
+    "XCVR_COMMUNICATION_FAILED": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "XCVRCommunicationFailed"
+    },
+    "INVALID_CROSSBAR": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "InvalidCrossBar"
+    },
+    "INVALID_WORKING_MODE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "InvalidWorkingMode"
+    },
+    "VENDOR_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Vendor Mismatch"
+    },
+    "MAPPING_MISMATCH": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Cross Bar Mismatch"
+    },
+    "FLEXO_RX_SM_BIP8": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "RX SM-BIP8 Error Indication"
+    },
+    "FLEXO_RX_SM_BEI": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Rx SM-BEI Error Indication"
+    },
+    "FLEXO_RX_OTN_LOF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_OTN_LOF"
+    },
+    "FLEXO_RX_OTN_OOF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_OTN_OOF"
+    },
+    "FLEXO_RX_OTN_LOM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_OTN_LOM"
+    },
+    "FLEXO_RX_OTN_OOM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_OTN_OOM"
+    },
+    "FLEXO_RX_SM_BDI": {
+        "Severity": "MINOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_SM_BDI"
+    },
+    "FLEXO_RX_ODU_AIS": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_ODU_AIS"
+    },
+    "FLEXO_RX_ODU_LCK": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_ODU_LCK"
+    },
+    "FLEXO_RX_FEC_UNCORRECT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX-FEC-UNCORRECT"
+    },
+    "FLEXO_RX_FEC_SD": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_FEC_SD"
+    },
+    "FLEXO_RX_FEC_SF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_FEC_SF"
+    },
+    "FLEXO_TX_FEC_SD": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_TX_FEC_SD"
+    },
+    "FLEXO_TX_FEC_SF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_TX_FEC_SF"
+    },
+    "FLEXO_RX_ALGNMENT_ERR": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_AlGNMENT_ERR"
+    },
+    "FLEXO_RX_CD_DEG": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_CD_DEG"
+    },
+    "FLEXO_RX_PDL_DEG": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_PDL_DEG"
+    },
+    "FLEXO_RX_PMD_DEG": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_PMD_DEG"
+    },
+    "FLEXO_RX_FOFF_DEG": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_FOFF_DEG"
+    },
+    "FLEXO_RXSOPCHANGERATE_DEG": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_SOP_CHANGE_RATE_DEG"
+    },
+    "FLEXO_TX_FORCE_AIS": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_TX-FORCE-AIS"
+    },
+    "FLEXO_TX_FORCE_LCK": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_TX-FORCE-LCK"
+    },
+    "FLEXO_ABNORMAL_STATE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_ABNORMAL_STATE"
+    },
+    "FLEXO_LINE_PRBS_ENABLE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_LINE_PRBS_ENABLE"
+    },
+    "FLEXO_LINE_RX_TTI_MISMATCH": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_LINE_RX_TTI_MISMATCH"
+    },
+    "FLEXO_TX_FORCE_OCI": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_TX-FORCE-OCI"
+    },
+    "FLEXO_RX_BER_FDD": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_BER_FDD"
+    },
+    "FLEXO_RX_BER_FED": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_BER_FED"
+    },
+    "FLEXO_RX_GIDM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "FlexO_RX_GIDM"
+    },
+    "FLEXO_RX_LDI_LD": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Link Degrade Indication Local Degrade"
+    },
+    "FLEXO_RX_LDI_RD": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Link Degrade Indication Remote Degrade"
+    },
+    "FLEXO_RX_LOFLOM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Loss Of Frame Loss Of Multi-frame defect"
+    },
+    "FLEXO_RX_PMM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "PHY Map Mismatch defect"
+    },
+    "FLEXO_RX_RPF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Remote PHY Fault defect"
+    },
+    "RX_DISPERSION_POST_COMP_OOR": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "RX_DISPERSION_POST_COMP_OOR"
+    },
+    "CLIENT_LASER_OFF_BY_ALS": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client_LaserOffByALS"
+    },
+    "CLIENT_LASER_OFF_BY_DISABLED": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client_LaserOffByDisabled"
+    },
+    "CLIENT_POWER_MODE_ERROR": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client PowerMode Error"
+    },
+    "CLIENT_QSFP28_PNCODE_ERR": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client_QSFP28 PNCODE ERR"
+    },
+    "CLIENT_RX_PLL_FLT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client_RX_PLL_FLT"
+    },
+    "CLIENT_SERDES_PRBS_ENABLE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client_SERDES_PRBS_ENABLE"
+    },
+    "CRYPT_KEY_ID": {
+        "Severity": "MINOR",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "CRYPT_KEY_ID"
+    },
+    "CLIENT_MODULE_HOST_PRBS_ENABLE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client Module Host Prbs Enable"
+    },
+    "CLIENT_MODULE_MEDIA_PRBS_ENABLE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client Module Media Prbs Enable"
+    },
+    "CLIENT_MODULE_HOST_LOOPBACK": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client Module Host Loopback"
+    },
+    "CLIENT_MODULE_MEDIA_LOOPBACK": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client Module Media Loopback"
+    },
+    "CLIENT_RX_FEC_BER_SD_ALARM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client Rx Fec BER SD Alarm"
+    },
+    "CLIENT_RX_FEC_BER_SF_ALARM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Client Rx Fec BER SF Alarm"
+    },
+    "GE_TX_FORCE_LF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_FORCE_LF"
+    },
+    "GE_TX_FORCE_RF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_FORCE_RF"
+    },
+    "GE_TX_FORCE_IDLE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_FORCE_IDLE"
+    },
+    "GE_RX_NO_PACKET": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX-NO_PACKET"
+    },
+    "GE_RX_LF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX_LF"
+    },
+    "GE_TX_LF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_LF"
+    },
+    "GE_RX_RF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX_RF"
+    },
+    "GE_TX_RF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_RF"
+    },
+    "GE_RX_BLK_LCK_FLT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX_BLK_LCK_FLT"
+    },
+    "GE_RX_AM_LCK_FLT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX_AM_LCK_FLT"
+    },
+    "GE_TX_BLK_LCK_FLT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_BLK_LCK_FLT"
+    },
+    "GE_TX_AM_LCK_FLT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_AM_LCK_FLT"
+    },
+    "GE_RX_PCS_ERR_FLT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX_PCS_ERR_FLT"
+    },
+    "GE_RX_PCS_BIP_FLT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX_PCS_BIP_FLT"
+    },
+    "GE_TX_PCS_ERR_FLT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_PCS_ERR_FLT"
+    },
+    "GE_TX_PCS_BIP_FLT": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_PCS_BIP_FLT"
+    },
+    "GE_RX_PCS_LOA": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX_PCS_LOA"
+    },
+    "GE_TX_PCS_LOA": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_PCS_LOA"
+    },
+    "GE_RX_PCS_HI_BER": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX_PCS_HI_BER"
+    },
+    "GE_RX_LOSS_OF_SYNC": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_RX_LOSS_OF_SYNC"
+    },
+    "GE_TX_LOSS_OF_SYNC": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "GE_TX_LOSS_OF_SYNC"
+    },
+    "OTUCN_IAE": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn IAE indication"
+    },
+    "OTUCN_LOF_LOM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn Loss of frame/multi-frame"
+    },
+    "OTUCN_ODU_AIS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn ODUk AIS indication"
+    },
+    "OTUCN_ODU_LCK": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn ODUk LCK indication"
+    },
+    "OTUCN_ODU_OCI": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn ODUk OCI indication"
+    },
+    "OTUCN_ODU_SD": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn ODUk Signal Degrade"
+    },
+    "OTUCN_OOF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn OOF indication"
+    },
+    "OTUCN_OOM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn OOM indication"
+    },
+    "OTUCN_OPU_AIS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn OPUk-AIS Error indication"
+    },
+    "OTUCN_OPU_CRC5": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn OPUk-CRC5 Error indication"
+    },
+    "OTUCN_OPU_CRC8": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn OPUk-CRC8 Error indication"
+    },
+    "OTUCN_OPU_CSF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn OPUk Client Signal Fail indication"
+    },
+    "OTUCN_OPU_LOCM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn OPUk Loss of Cm"
+    },
+    "OTUCN_OPU_PLM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn OPUk Payload Mismatch"
+    },
+    "OTUCN_OTU_SD": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn OTUk Signal Degrade"
+    },
+    "OTUCN_PM_BDI": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn PM-BDI Indication"
+    },
+    "OTUCN_PM_BEI_ALARM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn PM-BEI indication"
+    },
+    "OTUCN_PM_BIP8_ALARM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn PM-BIP8 indication"
+    },
+    "OTUCN_PM_SSF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn PM-SSF indication"
+    },
+    "OTUCN_PM_TSF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn PM-TSF Indication"
+    },
+    "OTUCN_SM_BDI": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn SM-BDI indication"
+    },
+    "OTUCN_SM_BEI_ALARM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn SM-BEI indication"
+    },
+    "OTUCN_SM_BIAE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn SM-BIAE indication"
+    },
+    "OTUCN_SM_BIP8_ALARM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn SM-BIP8 indication"
+    },
+    "OTUCN_SM_SSF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn SM-SSF indication"
+    },
+    "OTUCN_SM_TSF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUCn SM-TSF indication"
+    },
+    "OTN_AM_SF_0": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex AM SF 0 indication"
+    },
+    "OTN_AM_SF_2": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex AM SF 2 indication"
+    },
+    "OTN_ASSERTING_AM_SF_1": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex Asserting AM SF 1 indication"
+    },
+    "OTN_IAE": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex IAE indicatio"
+    },
+    "OTN_LOFLOM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex Loss of frame/multi-frame"
+    },
+    "OTN_LRC": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex Loss of Rate Compensation indication"
+    },
+    "OTN_ODU_AIS": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex ODUk AIS indication"
+    },
+    "OTN_ODU_LCK": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex ODUk LCK indication"
+    },
+    "OTN_ODU_OCI": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex ODUk OCI indication"
+    },
+    "OTN_ODU_SD": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex ODUk Signal Degrade"
+    },
+    "OTN_OOF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex OOF indication"
+    },
+    "OTN_OOM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex OOM indication"
+    },
+    "OTN_OPU_AIS": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex OPUk-AIS Error indication"
+    },
+    "OTN_OPU_CRC5": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex OPUk-CRC5 Error indication"
+    },
+    "OTN_OPU_CRC8": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex OPUk-CRC8 Error indication"
+    },
+    "OTN_OPU_CSF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex OPUk-Client Signal Fail indication"
+    },
+    "OTN_OPU_LOCM": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex OPUk Loss of CM"
+    },
+    "OTN_OPU_PLM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex OPUk Payload Mismatch"
+    },
+    "OTN_OTU_SD": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex OTUk Signal Degrade"
+    },
+    "OTN_PM_BDI": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex PM-BDI Indication"
+    },
+    "OTN_PM_BEI_ALARM": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex PM-BEI indication"
+    },
+    "OTN_PM_BIP8_ALARM": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex PM-BIP8 indication"
+    },
+    "OTN_PM_SSF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex PM-SSF indication"
+    },
+    "OTN_PM_TSF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex PM-TSF Indication"
+    },
+    "OTN_RECEIVE_CDL_1": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex Receiving CDI 1 indication"
+    },
+    "OTN_SM_BDI": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex SM-BDI indication"
+    },
+    "OTN_SM_BEI_ALARM": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex SM-BEI indication"
+    },
+    "OTN_SM_BIAE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex SM-BIAE indication"
+    },
+    "OTN_SM_BIP8_ALARM": {
+        "Severity": "WARNING",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex SM-BIP8 indication"
+    },
+    "OTN_SM_SSF": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex SM-SSF indication"
+    },
+    "OTN_SM_TSF": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTUFlex SM-TSF indication"
+    },
+    "Q_FACTOR_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Q-Factor high."
+    },
+    "Q_FACTOR_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Q-Factor low."
+    },
+    "ESNR_A_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Eletrical signal to noise ratio,Modulation format A for highest bit"
+    },
+    "ESNR_A_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Eletrical signal to noise ratio,Modulation format A for lowest bit"
+    },
+    "ESNR_B_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Eletrical signal to noise ratio,Modulation format B for highest bit"
+    },
+    "ESNR_B_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Eletrical signal to noise ratio,Modulation format B for lowest bit"
+    },
+    "OSNR_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Optical signal to noise ratio."
+    },
+    "OSNR_LOW": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "Optical signal to noise ratio."
+    },
+    "CD_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "chromatic dispersion."
+    },
+    "CD_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "chromatic dispersion."
+    },
+    "PDL_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Polarization dependent loss."
+    },
+    "PDL_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Polarization dependent loss."
+    },
+    "FOFF_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Frequency offset between RX and LO."
+    },
+    "FOFF_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Frequency offset between RX and LO.."
+    },
+    "DGD_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Differential group delay."
+    },
+    "DGD_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Differential group delay.."
+    },
+    "SOP_MD_RANGE_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "RX Second Order Polarization Mode Dispersion Range."
+    },
+    "SOP_MD_RANGE_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "RX Second Order Polarization Mode Dispersion Range.."
+    },
+    "SOP_CHANGE_RATE_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Network Lane SOP Change Rate Range."
+    },
+    "SOP_CHANGE_RATE_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Network Lane SOP Change Rate Range.."
+    },
+    "TX_POWER_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Network Lane Transmitter Output Power/lane TX optical power."
+    },
+    "TX_POWER_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Network Lane Transmitter Output Power/lane TX optical power.."
+    },
+    "TX_PWR_NOT_MATCH": {
+        "Severity": "MINOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Trans TxPwr NotMatch.."
+    },
+    "RX_POWER_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Network Lane Receiver Signal (Coherent) Power /lane RX signal optical power."
+    },
+    "RX_POWER_LOW": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "Network Lane Receiver Signal (Coherent) Power /lane RX signal optical power.."
+    },
+    "RX_TOTAL_POWER_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "Measured received total optical power is reported in dBm High"
+    },
+    "RX_TOTAL_POWER_LOW": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "Measured received total optical power is reported in dBm Low."
+    },
+    "LASER_BIAS_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "current percentage of the modulator bias offset being utilized."
+    },
+    "LASER_BIAS_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "current percentage of the modulator bias offset being utilized.."
+    },
+    "EDFA_BIAS_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "current percentage of the modulator bias offset being utilized."
+    },
+    "EDFA_BIAS_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "current percentage of the modulator bias offset being utilized."
+    },
+    "LOSS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "loss of signal seconds."
+    },
+    "PRE_FEC_BER_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "bit error rate before FEC"
+    },
+    "PRE_FEC_BER_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "bit error rate before FEC"
+    },
+    "EB": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "The error block count based on th result of BIP8 processing"
+    },
+    "BBE": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "background block errors"
+    },
+    "SES": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "Severely errored seconds,count of seconds with error blocks >x"
+    },
+    "ES": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "Errored Seconds,count of seconds with uncorrected error"
+    },
+    "UAS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "The Unavailable Seconds"
+    },
+    "TX_PCS_INVALID": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "TX Client interface transmit total number of detected invalid blocks count over PM Interval."
+    },
+    "TX_PCS_EBLK": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "TX Client interface transmit total number of PCS error blocks count over PM Interval."
+    },
+    "TX_PCS_ES": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "TX Errored seconds: Count of seconds with EBLK>1/defects/los"
+    },
+    "TX_PCS_SES": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "TX Severely errored seconds: Count of seconds with EBLK>10/defects/los"
+    },
+    "TX_PCS_CCW": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "TX Client interface transmit FEC corrected codewords count over PM Interval."
+    },
+    "TX_PCS_UCCW": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "TX Client interface transmit FEC uncorrectable codewords count over PM Interval"
+    },
+    "RX_PCS_INVALID": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "RX Client interface transmit total number of detected invalid blocks count over PM Interval."
+    },
+    "RX_PCS_EBLK": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "RX lient interface transmit total number of PCS error blocks count over PM Interval."
+    },
+    "RX_PCS_ES": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "RX Errored seconds: Count of seconds with EBLK>1/defects/los"
+    },
+    "RX_PCS_SES": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "RX Severely errored seconds: Count of seconds with EBLK>10/defects/los"
+    },
+    "RX_PCS_BER_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "TX Client interface transmit PCS BER count over PM Interval."
+    },
+    "RX_PCS_BER_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "TCA",
+        "Detail": "TX Client interface transmit PCS BER count over PM Interval."
+    },
+    "TX_BAD_OCTETS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "TX Total number of octets found in all bad frames."
+    },
+    "TX_BAD_PKTS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "TX Number of BAD packets,including all unicast, multicast, broadcast,MAC control."
+    },
+    "RX_BAD_OCTETS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "RX Total number of octets found in all bad frames."
+    },
+    "RX_BAD_PKTS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "TCA",
+        "Detail": "RX Number of BAD packets,all unicast, multicast, broadcast,MAC control."
+    },
+    "OLP_SWITCH_TO_PRIMARY": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "OLP_SWITCH_TO_PRIMARY"
+    },
+    "OLP_FORCE_TO_PRIMARY": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "OLP_FORCE_TO_PRIMARY"
+    },
+    "OLP_SWITCH_TO_SECONDARY": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "OLP_SWITCH_TO_SECONDARY"
+    },
+    "OLP_FORCE_TO_SECONDARY": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "transient",
+        "Detail": "OLP_FORCE_TO_SECONDARY"
+    },
+    "EDFA_SATURATED": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "EDFA_SATURATED"
+    },
+    "EDFA_GAIN_LOW": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "EDFA_GAIN_LOW"
+    },
+    "OTDR_LOS_CHANGE": {
+        "Severity": "MAJOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "OTDR_LOS_CHANGE"
+    },
+    "OTDR_TEST_FAILURE": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "OTDR_TEST_FAILURE"
+    },
+    "OTDR_REPORT_IN": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "transient",
+        "Detail": "OTDR_REPORT_IN"
+    },
+    "OTDR_LENGTH_BENEATH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "OTDR_LENGTH_BENEATH"
+    },
+    "OTDR_LOSS_EXCEED": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "OTDR_LOSS_EXCEED"
+    },
+    "WSS_TRIB_INPUT_LOS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "WSS_TRIB_INPUT_LOS"
+    },
+    "WSS_TRIB_OUTPUT_LOS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "WSS_TRIB_OUTPUT_LOS"
+    },
+    "WSS_TRIB_INPUT_LOW": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "WSS_TRIB_INPUT_LOW"
+    },
+    "WSS_TRIB_INPUT_HIGH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "WSS_TRIB_INPUT_HIGH"
+    },
+    "WSS_PORT_MISMATCH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "WSS_PORT_MISMATCH"
+    },
+    "MEDIACHANNEL_TARGETPOWER_OUTOFREACH": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "MEDIACHANNEL_TARGETPOWER_OUTOFREACH"
+    },
+    "MEDIACHANNEL_INPUT_LOS": {
+        "Severity": "CRITICAL",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "MEDIACHANNEL_INPUT_LOS"
+    },
+    "ASE_TARGET_PSD_NOT_REACHABLE": {
+        "Severity": "MAJOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "ASE_TARGET_PSD_NOT_REACHABLE"
+    },
+    "CONTAINER_EXIT": {
+        "Severity": "CRITICAL",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "CONTAINER_EXIT"
+    },
+    "TRANS_TXPWR_NOTMATCH": {
+        "Severity": "MINOR",
+        "SA": "nsa",
+        "Type": "standing",
+        "Detail": "Trans TxPwr NotMatch"
+    },
+    "HIGH_TEMPERATURE_ALARM": {
+        "Severity": "MINOR",
+        "SA": "sa",
+        "Type": "standing",
+        "Detail": "Laser High Temp Alarm"
+    }
+}
