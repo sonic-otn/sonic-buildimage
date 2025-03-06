@@ -1,0 +1,32 @@
+{
+    "chassis_id_list": [1],
+    "max_slot_id": 13,
+    "slot": [
+        {
+            "id": 1
+        },
+        {
+            "id": 2
+        },
+        {
+            "id": 3
+        },
+        {
+            "id": 4
+        }
+    ],
+
+    
+    "psu_id_list": [1, 2],
+    "psu_slot_id_offset": 4,
+    "fan_id_list": [1, 2, 3],
+    "fan_slot_id_offset": 6,
+
+    "chassis_temp_low_alarm_threshold": [0, 10],
+    "chassis_temp_low_warning_threshold": [10, 30],
+    "chassis_temp_hi_alarm_threshold": [70, 100],
+    "chassis_temp_hi_warning_threshold": [50, 70],
+
+    "terminal_linecard_type": ["P230C"],
+    "linecard_type": ["E110C", "P230C"]
+}

@@ -1,0 +1,73 @@
+{
+    "temp_low_alarm_threshold": [0, 10],
+    "temp_low_warning_threshold": [10, 30],
+    "temp_hi_alarm_threshold": [70, 100],
+    "temp_hi_warning_threshold": [50, 70],
+
+    "voa": [
+        {
+            "id": 1,
+            "attenuation": [0, 25]
+        },
+        {
+            "id": 2,
+            "attenuation": [0, 25]
+        },
+        {
+            "id": 3,
+            "attenuation": [0, 20]
+        }
+    ],
+
+    "edfa": [
+        {
+            "id": 1,
+            "input_los_threshold": [-50, -30],
+            "input_low_threshold": [-30, 10],
+            "output_low_threshold": [-50, -30],
+            "gain_low_threshold": [1, 10],
+            "gain_low_hysteresis": [1, 5],
+            "los_ase_delay": [0, 100]
+        },
+        {
+            "id": 2,
+            "input_los_threshold": [-50, -30],
+            "input_low_threshold": [-30, 10],
+            "output_low_threshold": [-50, -30],
+            "gain_low_threshold": [1, 10],
+            "gain_low_hysteresis": [1, 5],
+            "los_ase_delay": [0, 100]
+        }
+    ],
+    "osc": [
+        {
+            "id": 1,
+            "input_high_threshold": [-30, 20]
+        }
+    ],
+    "olp": [
+        {
+            "id": 1,
+            "switch_hysteresis": [1, 5],
+            "wait_to_restore_time": [300000, 7200000],
+            "hold_off_time": [0, 50],
+            "relative_diff_threshold_offset": [-10, 10],
+            "relative_diff_threshold": [3, 10],
+            "alarm_hysteresis": [1, 5],
+            
+            "primary_switch_threshold": [-50, 30],
+            "primary_in_alarm_threshold": [-50, 30],
+            "primary_out_alarm_threshold": [-50, 30],
+
+            "secondary_switch_threshold": [-50, 30],
+            "secondary_in_alarm_threshold": [-50, 30],
+            "secondary_out_alarm_threshold": [-50, 30],
+
+            "common_in_alarm_threshold": [-50, 30],
+            "common_out_alarm_threshold": [-50, 30]
+        }
+    ],
+
+    "port_id_list": ["MD58", "MD53", "MD48", "MD43", "MD38", "MD33", "EXT", "L1", "L2"],
+    "client_port_id_list": ["MD58", "MD53", "MD48", "MD43", "MD38", "MD33", "EXT"]
+}

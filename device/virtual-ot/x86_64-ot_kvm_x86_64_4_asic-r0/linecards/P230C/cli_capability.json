@@ -1,0 +1,27 @@
+{
+    "temp_low_alarm_threshold": [0, 10],
+    "temp_low_warning_threshold": [10, 30],
+    "temp_hi_alarm_threshold": [70, 100],
+    "temp_hi_warning_threshold": [50, 70],
+
+    "board_mode_list": ["L1_400G_CA_100GE"],
+    "line": [
+        {
+            "id": 1
+        }
+    ],
+    "client": [
+        {
+            "id": 1
+        },
+        {
+            "id": 2
+        },
+        {
+            "id": 3
+        },
+        {
+            "id": 4
+        }
+    ]
+}
