@@ -116,50 +116,234 @@ admin@sonic:~$
 ```
 
 # Test provision a linecard
-We provide a test script to provision virtual linecards in the sonic-otn VM systems.
+We provide CLI commands to provision virtual linecards in the sonic-otn VM systems.
 
-1. copy the test script [config_sonic_otn_linecard.sh](./config_sonic_otn_linecard.sh) to the sonic-otn system
+1. provision slot 1 with linecard type P230C, which is a transponder with four 100G Ethernet client port and one 400G line port.
 
 ```
-scp -P 10022 config_sonic_otn_linecard.sh admin@localhost:/home/admin
-```
-
-2. provision slot 1 with e110c, which is a line system with VOA, OSC, EDFA, MUX/DEMUX and OLP.
-```
-admin@sonic:~$ ./config_sonic_otn_linecard.sh 1 e110c
-1 e110c E110C 0
-linecard type is e110c
-plugin the linecard 1 ...
-5
-0
+sudo config slot 1 type P230C
 ```
 
-3. provision slot 2 with p230c, which is a transponder with four 100G Ethernet client port and one 400G line port.
+2. now you can check the slot configuration, state and alarm with these CLI commands.
 ```
-admin@sonic:~$ ./config_sonic_otn_linecard.sh 2 p230c
-2 p230c P230C 1
-linecard type is p230c
-plugin the linecard 2 ...
-5
-0
+admin@sonic:~$show slot 1 config
+Card Type                                    : P230C
+Board mode                                   : NA
+Admin                                        : NA
+Baudrate                                     : NA
+Hostname                                     : NA
+Temp Hi-Alarm(C)                             : NA
+Temp Hi-Warning(C)                           : NA
+Temp Low-Alarm(C)                            : NA
+Temp Low-Warning(C)                          : NA
+
+admin@sonic:~$ show slot 1 info
+Card Type                                    : P230C
+Board mode                                   : L1_400G_CA_100GE
+Admin                                        : ENABLED
+Oper Status                                  : ACTIVE
+Part no                                      : NA
+Serial no                                    : NA
+Hardware ver                                 : NA
+Software ver                                 : 1.0
+Mfg name                                     : Alibaba
+Mfg date                                     : NA
+Alarm Led State                              : RED
+
+Temperature(C)                               : 35.0
+CPU utilized(%)                              : 742274744
+Memory available(B)                          : 691489792
+Memory utilized(B)                           : 382252064
+
+admin@sonic:~$
+admin@sonic:~$ show slot 1 alarm current
+Slot 1 Current Alarm Total num: 1
+  id  time-created             resource      severity    type-id                 text              sa    type
+----  -----------------------  ------------  ----------  ----------------------  ----------------  ----  --------
+   1  2025-03-10 12:16:25.174  LINECARD-1-1  MAJOR       HIGH_TEMPERATURE_ALARM  high temperature  sa    standing
+
+admin@sonic:~$
 ```
 
-4. check the data in the database0 and database1
+3. You can show the configuration, state, PMs for each component on the linecard
 ```
-admin@sonic:~$ docker exec -ti database0 bash
-root@sonic:/# redis-cli -n 6
-root@sonic:/# redis-cli -n 2
+admin@sonic:~$ show slot 1 line 1 state
+Name                                         : TRANSCEIVER-1-1-L1
+PortOperState                                : ACTIVE
+PortAdministate                              : MAINT
+DcoVendorPreconf                             : Alibaba
+tx-laser                                     : true
+LineLoop                                     : FACILITY
+LinePrbsTx                                   : PRBS_PATTERN_TYPE_2E7
+LinePrbsRx                                   : PRBS_PATTERN_TYPE_2E7
+LineForceInsert                              : AIS
+tti-msg-auto-mode                            : false
+Tti_transmit                                 : SONIC-OTN:/1/1/L1
+Tti_rx_expected                              : SONIC-OTN:/1/1/L1
+TxPower(dBm)                                 : 0.5
+Frequency(MHz)                               : 195875000
+OperationlMode                               : test
+Tti_rx                                       : SONiC-OTN:/1/2/L1
+LineState                                    : true
+LineExist                                    : PRESENT
+LineFrequency(MHz)                           : 195875000
+LinePrbsStateTx                              : PRBS_PATTERN_TYPE_2E7
+LinePrbsStateRx                              : PRBS_PATTERN_TYPE_2E7
+LedState                                     : RED
 
-admin@sonic:~$ docker exec -ti database1 bash
-root@sonic:/# redis-cli -n 6
-root@sonic:/# redis-cli -n 2
+InputPower(dBm)                              : 20.0
+OutputPower(dBm)                             : 20.0
+LaserBias(mA)                                : 20.0
+PowerConsumption(W)                          : 20.0
+CaseTemp(C)                                  : 20.0
+LaserTemp(C)                                 : 20.0
+TX MOD BIAS X/I                              : 20.0
+TX MOD BIAS X/Q                              : 20.0
+TX MOD BIAS Y/I                              : 20.0
+TX MOD BIAS Y/Q                              : 20.0
+TX MOD BIAS X/PH                             : 20.0
+TX MOD BIAS Y/PH                             : 20.0
+Q-Factor                                     : 10.1
+ESNR                                         : 0.0
+PRE-FEC-BER                                  : 0.0000001
+POST-FEC-BER                                 : 0.0000001
+OSNR(dB)                                     : 0.01
+CD(ps/nm)                                    : 10.1
+PDL(dB)                                      : 0.01
+FOFF(MHz)                                    : 742389350
+DGD(ps)                                      : 10.1
+SoPMD(ps^2)                                  : 10.1
+SOP CHANGE RATE(rad/s)                       : 742389350
+LASER BIAS(mA)                               : 10.1
+EDFA BIAS(mA)                                : 10.1
+Signal Input Power(dBm)                      : 10.1
+
+admin@sonic:~$
 ```
+
+4. provision slot 2 with e110c, which is a line system with VOA, OSC, EDFA, MUX/DEMUX and OLP.
+```
+admin@sonic:~$ sudo config slot 2 type E110C
+Setting card 2 type E110C now, Wait for a minute..
+plugin the virtual linecard 2 and power enabled...
+3
+virtual linecard otai library communication link status is up...
+Successed
+admin@sonic:~$
+```
+
+4. check the configuration, status and PMs for each optical components.
+```
+admin@sonic:~$ show slot 2 voa all info
+Module Name                                  : ATTENUATOR-1-2-1
+VOA Attenuation(dB)                          : 15.0
+VOA fix Attenuation(dB)                      : 1.0
+
+Module Name                                  : ATTENUATOR-1-2-2
+VOA Attenuation(dB)                          : 15.0
+VOA fix Attenuation(dB)                      : 1.0
+
+Module Name                                  : ATTENUATOR-1-2-3
+VOA Attenuation(dB)                          : 15.0
+VOA fix Attenuation(dB)                      : 1.0
+
+admin@sonic:~$
+admin@sonic:~$ show slot 2 edfa all info
+Module Name                                  : AMPLIFIER-1-2-1
+Module PN                                    : 123
+Module SN                                    : 123
+Firmware version                             : 1.0
+Work mode                                    : CONSTANT_GAIN
+EDFA Switch Actual                           : true
+Gain Range(dB)                               : LOW_GAIN_RANGE
+Set gain(dB)                                 : 15.0
+Set Gain tilt                                : 0.0
+Work State                                   : LOS_A
+Los Ase Delay(ms)                            : 10
+Input LOS Th(dBm)                            : 10.0
+Input LOS Hy(dB)                             : 1.0
+Output LOP Th(dBm)                           : 10.0
+Output LOP Hy(dB)                            : 1.0
+Gain Low Alm Th(dBm)                         : 10.0
+Gain Low Alm Hy(dB)                          : 1.0
+Pin Low AlmTh(dBm)                           : 10.0
+Pout Low AlmTh(dBm)                          : 10.0
+
+Module temperature(C)                        : 10.0
+Actual gain(dB)                              : 10.0
+Actual Gain tilt                             : 1.0
+Pump Iop(mA)                                 : 10.0
+Pump temperature(C)                          : 10.0
+Pump Itec(mA)                                : 10.0
+Input power(Original)(dBm)                   : 10.0
+Output power(Original)(dBm)                  : 10.0
+
+Module Name                                  : AMPLIFIER-1-2-2
+Module PN                                    : 123
+Module SN                                    : 123
+Firmware version                             : 1.0
+Work mode                                    : CONSTANT_GAIN
+EDFA Switch Actual                           : true
+Gain Range(dB)                               : LOW_GAIN_RANGE
+Set gain(dB)                                 : 15.0
+Set Gain tilt                                : 0.0
+Work State                                   : LOS_A
+Los Ase Delay(ms)                            : 10
+Input LOS Th(dBm)                            : 10.0
+Input LOS Hy(dB)                             : 1.0
+Output LOP Th(dBm)                           : 10.0
+Output LOP Hy(dB)                            : 1.0
+Gain Low Alm Th(dBm)                         : 10.0
+Gain Low Alm Hy(dB)                          : 1.0
+Pin Low AlmTh(dBm)                           : 10.0
+Pout Low AlmTh(dBm)                          : 10.0
+
+Module temperature(C)                        : 10.0
+Actual gain(dB)                              : 10.0
+Actual Gain tilt                             : 1.0
+Pump Iop(mA)                                 : 10.0
+Pump temperature(C)                          : 10.0
+Pump Itec(mA)                                : 10.0
+Input power(Original)(dBm)                   : 10.0
+Output power(Original)(dBm)                  : 10.0
+
+admin@sonic:~$
+admin@sonic:~$ show slot 2 osc all info
+Module Name                                  : OSC-1-2-1
+Module PN                                    : 123
+Module SN                                    : 123
+Vendor                                       : alibaba
+Frequency(MHz)                               : 1913000
+Tx Laser State                               : true
+link-status                                  : ACTIVE
+Rx Low AlmTh(dBm)                            : 20.0
+Rx High AlmTh(dBm)                           : 20.0
+Tx Low AlmTh(dBm)                            : 20.0
+
+temperatue(C)                                : 20.0
+Tx Bias Current(ma)                          : 20.0
+Tx Power(dBm)                                : 20.0
+Rx Power(dBm)                                : 20.0
+
+in-pkts                                      : 0
+in-errors                                    : 0
+out-pkts                                     : 0
+
+admin@sonic:~$
+```
+
 
 5. deprovision the linecard with test script  
 It will plug out the virtual linecard and flush all data in the database
 ```
-./config_sonic_otn_linecard.sh 1 none
-./config_sonic_otn_linecard.sh 2 none
+admin@sonic:~$ sudo config slot 1 type NONE
+Setting slot 1 type NONE now, Wait for a minute..
+Successed
+admin@sonic:~$
+admin@sonic:~$ sudo config slot 2 type NONE
+Setting slot 2 type NONE now, Wait for a minute..
+Successed
+admin@sonic:~$
 
 ```
 
