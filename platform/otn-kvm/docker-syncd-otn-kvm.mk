@@ -7,7 +7,8 @@ $(DOCKER_SYNCD_BASE)_DEPENDS += $(SYNCD) \
                                 $(OTN_KVM_THRIFT_LIB_DEB) \
                                 $(OTN_KVM_THRIFT_LIB_DEV_DEB) \
                                 $(OTN_KVM_LIBSAI_DEB) \
-                                $(OTN_KVM_HALSERVER_DEB)
+                                $(OTN_KVM_HALSERVER_DEB) \
+                                $(SONIC_EVENTD)
 
 $(DOCKER_SYNCD_BASE)_DBG_DEPENDS += $(SYNCD_DBG) \
                                     $(LIBSWSSCOMMON_DBG) \

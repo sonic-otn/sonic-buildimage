@@ -1,0 +1,12 @@
+[                                                                                                                          
+    {
+        "tag": "Fan",
+        "regex": ".*(Fan) failure .*(RAISE|CLEAR) (.*)",
+        "params": [ "type-id","action","text" ]
+    },
+    {
+        "tag": "Fan",
+        "regex": ".*(Fan) failure monitor (started|stopped)",
+        "params": [ "type-id","text" ]
+    }
+]

@@ -363,6 +363,10 @@ function postStartAction()
         systemctl reset-failed rsyslog
         systemctl restart rsyslog
     fi
+{%- elif docker_container_name == "syncd" %}
+    for f in $(docker exec -i syncd ls /etc/rsyslog.d/rsyslog_plugin_conf); do docker cp syncd:/etc/rsyslog.d/rsyslog_plugin_conf/$f /etc/rsyslog.d/; done
+    systemctl reset-failed rsyslog
+    systemctl restart rsyslog
 {%- else %}
     : # nothing
 {%- endif %}
