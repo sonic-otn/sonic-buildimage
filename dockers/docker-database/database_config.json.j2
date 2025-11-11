@@ -143,6 +143,12 @@
         {# No BMP_STATE_DB for BMC devices #}
 {% else %}
         ,
+        "EVENT_DB" : {
+            "id" : 19,
+            "separator": "|",
+            "instance" : "redis"
+        }
+        ,
         "BMP_STATE_DB" : {
             "id" : 20,
             "separator": "|",
