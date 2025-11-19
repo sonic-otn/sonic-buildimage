@@ -1,7 +1,11 @@
 {% set is_fabric_asic = 0 %}
+{% set is_otn_asic = 0 %}
 {% if DEVICE_METADATA.localhost.switch_type %}
 {% if DEVICE_METADATA.localhost.switch_type == "fabric" %}
 {% set is_fabric_asic = 1 %}
+{% endif %}
+{% if DEVICE_METADATA.localhost.switch_type == "otn" %}
+{% set is_otn_asic = 1 %}
 {% endif %}
 {% endif %}
 program:orchagent
@@ -19,4 +23,7 @@ program:nbrmgrd
 program:vxlanmgrd
 program:coppmgrd
 program:tunnelmgrd
+{%- endif %}
+{% if is_otn_asic == 1 %}
+program:otnmgrd
 {%- endif %}

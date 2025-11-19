@@ -29,11 +29,15 @@ stderr_logfile=syslog
 dependent_startup=true
 
 {% set is_fabric_asic = 0 %}
+{% set is_otn_asic = 0 %}
 {% set orchagent_dependent_startup_wait_for = "portsyncd:running" %}
 {% if DEVICE_METADATA.localhost.switch_type %}
 {% if DEVICE_METADATA.localhost.switch_type == "fabric" %}
 {% set is_fabric_asic = 1 %}
 {% set orchagent_dependent_startup_wait_for = "rsyslogd:running" %}
+{%- endif %}
+{% if DEVICE_METADATA.localhost.switch_type == "otn" %}
+{% set is_otn_asic = 1 %}
 {%- endif %}
 {%- endif %}
 {% set asan_extra_options = ':print_suppressions=0' %}
@@ -300,5 +304,20 @@ dependent_startup=true
 dependent_startup_wait_for=swssconfig:exited
 {% if ENABLE_ASAN == "y" %}
 environment=ASAN_OPTIONS="log_path=/var/log/asan/fdbsyncd-asan.log{{ asan_extra_options }}"
+{% endif %}
+{%- endif %}
+
+{% if is_otn_asic == 1 %}
+[program:otnmgrd]
+command=/usr/bin/otnmgrd
+priority=18
+autostart=false
+autorestart=false
+stdout_logfile=syslog
+stderr_logfile=syslog
+dependent_startup=true
+dependent_startup_wait_for=swssconfig:exited
+{% if ENABLE_ASAN == "y" %}
+environment=ASAN_OPTIONS="log_path=/var/log/asan/otnmgrd-asan.log{{ asan_extra_options }}"
 {% endif %}
 {%- endif %}

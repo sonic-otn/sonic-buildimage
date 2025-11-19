@@ -4,7 +4,6 @@
 [submodule "sonic-linux-kernel"]
 	path = src/sonic-linux-kernel
 	url = https://github.com/sonic-net/sonic-linux-kernel
-  branch = 202411
 [submodule "sonic-sairedis"]
 	path = src/sonic-sairedis
 	url = https://github.com/sonic-molex/sonic-sairedis
@@ -20,15 +19,12 @@
 [submodule "sonic-dbsyncd"]
 	path = src/sonic-dbsyncd
 	url = https://github.com/sonic-net/sonic-dbsyncd
-  branch = 202411
 [submodule "src/sonic-py-swsssdk"]
 	path = src/sonic-py-swsssdk
 	url = https://github.com/sonic-net/sonic-py-swsssdk.git
-  branch = 202411
 [submodule "src/sonic-snmpagent"]
 	path = src/sonic-snmpagent
 	url = https://github.com/sonic-net/sonic-snmpagent
-  branch = 202411
 [submodule "src/ptf"]
 	path = src/ptf
 	url = https://github.com/p4lang/ptf.git
@@ -75,11 +71,9 @@
 [submodule "src/sonic-ztp"]
 	path = src/sonic-ztp
 	url = https://github.com/sonic-net/sonic-ztp
-  branch = 202411
 [submodule "src/sonic-restapi"]
 	path = src/sonic-restapi
 	url = https://github.com/sonic-net/sonic-restapi.git
-  branch = 202411
 [submodule "src/sonic-mgmt-common"]
 	path = src/sonic-mgmt-common
 	url = https://github.com/sonic-molex/sonic-mgmt-common.git
@@ -96,7 +90,6 @@
 [submodule "src/linkmgrd"]
 	path = src/linkmgrd
 	url = https://github.com/sonic-net/sonic-linkmgrd.git
-  branch = 202411
 [submodule "src/sonic-p4rt/sonic-pins"]
 	path = src/sonic-p4rt/sonic-pins
 	url = https://github.com/sonic-net/sonic-pins.git
@@ -106,11 +99,9 @@
 [submodule "src/dhcprelay"]
 	path = src/dhcprelay
 	url = https://github.com/sonic-net/sonic-dhcp-relay.git
-  branch = 202411
 [submodule "src/sonic-host-services"]
 	path = src/sonic-host-services
 	url = https://github.com/sonic-net/sonic-host-services
-  branch = 202411
 [submodule "src/sonic-gnmi"]
 	path = src/sonic-gnmi
 	url = https://github.com/sonic-molex/sonic-gnmi.git
@@ -123,11 +114,9 @@
 [submodule "src/dhcpmon"]
 	path = src/dhcpmon
 	url = https://github.com/sonic-net/sonic-dhcpmon.git
-  branch = 202411
 [submodule "src/sonic-dash-api"]
 	path = src/sonic-dash-api
 	url = https://github.com/sonic-net/sonic-dash-api.git
-  branch = 202411
 [submodule "platform/marvell/mrvl-prestera"]
 	path = platform/marvell/mrvl-prestera
 	url = https://github.com/Marvell-switching/mrvl-prestera.git
