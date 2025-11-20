@@ -1,0 +1,12 @@
+[                                                                                                                          
+    {
+        "tag": "Cpu",
+        "regex": ".*(Cpu) high .*(RAISE|CLEAR) (.*)",
+        "params": [ "type-id","action","text" ]
+    },
+    {
+        "tag": "Cpu",
+        "regex": ".*(Cpu) supervisor (started|stopped)",
+        "params": [ "type-id","text" ]
+    }
+]

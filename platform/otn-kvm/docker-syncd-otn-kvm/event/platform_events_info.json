@@ -1,0 +1,13 @@
+{
+    "yang_module": "sonic-events-platform",
+    "proclist": [
+        {
+            "name": "fan",
+            "parse_json": "fan_regex.json"
+        },
+        {
+            "name": "cpu",
+            "parse_json": "cpu_regex.json"
+        }
+    ]
+}

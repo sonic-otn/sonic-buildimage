@@ -229,3 +229,20 @@ startsecs=10
 dependent_startup=true
 dependent_startup_wait_for=rsyslogd:running
 {% endif %}
+
+{% set is_otn_asic = 0 %}
+{% if DEVICE_METADATA.localhost.switch_type == "otn" %}
+{% set is_otn_asic = 1 %}
+{%- endif %}
+{% if is_otn_asic == 1 and not skip_linecardsyncd %}
+[program:linecardsyncd]
+command={% if API_VERSION == 3 and 'linecardsyncd' not in python2_daemons %}python3 {% else %} python2 {% endif %}/usr/local/bin/linecardsyncd
+priority=8
+autostart=false
+autorestart=unexpected
+stdout_logfile=syslog
+stderr_logfile=syslog
+startsecs=10
+dependent_startup=true
+dependent_startup_wait_for=rsyslogd:running {% if delay_non_critical_daemon %}delay:exited{% endif %}
+{% endif %}
