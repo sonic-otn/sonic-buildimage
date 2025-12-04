@@ -30,8 +30,27 @@ stderr_logfile=NONE
 stderr_syslog=true
 dependent_startup=true
 
-
 {% set include_swssconfig = true %}
 {% set swss_priority_base = 0 %}
 
 {% include "supervisord.conf.common.j2" %}
+
+{% set asan_extra_options = ':print_suppressions=0' %}
+{% set is_otn_asic = 0 %}
+{% if DEVICE_METADATA.localhost.switch_type is defined and DEVICE_METADATA.localhost.switch_type == "otn" %}
+{% set is_otn_asic = 1 %}
+{% endif %}
+{% if is_otn_asic == 1 %}
+[program:otnmgrd]
+command=/usr/bin/otnmgrd
+priority=18
+autostart=false
+autorestart=false
+stdout_logfile=syslog
+stderr_logfile=syslog
+dependent_startup=true
+dependent_startup_wait_for=swssconfig:exited
+{% if ENABLE_ASAN == "y" %}
+environment=ASAN_OPTIONS="log_path=/var/log/asan/otnmgrd-asan.log{{ asan_extra_options }}"
+{% endif %}
+{%- endif %}
