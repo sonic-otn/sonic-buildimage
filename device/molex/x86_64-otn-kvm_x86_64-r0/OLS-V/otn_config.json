@@ -1,0 +1,317 @@
+{
+  "OTN_ATTENUATOR": {
+    "VOA0-0": {
+      "attenuation": "4.2",
+      "attenuation-mode": "CONSTANT_ATTENUATION",
+      "enabled": "true"
+    },
+    "VOA0-1": {
+      "attenuation": "3.2",
+      "attenuation-mode": "CONSTANT_ATTENUATION",
+      "enabled": "true"
+    }
+  },
+  "OTN_OA": {
+    "OA0-0": {
+      "target-gain": "4.2",
+      "target-gain-tilt": "0.4",
+      "gain-range": "FIXED_GAIN_RANGE",
+      "amp-mode": "CONSTANT_GAIN",
+      "enabled": "true",
+      "type": "EDFA"
+    },
+    "OA0-1": {
+      "target-gain": "5.2",
+      "target-gain-tilt": "0.5",
+      "gain-range": "FIXED_GAIN_RANGE",
+      "amp-mode": "CONSTANT_GAIN",
+      "enabled": "true",
+      "type": "EDFA"
+    }
+  },
+  "OTN_OSC": {
+    "OSC0-0": {
+    },
+    "OSC0-1": {
+    }
+  },
+  "OTN_OCM": {
+    "OCM0-0": {
+      "monitor-port": "LineIn"
+    },
+    "OCM0-1": {
+      "monitor-port": "LineOut"
+    },
+    "OCM0-2": {
+      "monitor-port": "ClientIn"
+    },
+    "OCM0-3": {
+      "monitor-port": "ClientOut"
+    },
+    "OCM0-4": {
+      "monitor-port": "OcmIn"
+    }
+  },
+  "OTN_OCM_CHANNEL": {
+    "OCM0-0|191262500": {
+      "lower-frequency": 191262500,
+      "upper-frequency": 191337500
+    },
+    "OCM0-0|191337500": {
+      "lower-frequency": 191337500,
+      "upper-frequency": 191412500
+    },
+    "OCM0-0|191412500": {
+      "lower-frequency": 191412500,
+      "upper-frequency": 191487500
+    },
+    "OCM0-0|191487500": {
+      "lower-frequency": 191487500,
+      "upper-frequency": 191562500
+    },
+    "OCM0-0|191562500": {
+      "lower-frequency": 191562500,
+      "upper-frequency": 191637500
+    },
+    "OCM0-0|191637500": {
+      "lower-frequency": 191637500,
+      "upper-frequency": 191712500
+    },
+    "OCM0-0|191712500": {
+      "lower-frequency": 191712500,
+      "upper-frequency": 191787500
+    },
+    "OCM0-0|191787500": {
+      "lower-frequency": 191787500,
+      "upper-frequency": 191862500
+    },
+    "OCM0-0|191862500": {
+      "lower-frequency": 191862500,
+      "upper-frequency": 191937500
+    },
+    "OCM0-0|191937500": {
+      "lower-frequency": 191937500,
+      "upper-frequency": 192012500
+    },
+    "OCM0-0|192012500": {
+      "lower-frequency": 192012500,
+      "upper-frequency": 192087500
+    },
+    "OCM0-0|192087500": {
+      "lower-frequency": 192087500,
+      "upper-frequency": 192162500
+    },
+    "OCM0-0|192162500": {
+      "lower-frequency": 192162500,
+      "upper-frequency": 192237500
+    },
+    "OCM0-0|192237500": {
+      "lower-frequency": 192237500,
+      "upper-frequency": 192312500
+    },
+    "OCM0-0|192312500": {
+      "lower-frequency": 192312500,
+      "upper-frequency": 192387500
+    },
+    "OCM0-0|192387500": {
+      "lower-frequency": 192387500,
+      "upper-frequency": 192462500
+    },
+    "OCM0-0|192462500": {
+      "lower-frequency": 192462500,
+      "upper-frequency": 192537500
+    },
+    "OCM0-0|192537500": {
+      "lower-frequency": 192537500,
+      "upper-frequency": 192612500
+    },
+    "OCM0-0|192612500": {
+      "lower-frequency": 192612500,
+      "upper-frequency": 192687500
+    },
+    "OCM0-0|192687500": {
+      "lower-frequency": 192687500,
+      "upper-frequency": 192762500
+    },
+    "OCM0-0|192762500": {
+      "lower-frequency": 192762500,
+      "upper-frequency": 192837500
+    },
+    "OCM0-0|192837500": {
+      "lower-frequency": 192837500,
+      "upper-frequency": 192912500
+    },
+    "OCM0-0|192912500": {
+      "lower-frequency": 192912500,
+      "upper-frequency": 192987500
+    },
+    "OCM0-0|192987500": {
+      "lower-frequency": 192987500,
+      "upper-frequency": 193062500
+    },
+    "OCM0-0|193062500": {
+      "lower-frequency": 193062500,
+      "upper-frequency": 193137500
+    },
+    "OCM0-0|193137500": {
+      "lower-frequency": 193137500,
+      "upper-frequency": 193212500
+    },
+    "OCM0-0|193212500": {
+      "lower-frequency": 193212500,
+      "upper-frequency": 193287500
+    },
+    "OCM0-0|193287500": {
+      "lower-frequency": 193287500,
+      "upper-frequency": 193362500
+    },
+    "OCM0-0|193362500": {
+      "lower-frequency": 193362500,
+      "upper-frequency": 193437500
+    },
+    "OCM0-0|193437500": {
+      "lower-frequency": 193437500,
+      "upper-frequency": 193512500
+    },
+    "OCM0-0|193512500": {
+      "lower-frequency": 193512500,
+      "upper-frequency": 193587500
+    },
+    "OCM0-0|193587500": {
+      "lower-frequency": 193587500,
+      "upper-frequency": 193662500
+    },
+    "OCM0-0|193662500": {
+      "lower-frequency": 193662500,
+      "upper-frequency": 193737500
+    },
+    "OCM0-0|193737500": {
+      "lower-frequency": 193737500,
+      "upper-frequency": 193812500
+    },
+    "OCM0-0|193812500": {
+      "lower-frequency": 193812500,
+      "upper-frequency": 193887500
+    },
+    "OCM0-0|193887500": {
+      "lower-frequency": 193887500,
+      "upper-frequency": 193962500
+    },
+    "OCM0-0|193962500": {
+      "lower-frequency": 193962500,
+      "upper-frequency": 194037500
+    },
+    "OCM0-0|194037500": {
+      "lower-frequency": 194037500,
+      "upper-frequency": 194112500
+    },
+    "OCM0-0|194112500": {
+      "lower-frequency": 194112500,
+      "upper-frequency": 194187500
+    },
+    "OCM0-0|194187500": {
+      "lower-frequency": 194187500,
+      "upper-frequency": 194262500
+    },
+    "OCM0-0|194262500": {
+      "lower-frequency": 194262500,
+      "upper-frequency": 194337500
+    },
+    "OCM0-0|194337500": {
+      "lower-frequency": 194337500,
+      "upper-frequency": 194412500
+    },
+    "OCM0-0|194412500": {
+      "lower-frequency": 194412500,
+      "upper-frequency": 194487500
+    },
+    "OCM0-0|194487500": {
+      "lower-frequency": 194487500,
+      "upper-frequency": 194562500
+    },
+    "OCM0-0|194562500": {
+      "lower-frequency": 194562500,
+      "upper-frequency": 194637500
+    },
+    "OCM0-0|194637500": {
+      "lower-frequency": 194637500,
+      "upper-frequency": 194712500
+    },
+    "OCM0-0|194712500": {
+      "lower-frequency": 194712500,
+      "upper-frequency": 194787500
+    },
+    "OCM0-0|194787500": {
+      "lower-frequency": 194787500,
+      "upper-frequency": 194862500
+    },
+    "OCM0-0|194862500": {
+      "lower-frequency": 194862500,
+      "upper-frequency": 194937500
+    },
+    "OCM0-0|194937500": {
+      "lower-frequency": 194937500,
+      "upper-frequency": 195012500
+    },
+    "OCM0-0|195012500": {
+      "lower-frequency": 195012500,
+      "upper-frequency": 195087500
+    },
+    "OCM0-0|195087500": {
+      "lower-frequency": 195087500,
+      "upper-frequency": 195162500
+    },
+    "OCM0-0|195162500": {
+      "lower-frequency": 195162500,
+      "upper-frequency": 195237500
+    },
+    "OCM0-0|195237500": {
+      "lower-frequency": 195237500,
+      "upper-frequency": 195312500
+    },
+    "OCM0-0|195312500": {
+      "lower-frequency": 195312500,
+      "upper-frequency": 195387500
+    },
+    "OCM0-0|195387500": {
+      "lower-frequency": 195387500,
+      "upper-frequency": 195462500
+    },
+    "OCM0-0|195462500": {
+      "lower-frequency": 195462500,
+      "upper-frequency": 195537500
+    },
+    "OCM0-0|195537500": {
+      "lower-frequency": 195537500,
+      "upper-frequency": 195612500
+    },
+    "OCM0-0|195612500": {
+      "lower-frequency": 195612500,
+      "upper-frequency": 195687500
+    },
+    "OCM0-0|195687500": {
+      "lower-frequency": 195687500,
+      "upper-frequency": 195762500
+    },
+    "OCM0-0|195762500": {
+      "lower-frequency": 195762500,
+      "upper-frequency": 195837500
+    },
+    "OCM0-0|195837500": {
+      "lower-frequency": 195837500,
+      "upper-frequency": 195912500
+    },
+    "OCM0-0|195912500": {
+      "lower-frequency": 195912500,
+      "upper-frequency": 195987500
+    },
+    "OCM0-0|195987500": {
+      "lower-frequency": 195987500,
+      "upper-frequency": 196062500
+    },
+    "OCM0-0|196062500": {
+      "lower-frequency": 196062500,
+      "upper-frequency": 196137500
+    }
+  }
+}
