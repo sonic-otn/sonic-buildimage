@@ -1,0 +1,166 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+export INSTALL_MOD_DIR:=extra
+
+PACKAGE_NAME := sonic-yanggen
+SCRIPT_SRC := $(CURDIR)
+# Build-time only script (not packaged)
+YANGGEN_SCRIPT := sonic_yanggen.py
+# Runtime scripts (packaged)
+AUTO_CLI_SCRIPT := yang_auto_cli.sh
+
+# Installation directories
+YANG_TEMP_DIR := $(CURDIR)/yang-generated
+YANG_INSTALL_DIR := debian/$(PACKAGE_NAME)/usr/share/sonic/device-yang
+SCRIPT_INSTALL_DIR := debian/$(PACKAGE_NAME)/usr/bin
+SYSTEMD_INSTALL_DIR := debian/$(PACKAGE_NAME)/lib/systemd/system
+
+# Source directories
+YANG_MODELS_SRC := /sonic/src/sonic-mgmt-common/models/yang
+DEVICE_BASE := /sonic/device
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	@echo "========================================"
+	@echo "Building libyang from source"
+	@echo "========================================"
+	# Clone and build libyang from source
+	@if [ ! -d "$(CURDIR)/libyang" ]; then \
+		git clone https://github.com/CESNET/libyang.git $(CURDIR)/libyang && \
+		cd $(CURDIR)/libyang && \
+		mkdir -p build && cd build && \
+		cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/libyang-install -DCMAKE_INSTALL_INCLUDEDIR=include ..&& \
+		make -j$$(nproc) && \
+		make install && \
+		ls -la $(CURDIR)/libyang-install/include/ && \
+		echo "✓ libyang compiled and installed to $(CURDIR)/libyang-install"; \
+	fi
+	
+	@echo "========================================"
+	@echo "Installing libyang Python bindings"
+	@echo "========================================"
+	# Install cffi first, then libyang Python package with proper include/lib path
+	@pip3 install --target=$(CURDIR)/python-deps cffi pyproject-toml
+	@export CFLAGS="-I$(CURDIR)/libyang-install/include" && \
+	export LDFLAGS="-L$(CURDIR)/libyang-install/lib" && \
+	export LD_LIBRARY_PATH=$(CURDIR)/libyang-install/lib:$$LD_LIBRARY_PATH && \
+	pip3 install --target=$(CURDIR)/python-deps libyang
+	
+	@echo "========================================"
+	@echo "Auto-discovering devices with YANG configs..."
+	@echo "========================================"
+	@echo "Current directory: $(CURDIR)"
+	@echo "Device base: $(DEVICE_BASE)"
+	@echo "YANG models: $(YANG_MODELS_SRC)"
+	@echo ""
+	@mkdir -p $(YANG_TEMP_DIR)
+	@TOTAL_DEVICES=0; \
+	PROCESSED_DEVICES=0; \
+	if [ -d "$(DEVICE_BASE)" ]; then \
+		echo "Scanning device base: $(DEVICE_BASE)"; \
+		for vendor_dir in $(DEVICE_BASE)/*/; do \
+			if [ -d "$$vendor_dir" ]; then \
+				VENDOR_NAME=$$(basename "$$vendor_dir"); \
+				echo "  Checking vendor: $$VENDOR_NAME"; \
+				for device_dir in $$vendor_dir*/; do \
+					if [ -d "$$device_dir" ]; then \
+						DEVICE_NAME=$$(basename "$$device_dir"); \
+						DEVICE_CONFIG="$$device_dir/yang_auto_cli"; \
+						if [ -f "$$DEVICE_CONFIG" ]; then \
+							TOTAL_DEVICES=$$((TOTAL_DEVICES + 1)); \
+							echo ""; \
+							echo "========================================"; \
+							echo "Found device: $$DEVICE_NAME (vendor: $$VENDOR_NAME)"; \
+							echo "Config: $$DEVICE_CONFIG"; \
+							echo "========================================"; \
+							DEVICE_YANG_DIR="$(YANG_TEMP_DIR)/$$DEVICE_NAME"; \
+							mkdir -p $$DEVICE_YANG_DIR; \
+							GENERATED_COUNT=0; \
+							grep -v '^#' $$DEVICE_CONFIG | grep -v '^$$' | while read line; do \
+								annot_name=$$(echo $$line | awk '{print $$2}' | sed 's/\.yang$$//'); \
+								if [ -n "$$annot_name" ]; then \
+									echo "  Processing $$annot_name..."; \
+									export LD_LIBRARY_PATH=$(CURDIR)/libyang-install/lib:$$LD_LIBRARY_PATH; \
+									export PYTHONPATH=$(CURDIR)/python-deps:$$PYTHONPATH; \
+									if python3 $(SCRIPT_SRC)/$(YANGGEN_SCRIPT) $(YANG_MODELS_SRC) $$annot_name $$DEVICE_YANG_DIR 2>&1; then \
+										echo "    ✓ Generated"; \
+									else \
+										echo "    ✗ Failed"; \
+									fi; \
+								fi; \
+							done; \
+							PROCESSED_DEVICES=$$((PROCESSED_DEVICES + 1)); \
+						fi; \
+					fi; \
+				done; \
+			fi; \
+		done; \
+	else \
+		echo "WARNING: Device base directory not found"; \
+	fi; \
+	echo ""; \
+	echo "========================================"; \
+	echo "Auto-Discovery Summary"; \
+	echo "========================================"; \
+	echo "Devices discovered: $$TOTAL_DEVICES"; \
+	echo "Devices processed: $$PROCESSED_DEVICES"
+
+override_dh_auto_install:
+	# Install ONLY the generated YANG files (final product)
+	@echo "Installing generated YANG files..."
+	mkdir -p $(YANG_INSTALL_DIR)
+	if [ -d "$(YANG_TEMP_DIR)" ]; then \
+		cp -r $(YANG_TEMP_DIR)/* $(YANG_INSTALL_DIR)/ && \
+		echo "✓ YANG files installed"; \
+		ls -R $(YANG_INSTALL_DIR); \
+	else \
+		echo "⚠ No YANG files generated"; \
+	fi
+	
+	# Install the runtime CLI generation script (needed at runtime)
+	@echo "Installing runtime CLI generation script..."
+	mkdir -p $(SCRIPT_INSTALL_DIR)
+	cp $(SCRIPT_SRC)/$(AUTO_CLI_SCRIPT) $(SCRIPT_INSTALL_DIR)/$(AUTO_CLI_SCRIPT)
+	chmod +x $(SCRIPT_INSTALL_DIR)/$(AUTO_CLI_SCRIPT)
+	
+	# NOTE: sonic_yanggen.py is intentionally NOT installed
+	# It's only used during build to generate YANG files
+	
+	@echo ""
+	@echo "========================================"
+	@echo "✓ Installation complete"
+	@echo "========================================"
+	@echo "Packaged items:"
+	@echo "  - Generated YANG files (final product)"
+	@echo "  - yang_auto_cli.sh (runtime CLI generation)"
+	@echo ""
+	@echo "NOT included (build-time tools only):"
+	@echo "  - libyang C library"
+	@echo "  - libyang Python bindings"
+	@echo "  - sonic_yanggen.py script"
+	@echo "========================================"
+
+override_dh_auto_clean:
+	dh_auto_clean
+	# Clean up build artifacts
+	rm -rf $(YANG_TEMP_DIR)
+	rm -rf libyang-install python-deps libyang
+	rm -f build-stamp
+
+override_dh_installinit:
+	dh_installinit --name=$(PACKAGE_NAME)
+
+override_dh_installsystemd:
+	dh_installsystemd --name=$(PACKAGE_NAME)
+
+override_dh_usrlocal:
+	# Skip dh_usrlocal
+
+override_dh_shlibdeps:
+	# Skip shlibdeps for bundled libraries

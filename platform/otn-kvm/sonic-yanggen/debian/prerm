@@ -1,0 +1,30 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove|purge)
+        # Stop and disable the sonic-yanggen service
+        if [ -d /run/systemd/system ]; then
+            systemctl --system daemon-reload >/dev/null || true
+            if systemctl is-active sonic-yanggen.service >/dev/null 2>&1; then
+                systemctl stop sonic-yanggen.service >/dev/null || true
+            fi
+            if systemctl is-enabled sonic-yanggen.service >/dev/null 2>&1; then
+                systemctl disable sonic-yanggen.service >/dev/null || true
+            fi
+        fi
+        ;;
+    
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+    
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0
+
