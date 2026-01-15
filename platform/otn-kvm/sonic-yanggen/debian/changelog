@@ -1,0 +1,9 @@
+sonic-yanggen (1.0.0) unstable; urgency=low
+
+  * Initial release
+  * Auto-generate SONiC YANG models from OpenConfig annotations
+  * Auto-generate CLI commands from SONiC YANG models
+  * Support for CONFIG_DB and STATE_DB
+
+ -- SONiC Team <sonic-dev@lists.sonic.net>  Wed, 07 Jan 2026 00:00:00 +0000
+
