@@ -1,0 +1,14 @@
+[Unit]
+Description=sonic-yanggen service
+After=config-setup.service swss.service syncd.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/yang_auto_cli.sh
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,2 @@
+#DPKG FRK
+$(SONIC_YANGGEN)_CACHE_MODE  := none

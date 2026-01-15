@@ -4,6 +4,7 @@ include $(PLATFORM_PATH)/sai.mk
 include $(PLATFORM_PATH)/docker-syncd-otn-kvm.mk
 include $(PLATFORM_PATH)/platform-modules-otn-kvm.mk
 include $(PLATFORM_PATH)/sonic-version.mk
+include $(PLATFORM_PATH)/sonic-yanggen.mk
 include $(PLATFORM_PATH)/one-image.mk
 include $(PLATFORM_PATH)/onie.mk
 include $(PLATFORM_PATH)/kvm-image.mk
