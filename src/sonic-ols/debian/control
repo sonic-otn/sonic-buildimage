@@ -1,0 +1,13 @@
+Source: sonic-ols
+Section: devel
+Priority: optional
+Maintainer: Molex Team
+Build-Depends: debhelper (>= 12.0.0), libevent-dev, libhiredis-dev, libswsscommon-dev, libboost-thread-dev, libboost-system-dev, libzmq3-dev, libboost-serialization-dev
+Standards-Version: 3.9.3
+Homepage: https://github.com/sonic-molex/sonic-buildimage
+
+Package: sonic-ols
+Architecture: any
+Built-Using: ${misc:Built-Using}
+Depends: ${shlibs:Depends}
+Description: SONiC Optical Line System (OLS) service
