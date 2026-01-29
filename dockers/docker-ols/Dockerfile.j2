@@ -1,0 +1,40 @@
+{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files %}
+FROM docker-swss-layer-bookworm-{{DOCKER_USERNAME}}:{{DOCKER_USERTAG}}
+
+ARG docker_container_name
+
+# Make apt-get non-interactive
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update apt's cache of available packages
+# Install required packages
+RUN apt-get update   && \
+    apt-get install -y  \
+        logrotate       
+
+{% if docker_ols_debs.strip() -%}
+# Copy locally-built Debian package dependencies
+{{ copy_files("debs/", docker_ols_debs.split(' '), "/debs/") }}
+
+# Install locally-built Debian packages and implicitly install their dependencies
+{{ install_debian_packages(docker_ols_debs.split(' ')) }}
+{%- endif %}
+
+{% if docker_ols_whls.strip() %}
+# Copy locally-built Python wheel dependencies
+{{ copy_files("python-wheels/", docker_ols_whls.split(' '), "/python-wheels/") }}
+
+# Install locally-built Python wheel dependencies
+{{ install_python_wheels(docker_ols_whls.split(' ')) }}
+{% endif %}
+
+# Clean up
+RUN apt-get clean -y      && \
+    apt-get autoclean -y  && \
+    apt-get autoremove -y && \
+    rm -rf /debs ~/.cache /python-wheels
+
+COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
+COPY ["files/supervisor-proc-exit-listener", "/usr/bin"]
+
+ENTRYPOINT ["/usr/local/bin/supervisord"]

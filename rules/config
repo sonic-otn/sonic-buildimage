@@ -403,3 +403,6 @@ BUILD_SKIP_TEST ?= n
 # target/ccache/ and persists across builds.
 # Default: disabled (no impact on clean builds without a warm cache)
 SONIC_CONFIG_USE_CCACHE ?= n
+
+# INCLUDE_OLS - build docker-ols for ols support
+INCLUDE_OLS ?= y
