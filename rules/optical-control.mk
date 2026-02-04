@@ -1,0 +1,18 @@
+# OLS (Optical Line System) package
+
+SONIC_OPTICAL_CONTROL_VERSION = 1.0.0-0
+SONIC_OPTICAL_CONTROL_PKG_NAME = optical-control
+
+SONIC_OPTICAL_CONTROL = sonic-$(SONIC_OPTICAL_CONTROL_PKG_NAME)_$(SONIC_OPTICAL_CONTROL_VERSION)_$(CONFIGURED_ARCH).deb
+$(SONIC_OPTICAL_CONTROL)_SRC_PATH = $(SRC_PATH)/sonic-optical-control
+$(SONIC_OPTICAL_CONTROL)_DEPENDS += $(LIBSWSSCOMMON) $(LIBSWSSCOMMON_DEV)
+
+SONIC_DPKG_DEBS += $(SONIC_OPTICAL_CONTROL)
+
+SONIC_OPTICAL_CONTROL_DBG = sonic-$(SONIC_OPTICAL_CONTROL_PKG_NAME)-dbgsym_$(SONIC_OPTICAL_CONTROL_VERSION)_$(CONFIGURED_ARCH).deb
+$(eval $(call add_derived_package,$(SONIC_OPTICAL_CONTROL),$(SONIC_OPTICAL_CONTROL_DBG)))
+
+# The .c, .cpp, .h & .hpp files under src/{$DBG_SRC_ARCHIVE list}
+# are archived into debug one image to facilitate debugging.
+#
+DBG_SRC_ARCHIVE += sonic-optical-control
