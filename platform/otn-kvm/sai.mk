@@ -1,5 +1,5 @@
 LIBSAI_VERSION = 1.1.0
 OTN_KVM_LIBSAI_DEB = libsai-otn-$(LIBSAI_VERSION)-amd64.deb
-$(OTN_KVM_LIBSAI_DEB)_URL = "https://raw.githubusercontent.com/sonic-otn/sonic-otn-libs/main/debs/$(OTN_KVM_LIBSAI_DEB)"
+$(OTN_KVM_LIBSAI_DEB)_URL = "$(OTN_LIBS_RELEASE_URL)/$(OTN_KVM_LIBSAI_DEB)"
 
 SONIC_ONLINE_DEBS += $(OTN_KVM_LIBSAI_DEB)

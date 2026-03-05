@@ -1,3 +1,4 @@
+include $(PLATFORM_PATH)/otn-libs-release.mk
 include $(PLATFORM_PATH)/hal-server.mk
 include $(PLATFORM_PATH)/hal-client.mk
 include $(PLATFORM_PATH)/sai.mk
