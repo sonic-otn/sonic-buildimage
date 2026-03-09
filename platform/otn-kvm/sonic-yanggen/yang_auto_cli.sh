@@ -11,6 +11,7 @@ set -euo pipefail
 LOG_FILE="/var/log/sonic-yanggen.log"
 YANG_BASE_DIR="/usr/share/sonic/device-yang"
 YANG_DEST_DIR="/usr/local/yang-models"
+DEVICE_BASE_DIR="/usr/share/sonic/device"
 
 ########################################
 # Ensure logging works
@@ -19,6 +20,33 @@ mkdir -p "$(dirname "$LOG_FILE")"
 
 log_message() {
     echo "[$(date '+%F %T')] $1" | tee -a "$LOG_FILE"
+}
+
+get_show_generate_opts() {
+    local yang_basename="$1"
+    local device_config="$2"
+    local source_yang=""
+    local annot_yang=""
+    local layout_flag=""
+    local generated_basename=""
+
+    if [ ! -f "$device_config" ]; then
+        return 0
+    fi
+
+    while read -r source_yang annot_yang layout_flag _; do
+        [ -n "${source_yang:-}" ] || continue
+
+        generated_basename="${source_yang%.yang}"
+        generated_basename="${generated_basename/openconfig/sonic}"
+
+        if [ "$generated_basename" = "$yang_basename" ]; then
+            if [ "${layout_flag:-}" = "vertical" ]; then
+                echo "--vertical"
+            fi
+            return 0
+        fi
+    done < <(grep -v '^#' "$device_config" | grep -v '^$')
 }
 
 ########################################
@@ -47,6 +75,7 @@ fi
 
 mkdir -p "$YANG_DEST_DIR"
 SOURCE_DIR="$YANG_BASE_DIR/$ONIE_PLATFORM"
+DEVICE_CONFIG="$DEVICE_BASE_DIR/$ONIE_PLATFORM/yang_auto_cli"
 
 ########################################
 # Start
@@ -55,6 +84,7 @@ log_message "=================================================="
 log_message "Starting SONiC YANG Auto CLI Generation"
 log_message "Source directory: $SOURCE_DIR"
 log_message "Target directory: $YANG_DEST_DIR"
+log_message "Device config: $DEVICE_CONFIG"
 log_message "=================================================="
 
 ########################################
@@ -63,6 +93,10 @@ log_message "=================================================="
 if [ ! -d "$SOURCE_DIR" ]; then
     log_message "WARNING: Source YANG directory not found: $SOURCE_DIR"
     exit 0
+fi
+
+if [ ! -f "$DEVICE_CONFIG" ]; then
+    log_message "WARNING: Device config not found: $DEVICE_CONFIG"
 fi
 
 ########################################
@@ -83,13 +117,17 @@ shopt -s nullglob
 for src_file in "$SOURCE_DIR"/*.yang; do
     yang_basename="$(basename "$src_file" .yang)"
     dest_file="$YANG_DEST_DIR/$(basename "$src_file")"
+    show_generate_opts="$(get_show_generate_opts "$yang_basename" "$DEVICE_CONFIG")"
 
     # Copy file to destination
     cp "$src_file" "$dest_file"
 
     log_message "Processing YANG: $yang_basename"
+    if [ -n "$show_generate_opts" ]; then
+        log_message "  Show CLI options: $show_generate_opts"
+    fi
 
-    if sonic-cli-gen generate show "$yang_basename" >>"$LOG_FILE" 2>&1 \
+    if sonic-cli-gen generate show "$yang_basename" $show_generate_opts >>"$LOG_FILE" 2>&1 \
        && sonic-cli-gen generate config "$yang_basename" >>"$LOG_FILE" 2>&1; then
         log_message "  ✓ CLI generated successfully for $yang_basename"
         PROCESSED_COUNT=$((PROCESSED_COUNT + 1))

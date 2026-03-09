@@ -33,10 +33,22 @@ graph LR
 
 Create a configuration file at `device/<vendor>/<platform>/yang_auto_cli` to enable generation.
 
-**Format**: `source-yang annotation-yang`
+**Format**: `source-yang annotation-yang [layout]`
 ```text
 # Example: device/molex/x86_64-otn-kvm_x86_64-r0/yang_auto_cli
-openconfig-optical-attenuator.yang openconfig-optical-attenuator-annot.yang
+openconfig-optical-attenuator.yang openconfig-optical-attenuator-annot.yang vertical
+openconfig-optical-amplifier.yang openconfig-optical-amplifier-annot.yang vertical
+openconfig-channel-monitor.yang openconfig-channel-monitor-annot.yang
+```
+
+`layout` is optional. Currently supported value:
+
+- `vertical`: generate the `show` CLI plugin with `--vertical`
+
+Runtime vertical display:
+```bash
+# Change sonic-optical-amplifier in vertical display
+sonic-cli-gen generate show sonic-optical-amplifier --vertical
 ```
 
 ## How It Works
