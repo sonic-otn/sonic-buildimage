@@ -1,0 +1,160 @@
+module sonic-otn-pm {
+  namespace "http://github.com/Azure/sonic-otn-pm";
+  prefix sonic-otn-pm;
+
+  import sonic-extension {
+    prefix sonic-ext;
+  }
+
+  organization
+    "SONiC";
+
+  contact
+    "SONiC";
+
+  description
+    "SONiC performance management (PM) counters.
+     Simplified model inspired by org-openroadm-pm.yang for OTN and
+     optical equipment. Supports current values and historical bins
+     (15-minute and 24-hour granularity) with min, max, and average.";
+
+  revision 2024-03-01 {
+    description
+      "Initial revision. Simplified PM model for SONiC OTN.";
+  }
+
+  typedef pm-validity {
+    type enumeration {
+      enum valid {
+        description "PM data is valid.";
+      }
+      enum invalid {
+        description "PM data is invalid (e.g. resource down, no collection).";
+      }
+      enum questionable {
+        description "PM data may be unreliable.";
+      }
+    }
+    description "Indicates whether the PM measurement is valid, invalid, or questionable.";
+  }
+
+  typedef pm-granularity {
+    type enumeration {
+      enum current {
+        description "Current/latest PM (no bin).";
+      }
+      enum fifteen-min {
+        description "15-minute historical bin.";
+      }
+      enum twenty-four-hour {
+        description "24-hour historical bin.";
+      }
+    }
+    description "PM granularity: current, 15-minute, or 24-hour.";
+  }
+
+  /*
+   * CONFIG_DB table OTN_PM: which PM parameters to collect per resource type.
+   * Key = resource_type (OTN state table name). Attributes = pm-name (any number).
+   */
+  container sonic-otn-pm {
+    container OTN_PM {
+      sonic-ext:db-name "CONFIG_DB";
+      description
+        "Config table OTN_PM: resource_type (OTN state table name) as key;
+         each pm-name is an attribute (any number). Value e.g. 'true' to enable collection.";
+      list OTN_PM_LIST {
+        key "resource-type";
+        leaf resource-type {
+          type string;
+          description
+            "OTN state table name (e.g. OTN_OA_TABLE, OTN_ATTENUATOR_TABLE).";
+        }
+        list pm-parameter {
+          key "pm-name";
+          description
+            "Each entry is one pm-name to collect for this resource type.";
+          leaf pm-name {
+            type string;
+            description
+              "PM parameter name (e.g. input-power-total, actual-gain, temperature).";
+          }
+          leaf value {
+            type string;
+            description
+              "Value for this pm-name (e.g. 'true' to enable collection).";
+          }
+        }
+      }
+    }
+
+    /*
+     * STATE_DB table OTN_PM_TABLE: current and historical (15min, 24hour) PM data.
+     * Key: resource-name, pm-name, granularity, bin-number (0 for current).
+     */
+    container OTN_PM_TABLE {
+      sonic-ext:db-name "STATE_DB";
+      description
+        "PM entries: current values and historical bins (15min, 24hour).
+         For granularity current, bin-number is 0. For 15min use bin 1..96,
+         for 24hour use bin 1..7. For current PM timestamp is start time;
+         for historical PM timestamp is completion time.";
+      list OTN_PM_TABLE_LIST {
+        key "resource-name pm-name granularity bin-number";
+        leaf resource-name {
+          type string;
+          description
+            "Resource instance identifier (e.g. OA0-0, Chassis, Fan-0, VOA0-0).";
+        }
+        leaf pm-name {
+          type string;
+          description
+            "PM parameter name (e.g. input-power-total, temperature, speed,
+             actual-gain, actual-attenuation).";
+        }
+        leaf granularity {
+          type pm-granularity;
+          description
+            "PM granularity: current, 15min, or 24hour.";
+        }
+        leaf bin-number {
+          type uint16;
+          description
+            "Bin index. 0 for current; 1..96 for 15min (1 = most recent);
+             1..7 for 24hour (1 = most recent).";
+        }
+        leaf min {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          description
+            "Minimum value in the period.";
+        }
+        leaf max {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          description
+            "Maximum value in the period.";
+        }
+        leaf avg {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          description
+            "Average value in the period.";
+        }
+        leaf timestamp {
+          type string;
+          description
+            "For current PM it is start time; for historical PM it is completion time (ISO 8601 date-and-time).";
+        }
+        leaf validity {
+          type pm-validity;
+          description
+            "Indicates whether the PM data is valid, invalid, or questionable.";
+        }
+      }
+    }
+  }
+}
