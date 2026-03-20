@@ -1,0 +1,6 @@
+sonic-eventd-otn-profile (1.0.0) unstable; urgency=low
+
+  * Initial release
+  * OTN platform event profile for sonic-eventd
+
+ -- SONiC Team <sonic-dev@lists.sonic.net>  Mon, 16 Mar 2026 00:00:00 +0000

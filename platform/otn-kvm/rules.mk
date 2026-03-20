@@ -6,6 +6,7 @@ include $(PLATFORM_PATH)/docker-syncd-otn-kvm.mk
 include $(PLATFORM_PATH)/platform-modules-otn-kvm.mk
 include $(PLATFORM_PATH)/sonic-version.mk
 include $(PLATFORM_PATH)/sonic-yanggen.mk
+include $(PLATFORM_PATH)/sonic-eventd-otn-profile.mk
 include $(PLATFORM_PATH)/one-image.mk
 include $(PLATFORM_PATH)/onie.mk
 include $(PLATFORM_PATH)/kvm-image.mk
@@ -18,3 +19,6 @@ $(SYNCD)_DEPENDS += $(OTN_KVM_LIBSAI_DEB) $(LIBSAIMETADATA_DEV)
 
 # Inject otn-kvm hal dependency library into pmon
 $(DOCKER_PLATFORM_MONITOR)_DEPENDS += $(OTN_KVM_HALCLIENT_DEB)
+
+# Inject OTN event profile into docker-eventd (overwrites upstream default.json)
+$(DOCKER_EVENTD)_DEPENDS += $(SONIC_EVENTD_OTN_PROFILE)

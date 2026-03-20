@@ -1,0 +1,9 @@
+{
+    "yang_module": "sonic-events-otn",
+    "proclist": [
+        {
+            "name": "orchagent",
+            "parse_json": "otn_regex.json"
+        }
+    ]
+}

@@ -16,6 +16,8 @@
       "target-gain": "4.2",
       "target-gain-tilt": "0.4",
       "gain-range": "FIXED_GAIN_RANGE",
+      "min-gain": "3.00",
+      "max-gain": "20.00",
       "amp-mode": "CONSTANT_GAIN",
       "enabled": "true",
       "type": "EDFA"
@@ -24,6 +26,8 @@
       "target-gain": "5.2",
       "target-gain-tilt": "0.5",
       "gain-range": "FIXED_GAIN_RANGE",
+      "min-gain": "4.00",
+      "max-gain": "22.00",
       "amp-mode": "CONSTANT_GAIN",
       "enabled": "true",
       "type": "EDFA"

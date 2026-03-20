@@ -12,6 +12,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Update apt's cache of available packages
 RUN apt-get update
 
+# Order is important here: COPY must come before installing the Debian packages,
+# otherwise the Debian package's eventdb_wrapper.sh will be overwritten.
+COPY ["eventdb_wrapper.sh", "/usr/bin"]
+RUN chmod +x /usr/bin/eventdb_wrapper.sh
+
 {% if docker_eventd_debs.strip() -%}
 # Copy built Debian packages
 {{ copy_files("debs/", docker_eventd_debs.split(' '), "/debs/") }}
@@ -27,13 +32,13 @@ COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
 COPY ["critical_processes", "/etc/supervisor"]
 COPY ["*.json", "/etc/rsyslog.d/rsyslog_plugin_conf/"]
 COPY ["files/rsyslog_plugin.conf.j2", "/etc/rsyslog.d/rsyslog_plugin_conf/"]
-COPY ["eventdb_wrapper.sh", "/usr/bin"]
 
 RUN j2 -f json /etc/rsyslog.d/rsyslog_plugin_conf/rsyslog_plugin.conf.j2 /etc/rsyslog.d/rsyslog_plugin_conf/host_events_info.json > /etc/rsyslog.d/rsyslog_plugin_conf/host_events.conf
 RUN j2 -f json /etc/rsyslog.d/rsyslog_plugin_conf/rsyslog_plugin.conf.j2 /etc/rsyslog.d/rsyslog_plugin_conf/bgp_events_info.json > /etc/rsyslog.d/rsyslog_plugin_conf/bgp_events.conf
 RUN j2 -f json /etc/rsyslog.d/rsyslog_plugin_conf/rsyslog_plugin.conf.j2 /etc/rsyslog.d/rsyslog_plugin_conf/dhcp_relay_events_info.json > /etc/rsyslog.d/rsyslog_plugin_conf/dhcp_relay_events.conf
 RUN j2 -f json /etc/rsyslog.d/rsyslog_plugin_conf/rsyslog_plugin.conf.j2 /etc/rsyslog.d/rsyslog_plugin_conf/swss_events_info.json > /etc/rsyslog.d/rsyslog_plugin_conf/swss_events.conf
 RUN j2 -f json /etc/rsyslog.d/rsyslog_plugin_conf/rsyslog_plugin.conf.j2 /etc/rsyslog.d/rsyslog_plugin_conf/syncd_events_info.json > /etc/rsyslog.d/rsyslog_plugin_conf/syncd_events.conf
+RUN j2 -f json /etc/rsyslog.d/rsyslog_plugin_conf/rsyslog_plugin.conf.j2 /etc/rsyslog.d/rsyslog_plugin_conf/otn_events_info.json > /etc/rsyslog.d/rsyslog_plugin_conf/otn_events.conf
 
 
 RUN rm -f /etc/rsyslog.d/rsyslog_plugin_conf/rsyslog_plugin.conf.j2
@@ -42,6 +47,7 @@ RUN rm -f /etc/rsyslog.d/rsyslog_plugin_conf/bgp_events_info.json
 RUN rm -f /etc/rsyslog.d/rsyslog_plugin_conf/dhcp_relay_events_info.json
 RUN rm -f /etc/rsyslog.d/rsyslog_plugin_conf/swss_events_info.json
 RUN rm -f /etc/rsyslog.d/rsyslog_plugin_conf/syncd_events_info.json
+RUN rm -f /etc/rsyslog.d/rsyslog_plugin_conf/otn_events_info.json
 
 FROM $BASE
 

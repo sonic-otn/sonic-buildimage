@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+
+PACKAGE_NAME  := sonic-eventd-otn-profile
+DEST_BIN      := debian/$(PACKAGE_NAME)/usr/bin
+DEST_RSYSLOG  := debian/$(PACKAGE_NAME)/etc/rsyslog.d/rsyslog_plugin_conf
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	mkdir -p $(DEST_BIN)
+	install -m 755 eventdb_wrapper.sh $(DEST_BIN)/eventdb_wrapper.sh
+	mkdir -p $(DEST_RSYSLOG)
+	install -m 644 otn_events_info.json $(DEST_RSYSLOG)/otn_events_info.json
+	install -m 644 otn_regex.json $(DEST_RSYSLOG)/otn_regex.json
+
+override_dh_usrlocal:

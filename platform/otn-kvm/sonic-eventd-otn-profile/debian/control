@@ -1,0 +1,15 @@
+Source: sonic-eventd-otn-profile
+Section: net
+Priority: optional
+Maintainer: SONiC Team <sonic-dev@lists.sonic.net>
+Build-Depends: debhelper (>= 12)
+Standards-Version: 4.5.1
+Homepage: https://github.com/sonic-net/sonic-buildimage
+
+Package: sonic-eventd-otn-profile
+Architecture: all
+Depends: ${misc:Depends}, sonic-eventd
+Description: OTN event profile for sonic-eventd
+ Provides /etc/evprofile/default.json with OTN alarm type-id entries.
+ Installed after sonic-eventd in docker-eventd; overwrites the upstream
+ minimal default to enable OTN alarm recording in EVENT_DB.

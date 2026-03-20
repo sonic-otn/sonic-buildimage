@@ -118,6 +118,9 @@ shopt -s nullglob
 # load sonic default system sonic yang-models
 sonic-cli-gen generate config sonic-syslog
 sonic-cli-gen generate show sonic-syslog
+# This should be done by system CLI generator. Temporary solution.
+sonic-cli-gen generate show sonic-event
+# onic-cli-gen generate show sonic-alarm
 
 for src_file in "$SOURCE_DIR"/*.yang; do
     yang_basename="$(basename "$src_file" .yang)"

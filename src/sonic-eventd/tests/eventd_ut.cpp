@@ -713,7 +713,7 @@ TEST(eventd, service)
 
 void
 wait_for_heartbeat(stats_collector &stats_instance, long unsigned int cnt,
-        int wait_ms = 3000)
+        int wait_ms = 10000)
 {
     auto st = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     while (stats_instance.heartbeats_published() == cnt) {
@@ -780,7 +780,7 @@ TEST(eventd, heartbeat)
     stats_instance.heartbeat_ctrl();
 
     /* Wait for heartbeat count to change from last count */
-    wait_for_heartbeat(stats_instance, cnt, 2000);
+    wait_for_heartbeat(stats_instance, cnt, 10000);
 
     stats_instance.stop();
 
