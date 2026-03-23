@@ -25,17 +25,17 @@ module sonic-otn-pm {
 
   typedef pm-validity {
     type enumeration {
-      enum valid {
-        description "PM data is valid.";
+      enum complete {
+        description "PM data is complete.";
       }
-      enum invalid {
-        description "PM data is invalid (e.g. resource down, no collection).";
+      enum partial {
+        description "PM data is partial (e.g. resource down, no collection).";
       }
-      enum questionable {
+      enum suspect {
         description "PM data may be unreliable.";
       }
     }
-    description "Indicates whether the PM measurement is valid, invalid, or questionable.";
+    description "Indicates whether the PM measurement is complete, partial, or suspect.";
   }
 
   typedef pm-granularity {
@@ -43,10 +43,10 @@ module sonic-otn-pm {
       enum current {
         description "Current/latest PM (no bin).";
       }
-      enum fifteen-min {
+      enum 15min {
         description "15-minute historical bin.";
       }
-      enum twenty-four-hour {
+      enum 24Hour {
         description "24-hour historical bin.";
       }
     }
@@ -110,7 +110,7 @@ module sonic-otn-pm {
           type string;
           description
             "PM parameter name (e.g. input-power-total, temperature, speed,
-             actual-gain, actual-attenuation).";
+            actual-gain, actual-attenuation).";
         }
         leaf granularity {
           type pm-granularity;
@@ -121,7 +121,7 @@ module sonic-otn-pm {
           type uint16;
           description
             "Bin index. 0 for current; 1..96 for 15min (1 = most recent);
-             1..7 for 24hour (1 = most recent).";
+            1..7 for 24hour (1 = most recent).";
         }
         leaf min {
           type decimal64 {
@@ -152,7 +152,7 @@ module sonic-otn-pm {
         leaf validity {
           type pm-validity;
           description
-            "Indicates whether the PM data is valid, invalid, or questionable.";
+            "Indicates whether the PM data is complete, partial, or suspect.";
         }
       }
     }

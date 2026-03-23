@@ -1,0 +1,417 @@
+#!/usr/bin/env python3
+"""
+    sonic-pm
+    OTN PM daemon for SONiC PMON.
+"""
+
+from collections import defaultdict, deque
+from datetime import datetime, timezone
+import math
+import signal
+import sys
+import threading
+import time
+
+from sonic_py_common import daemon_base, logger
+from swsscommon import swsscommon
+
+SYSLOG_IDENTIFIER = "sonic-pm"
+
+OTN_PM_CONFIG_TABLE = "OTN_PM"
+OTN_PM_STATE_TABLE = "OTN_PM_TABLE"
+
+DEFAULT_POLL_INTERVAL_SECS = 15
+DEFAULT_VALIDITY = "partial"
+SUSPECT_VALUE = "suspect"
+DEFAULT_ZERO = "0.00"
+COMPLETE_VALUE = "complete"
+LOG_SUMMARY_EVERY_CYCLES = 4
+
+GRANULARITY_CURRENT = "current"
+GRANULARITY_15MIN = "15min"
+GRANULARITY_24H = "24Hour"
+
+# Production intervals:
+# - "15min" granularity rolls every 15 minutes
+# - "24Hour" granularity rolls every 24 hours
+BIN_15MIN_WINDOW_SECS = 900
+BIN_24H_WINDOW_SECS = 86400
+BIN_15MIN_MAX = 96
+BIN_24H_MAX = 7
+
+# Optional test hook to force current/historical validity states.
+# Disabled by default. Set TEST_VALIDITY_MODE to one of:
+#   "partial" | "suspect" | "alternate"
+# and adjust TEST_VALIDITY_EVERY as needed.
+TEST_VALIDITY_MODE = ""
+TEST_VALIDITY_EVERY = 10
+TEST_VALIDITY_TARGET_RESOURCE = ""
+TEST_VALIDITY_TARGET_PM = ""
+
+exit_code = 0
+
+
+class SonicPmDaemon(daemon_base.DaemonBase):
+    def __init__(self, log_identifier):
+        super(SonicPmDaemon, self).__init__(log_identifier)
+        self.log = logger.Logger(SYSLOG_IDENTIFIER)
+        self.stop_event = threading.Event()
+        self.timeout = DEFAULT_POLL_INTERVAL_SECS
+
+        self.config_db = daemon_base.db_connect("CONFIG_DB")
+        self.state_db = daemon_base.db_connect("STATE_DB")
+        self.otn_pm_cfg_table = swsscommon.Table(self.config_db, OTN_PM_CONFIG_TABLE)
+        self.otn_pm_state_table = swsscommon.Table(self.state_db, OTN_PM_STATE_TABLE)
+
+        # Per metric key (resource-name, pm-name), one active bin per granularity.
+        # active_bins[granularity][metric_key] -> {"start": epoch_secs, "samples": [float]}
+        self.active_bins = {
+            GRANULARITY_15MIN: {},
+            GRANULARITY_24H: {},
+        }
+        # history_bins[granularity][metric_key] -> deque newest-first
+        self.history_bins = {
+            GRANULARITY_15MIN: defaultdict(lambda: deque(maxlen=BIN_15MIN_MAX)),
+            GRANULARITY_24H: defaultdict(lambda: deque(maxlen=BIN_24H_MAX)),
+        }
+        self.known_metrics = set()
+        self.cycle_count = 0
+        self.test_validity_mode = TEST_VALIDITY_MODE
+        self.test_validity_every = TEST_VALIDITY_EVERY
+        self.test_target_resource = TEST_VALIDITY_TARGET_RESOURCE
+        self.test_target_pm = TEST_VALIDITY_TARGET_PM
+        self.test_inject_counter = defaultdict(int)
+        self.test_inject_toggle = 0
+        if self.test_validity_mode in ("partial", "suspect", "alternate"):
+            self.log.log_notice(
+                "Test validity injection enabled: mode={}, every={}, target_resource={}, target_pm={}".format(
+                    self.test_validity_mode,
+                    self.test_validity_every,
+                    self.test_target_resource if self.test_target_resource else "*",
+                    self.test_target_pm if self.test_target_pm else "*",
+                )
+            )
+
+    def _maybe_inject_test_validity(self, resource_name, pm_name, raw_value, sample_value):
+        if self.test_validity_mode not in ("partial", "suspect", "alternate"):
+            return raw_value, sample_value
+
+        if self.test_target_resource and resource_name != self.test_target_resource:
+            return raw_value, sample_value
+        if self.test_target_pm and pm_name != self.test_target_pm:
+            return raw_value, sample_value
+
+        metric_key = "{}|{}".format(resource_name, pm_name)
+        self.test_inject_counter[metric_key] += 1
+        if self.test_inject_counter[metric_key] % self.test_validity_every != 0:
+            return raw_value, sample_value
+
+        if self.test_validity_mode == "partial":
+            # Missing field path -> partial
+            return None, None
+
+        if self.test_validity_mode == "suspect":
+            # Present but non-numeric path -> suspect
+            return "test-non-numeric", None
+
+        # alternate mode: flip between partial and suspect each injection
+        self.test_inject_toggle ^= 1
+        if self.test_inject_toggle == 0:
+            return None, None
+        return "test-non-numeric", None
+
+    @staticmethod
+    def _to_iso_utc(epoch_secs):
+        return datetime.fromtimestamp(epoch_secs, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    @staticmethod
+    def _to_decimal_string(value):
+        return "{:.2f}".format(float(value))
+
+    @staticmethod
+    def _parse_numeric(raw_value):
+        if raw_value is None:
+            return None
+        try:
+            value = float(str(raw_value).strip())
+            if not math.isfinite(value):
+                return None
+            return value
+        except (TypeError, ValueError):
+            return None
+
+    @staticmethod
+    def _stats(values):
+        if not values:
+            return None
+        total = sum(values)
+        count = float(len(values))
+        return {
+            "min": min(values),
+            "max": max(values),
+            "avg": total / count,
+        }
+
+    @staticmethod
+    def _state_key(resource_name, pm_name, granularity, bin_number):
+        return "{}|{}|{}|{}".format(resource_name, pm_name, granularity, bin_number)
+
+    def _write_row(self, resource_name, pm_name, granularity, bin_number, stats, timestamp, validity):
+        key = self._state_key(resource_name, pm_name, granularity, bin_number)
+        if stats is None:
+            min_str = DEFAULT_ZERO
+            max_str = DEFAULT_ZERO
+            avg_str = DEFAULT_ZERO
+        else:
+            min_str = self._to_decimal_string(stats["min"])
+            max_str = self._to_decimal_string(stats["max"])
+            avg_str = self._to_decimal_string(stats["avg"])
+
+        fvs = swsscommon.FieldValuePairs(
+            [
+                ("min", min_str),
+                ("max", max_str),
+                ("avg", avg_str),
+                ("timestamp", timestamp),
+                ("validity", validity),
+            ]
+        )
+        self.otn_pm_state_table.set(key, fvs)
+
+    def _load_enabled_pm_config(self):
+        """
+        Returns:
+            dict[str, set[str]] mapping source STATE_DB table name -> enabled pm field names.
+        """
+        config_map = defaultdict(set)
+        # Load PM config from CONFIG_DB.
+        cfg_keys = self.otn_pm_cfg_table.getKeys()
+        for resource_type in cfg_keys:
+            ok, fields = self.otn_pm_cfg_table.get(resource_type)
+            if not ok:
+                continue
+            for pm_name, enabled in fields:
+                if str(enabled).lower() in ("1", "true", "yes", "on"):
+                    config_map[resource_type].add(pm_name)
+        if self.cycle_count == 1:
+            metric_count = sum(len(pm_names) for pm_names in config_map.values())
+            self.log.log_notice(
+                "Loaded PM config from CONFIG_DB: {} source tables, {} metrics".format(
+                    len(config_map), metric_count
+                )
+            )
+        return config_map
+
+    # tracks one active interval per metric per granularity.
+    def _roll_and_add_sample(self, granularity, metric_key, sample_value, sample_validity, now_epoch, interval_secs):
+        active = self.active_bins[granularity].get(metric_key)
+        aligned_start = int(now_epoch // interval_secs) * interval_secs
+
+        if active is None:
+            active = {
+                "start": aligned_start,
+                "samples": [],
+                "observations": 0,
+                "partial_count": 0,
+                "suspect_count": 0,
+            }
+            self.active_bins[granularity][metric_key] = active
+
+        # Roll completed bins if time advanced beyond current interval.
+        while now_epoch >= (active["start"] + interval_secs):
+            stats = self._stats(active["samples"])
+            bin_validity = COMPLETE_VALUE
+            if active["suspect_count"] > 0:
+                bin_validity = SUSPECT_VALUE
+            elif active["observations"] > 0 and active["partial_count"] == active["observations"]:
+                # Treat all-partial intervals as suspect so persistent missing data
+                # stands out from mixed-quality intervals.
+                bin_validity = SUSPECT_VALUE
+            elif active["partial_count"] > 0:
+                bin_validity = DEFAULT_VALIDITY
+
+            # Keep historical interval if we saw any observations in it, even if all were missing/suspect.
+            if active["observations"] > 0:
+                completion_ts = active["start"] + interval_secs
+                self.history_bins[granularity][metric_key].appendleft(
+                    {
+                        "stats": stats,
+                        "completion_ts": completion_ts,
+                        "validity": bin_validity,
+                    }
+                )
+            active["start"] += interval_secs
+            active["samples"] = []
+            active["observations"] = 0
+            active["partial_count"] = 0
+            active["suspect_count"] = 0
+
+        active["observations"] += 1
+        if sample_validity == COMPLETE_VALUE and sample_value is not None:
+            active["samples"].append(sample_value)
+        elif sample_validity == SUSPECT_VALUE:
+            active["suspect_count"] += 1
+        else:
+            active["partial_count"] += 1
+
+    def _update_history_bins(self, metric_key, sample_value, sample_validity, now_epoch):
+        self._roll_and_add_sample(
+            GRANULARITY_15MIN,
+            metric_key,
+            sample_value,
+            sample_validity,
+            now_epoch,
+            BIN_15MIN_WINDOW_SECS,
+        )
+        self._roll_and_add_sample(
+            GRANULARITY_24H,
+            metric_key,
+            sample_value,
+            sample_validity,
+            now_epoch,
+            BIN_24H_WINDOW_SECS,
+        )
+
+    def _write_historical_rows(self):
+        for resource_name, pm_name in self.known_metrics:
+            # 15-minute historical bins (1..96)
+            hist_15 = self.history_bins[GRANULARITY_15MIN].get((resource_name, pm_name), deque())
+            for idx in range(1, BIN_15MIN_MAX + 1):
+                key = self._state_key(resource_name, pm_name, GRANULARITY_15MIN, idx)
+                if idx <= len(hist_15):
+                    entry = hist_15[idx - 1]
+                    self._write_row(
+                        resource_name,
+                        pm_name,
+                        GRANULARITY_15MIN,
+                        idx,
+                        entry["stats"],
+                        self._to_iso_utc(entry["completion_ts"]),
+                        entry["validity"],
+                    )
+                else:
+                    self.otn_pm_state_table._del(key)
+
+            # 24-hour historical bins (1..7)
+            hist_24 = self.history_bins[GRANULARITY_24H].get((resource_name, pm_name), deque())
+            for idx in range(1, BIN_24H_MAX + 1):
+                key = self._state_key(resource_name, pm_name, GRANULARITY_24H, idx)
+                if idx <= len(hist_24):
+                    entry = hist_24[idx - 1]
+                    self._write_row(
+                        resource_name,
+                        pm_name,
+                        GRANULARITY_24H,
+                        idx,
+                        entry["stats"],
+                        self._to_iso_utc(entry["completion_ts"]),
+                        entry["validity"],
+                    )
+                else:
+                    self.otn_pm_state_table._del(key)
+
+    def _collect_and_publish(self):
+        self.cycle_count += 1
+        config = self._load_enabled_pm_config()
+        if not config:
+            return
+
+        now_epoch = time.time()
+        # YANG semantics: current PM timestamp is start time of the measurement period.
+        current_start_epoch = max(0.0, now_epoch - float(self.timeout))
+        current_start_iso = self._to_iso_utc(current_start_epoch)
+        source_tables_seen = 0
+        resource_rows_seen = 0
+        current_complete = 0
+        current_partial = 0
+        current_suspect = 0
+
+        for source_table_name, pm_names in config.items():
+            if not pm_names or source_table_name == OTN_PM_STATE_TABLE:
+                continue
+
+            source_tables_seen += 1
+            source_table = swsscommon.Table(self.state_db, source_table_name)
+            source_keys = source_table.getKeys()
+            for resource_name in source_keys:
+                resource_rows_seen += 1
+                ok, fields = source_table.get(resource_name)
+                if not ok:
+                    continue
+                field_map = dict(fields)
+
+                for pm_name in pm_names:
+                    metric_key = (resource_name, pm_name)
+                    self.known_metrics.add(metric_key)
+                    raw_value = field_map.get(pm_name)
+                    sample_value = self._parse_numeric(raw_value)
+                    raw_value, sample_value = self._maybe_inject_test_validity(
+                        resource_name, pm_name, raw_value, sample_value
+                    )
+
+                    if sample_value is None:
+                        # Missing field -> partial, present but non-numeric -> suspect.
+                        validity = DEFAULT_VALIDITY if raw_value is None else SUSPECT_VALUE
+                        current_stats = None
+                        if validity == DEFAULT_VALIDITY:
+                            current_partial += 1
+                        else:
+                            current_suspect += 1
+                    else:
+                        # Current row (latest sample).
+                        validity = COMPLETE_VALUE
+                        current_stats = {"min": sample_value, "max": sample_value, "avg": sample_value}
+                        current_complete += 1
+
+                    self._write_row(
+                        resource_name,
+                        pm_name,
+                        GRANULARITY_CURRENT,
+                        0,
+                        current_stats,
+                        current_start_iso,
+                        validity,
+                    )
+                    self._update_history_bins(metric_key, sample_value, validity, now_epoch)
+
+        self._write_historical_rows()
+        if self.cycle_count == 1 or self.cycle_count % LOG_SUMMARY_EVERY_CYCLES == 0:
+            self.log.log_notice(
+                "Cycle {} summary: source_tables={}, resources={}, metrics_tracked={}, current(complete={}, partial={}, suspect={})".format(
+                    self.cycle_count,
+                    source_tables_seen,
+                    resource_rows_seen,
+                    len(self.known_metrics),
+                    current_complete,
+                    current_partial,
+                    current_suspect,
+                )
+            )
+
+    def signal_handler(self, sig, frame):
+        global exit_code
+        if sig in (signal.SIGINT, signal.SIGTERM):
+            exit_code = 128 + sig
+            self.log.log_notice("Caught signal {}, exiting".format(sig))
+            self.stop_event.set()
+
+    def run(self):
+        self._collect_and_publish()
+        if self.stop_event.wait(self.timeout):
+            return False
+        return True
+
+
+def main():
+    daemon = SonicPmDaemon(SYSLOG_IDENTIFIER)
+    daemon.log.log_notice("Starting OTN PM daemon")
+
+    while daemon.run():
+        pass
+
+    daemon.log.log_notice("Stopping OTN PM daemon")
+    return exit_code
+
+
+if __name__ == "__main__":
+    sys.exit(main())

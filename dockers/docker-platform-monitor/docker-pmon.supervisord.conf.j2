@@ -291,3 +291,16 @@ startsecs=10
 dependent_startup=true
 dependent_startup_wait_for=rsyslogd:running
 {% endif %}
+
+{% if include_sonic_pm %}
+[program:sonic-pm]
+command=python3 /usr/local/bin/sonic-pm
+priority=12
+autostart=false
+autorestart=unexpected
+stdout_logfile=syslog
+stderr_logfile=syslog
+startsecs=5
+dependent_startup=true
+dependent_startup_wait_for=rsyslogd:running
+{% endif %}

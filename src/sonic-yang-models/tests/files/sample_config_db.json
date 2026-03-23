@@ -3151,6 +3151,19 @@
                 "retention_period": "15"
             }
         },
+        "OTN_PM": {
+            "OTN_OA_TABLE": {
+                "input-power-total": "true",
+                "output-power-total": "true",
+                "actual-gain": "true",
+                "temperature": "true"
+            },
+            "OTN_ATTENUATOR_TABLE": {
+                "actual-attenuation": "true",
+                "input-power-total": "true",
+                "output-power-total": "true"
+            }
+        },
         "ASIC_SENSORS": {
             "ASIC_SENSORS_POLLER_INTERVAL": {
                 "interval": "10"
