@@ -6,7 +6,9 @@
 
 from collections import defaultdict, deque
 from datetime import datetime, timezone
+import json
 import math
+import os
 import signal
 import sys
 import threading
@@ -38,6 +40,10 @@ BIN_15MIN_WINDOW_SECS = 900
 BIN_24H_WINDOW_SECS = 86400
 BIN_15MIN_MAX = 96
 BIN_24H_MAX = 7
+# This directory binds to /host/pmon/sonic-pm on the host.
+PRIMARY_PERSISTENCE_DIR = "/usr/share/sonic-pm"
+PERSISTENCE_STATE_FILENAME = "state.json"
+PERSISTENCE_VERSION = 1
 
 # Optional test hook to force current/historical validity states.
 # Disabled by default. Set TEST_VALIDITY_MODE to one of:
@@ -60,8 +66,9 @@ class SonicPmDaemon(daemon_base.DaemonBase):
 
         self.config_db = daemon_base.db_connect("CONFIG_DB")
         self.state_db = daemon_base.db_connect("STATE_DB")
+        self.history_db = daemon_base.db_connect("HISTORY_DB")
         self.otn_pm_cfg_table = swsscommon.Table(self.config_db, OTN_PM_CONFIG_TABLE)
-        self.otn_pm_state_table = swsscommon.Table(self.state_db, OTN_PM_STATE_TABLE)
+        self.otn_pm_history_table = swsscommon.Table(self.history_db, OTN_PM_STATE_TABLE)
 
         # Per metric key (resource-name, pm-name), one active bin per granularity.
         # active_bins[granularity][metric_key] -> {"start": epoch_secs, "samples": [float]}
@@ -75,6 +82,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
             GRANULARITY_24H: defaultdict(lambda: deque(maxlen=BIN_24H_MAX)),
         }
         self.known_metrics = set()
+        self.history_sync_pending = False
         self.cycle_count = 0
         self.test_validity_mode = TEST_VALIDITY_MODE
         self.test_validity_every = TEST_VALIDITY_EVERY
@@ -90,6 +98,194 @@ class SonicPmDaemon(daemon_base.DaemonBase):
                     self.test_target_resource if self.test_target_resource else "*",
                     self.test_target_pm if self.test_target_pm else "*",
                 )
+            )
+        self._log_persistence_path_status()
+        self._load_persisted_state()
+
+    @staticmethod
+    def _encode_metric_key(metric_key):
+        return "{}|{}".format(metric_key[0], metric_key[1])
+
+    @staticmethod
+    def _decode_metric_key(metric_key):
+        if not isinstance(metric_key, str):
+            return None
+        parts = metric_key.split("|", 1)
+        if len(parts) != 2 or not parts[0] or not parts[1]:
+            return None
+        return (parts[0], parts[1])
+
+    def _serialize_state(self):
+        serialized = {
+            "version": PERSISTENCE_VERSION,
+            "saved_at": int(time.time()),
+            "known_metrics": sorted([self._encode_metric_key(m) for m in self.known_metrics]),
+            "active_bins": {},
+            "history_bins": {},
+        }
+
+        for granularity in (GRANULARITY_15MIN, GRANULARITY_24H):
+            active_entries = {}
+            for metric_key, active in self.active_bins[granularity].items():
+                active_entries[self._encode_metric_key(metric_key)] = {
+                    "start": int(active.get("start", 0)),
+                    "samples": [float(v) for v in active.get("samples", [])],
+                    "observations": int(active.get("observations", 0)),
+                    "partial_count": int(active.get("partial_count", 0)),
+                    "suspect_count": int(active.get("suspect_count", 0)),
+                }
+            serialized["active_bins"][granularity] = active_entries
+
+            history_entries = {}
+            for metric_key, entries in self.history_bins[granularity].items():
+                history_entries[self._encode_metric_key(metric_key)] = [
+                    {
+                        "stats": entry.get("stats"),
+                        "completion_ts": int(entry.get("completion_ts", 0)),
+                        "validity": entry.get("validity", DEFAULT_VALIDITY),
+                    }
+                    for entry in list(entries)
+                ]
+            serialized["history_bins"][granularity] = history_entries
+
+        return serialized
+
+    @staticmethod
+    def _state_file_path(base_dir):
+        return os.path.join(base_dir, PERSISTENCE_STATE_FILENAME)
+
+    @staticmethod
+    def _persistence_dirs_in_priority_order():
+        return [PRIMARY_PERSISTENCE_DIR]
+
+    def _log_persistence_path_status(self):
+        state_file = self._state_file_path(PRIMARY_PERSISTENCE_DIR)
+        dir_exists = os.path.isdir(PRIMARY_PERSISTENCE_DIR)
+        dir_writable = os.access(PRIMARY_PERSISTENCE_DIR, os.W_OK) if dir_exists else False
+        state_exists = os.path.exists(state_file)
+        self.log.log_notice(
+            "PM persistence path: dir={}, exists={}, writable={}, state_file_exists={}".format(
+                PRIMARY_PERSISTENCE_DIR, dir_exists, dir_writable, state_exists
+            )
+        )
+
+    def _save_persisted_state(self):
+        serialized = self._serialize_state()
+        last_error = None
+        try:
+            os.makedirs(PRIMARY_PERSISTENCE_DIR, exist_ok=True)
+            state_file = self._state_file_path(PRIMARY_PERSISTENCE_DIR)
+            tmp_path = "{}.tmp".format(state_file)
+            with open(tmp_path, "w", encoding="utf-8") as tmp_file:
+                json.dump(serialized, tmp_file, separators=(",", ":"), sort_keys=True)
+                tmp_file.flush()
+                os.fsync(tmp_file.fileno())
+            os.replace(tmp_path, state_file)
+            return
+        except Exception as err:
+            last_error = err
+        self.log.log_warning("Failed to persist PM state: {}".format(last_error))
+
+    @staticmethod
+    def _sanitize_loaded_stats(stats):
+        if stats is None:
+            return None
+        if not isinstance(stats, dict):
+            return None
+        try:
+            min_v = float(stats["min"])
+            max_v = float(stats["max"])
+            avg_v = float(stats["avg"])
+            if not (math.isfinite(min_v) and math.isfinite(max_v) and math.isfinite(avg_v)):
+                return None
+            return {"min": min_v, "max": max_v, "avg": avg_v}
+        except (KeyError, TypeError, ValueError):
+            return None
+
+    def _load_persisted_state(self):
+        payload = None
+        loaded_from_path = None
+        for persistence_dir in self._persistence_dirs_in_priority_order():
+            state_file = self._state_file_path(persistence_dir)
+            if not os.path.exists(state_file):
+                continue
+
+            try:
+                with open(state_file, "r", encoding="utf-8") as state_file_handle:
+                    payload = json.load(state_file_handle)
+                loaded_from_path = state_file
+                break
+            except Exception as err:
+                self.log.log_warning("Failed to load PM state from {}: {}".format(state_file, err))
+
+        if payload is None:
+            return
+
+        if not isinstance(payload, dict) or payload.get("version") != PERSISTENCE_VERSION:
+            self.log.log_notice("Ignoring incompatible PM state file at {}".format(loaded_from_path))
+            return
+
+        loaded_metrics = set()
+        for raw_key in payload.get("known_metrics", []):
+            metric_key = self._decode_metric_key(raw_key)
+            if metric_key is not None:
+                loaded_metrics.add(metric_key)
+
+        for granularity in (GRANULARITY_15MIN, GRANULARITY_24H):
+            active_payload = payload.get("active_bins", {}).get(granularity, {})
+            if isinstance(active_payload, dict):
+                for raw_metric_key, active in active_payload.items():
+                    metric_key = self._decode_metric_key(raw_metric_key)
+                    if metric_key is None or not isinstance(active, dict):
+                        continue
+                    try:
+                        start = int(active.get("start", 0))
+                        samples = [float(v) for v in active.get("samples", [])]
+                        observations = max(0, int(active.get("observations", 0)))
+                        partial_count = max(0, int(active.get("partial_count", 0)))
+                        suspect_count = max(0, int(active.get("suspect_count", 0)))
+                    except (TypeError, ValueError):
+                        continue
+                    samples = [v for v in samples if math.isfinite(v)]
+                    self.active_bins[granularity][metric_key] = {
+                        "start": start,
+                        "samples": samples,
+                        "observations": observations,
+                        "partial_count": partial_count,
+                        "suspect_count": suspect_count,
+                    }
+                    loaded_metrics.add(metric_key)
+
+            history_payload = payload.get("history_bins", {}).get(granularity, {})
+            if isinstance(history_payload, dict):
+                max_bins = BIN_15MIN_MAX if granularity == GRANULARITY_15MIN else BIN_24H_MAX
+                for raw_metric_key, entries in history_payload.items():
+                    metric_key = self._decode_metric_key(raw_metric_key)
+                    if metric_key is None or not isinstance(entries, list):
+                        continue
+                    restored = deque(maxlen=max_bins)
+                    for entry in entries[:max_bins]:
+                        if not isinstance(entry, dict):
+                            continue
+                        try:
+                            completion_ts = int(entry.get("completion_ts", 0))
+                        except (TypeError, ValueError):
+                            continue
+                        restored.append(
+                            {
+                                "stats": self._sanitize_loaded_stats(entry.get("stats")),
+                                "completion_ts": completion_ts,
+                                "validity": str(entry.get("validity", DEFAULT_VALIDITY)),
+                            }
+                        )
+                    self.history_bins[granularity][metric_key] = restored
+                    loaded_metrics.add(metric_key)
+
+        self.known_metrics |= loaded_metrics
+        if loaded_metrics:
+            self.history_sync_pending = True
+            self.log.log_notice(
+                "Loaded persistent PM state for {} metrics from {}".format(len(loaded_metrics), loaded_from_path)
             )
 
     def _maybe_inject_test_validity(self, resource_name, pm_name, raw_value, sample_value):
@@ -176,7 +372,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
                 ("validity", validity),
             ]
         )
-        self.otn_pm_state_table.set(key, fvs)
+        self.otn_pm_history_table.set(key, fvs)
 
     def _load_enabled_pm_config(self):
         """
@@ -204,6 +400,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
 
     # tracks one active interval per metric per granularity.
     def _roll_and_add_sample(self, granularity, metric_key, sample_value, sample_validity, now_epoch, interval_secs):
+        history_updated = False
         active = self.active_bins[granularity].get(metric_key)
         aligned_start = int(now_epoch // interval_secs) * interval_secs
 
@@ -218,16 +415,17 @@ class SonicPmDaemon(daemon_base.DaemonBase):
             self.active_bins[granularity][metric_key] = active
 
         # Roll completed bins if time advanced beyond current interval.
+        expected_polls = max(1, int(interval_secs // self.timeout))
         while now_epoch >= (active["start"] + interval_secs):
             stats = self._stats(active["samples"])
             bin_validity = COMPLETE_VALUE
             if active["suspect_count"] > 0:
                 bin_validity = SUSPECT_VALUE
             elif active["observations"] > 0 and active["partial_count"] == active["observations"]:
-                # Treat all-partial intervals as suspect so persistent missing data
-                # stands out from mixed-quality intervals.
                 bin_validity = SUSPECT_VALUE
             elif active["partial_count"] > 0:
+                bin_validity = DEFAULT_VALIDITY
+            elif active["observations"] < expected_polls:
                 bin_validity = DEFAULT_VALIDITY
 
             # Keep historical interval if we saw any observations in it, even if all were missing/suspect.
@@ -240,6 +438,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
                         "validity": bin_validity,
                     }
                 )
+                history_updated = True
             active["start"] += interval_secs
             active["samples"] = []
             active["observations"] = 0
@@ -253,9 +452,10 @@ class SonicPmDaemon(daemon_base.DaemonBase):
             active["suspect_count"] += 1
         else:
             active["partial_count"] += 1
+        return history_updated
 
     def _update_history_bins(self, metric_key, sample_value, sample_validity, now_epoch):
-        self._roll_and_add_sample(
+        updated_15min = self._roll_and_add_sample(
             GRANULARITY_15MIN,
             metric_key,
             sample_value,
@@ -263,7 +463,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
             now_epoch,
             BIN_15MIN_WINDOW_SECS,
         )
-        self._roll_and_add_sample(
+        updated_24h = self._roll_and_add_sample(
             GRANULARITY_24H,
             metric_key,
             sample_value,
@@ -271,6 +471,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
             now_epoch,
             BIN_24H_WINDOW_SECS,
         )
+        return updated_15min or updated_24h
 
     def _write_historical_rows(self):
         for resource_name, pm_name in self.known_metrics:
@@ -290,7 +491,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
                         entry["validity"],
                     )
                 else:
-                    self.otn_pm_state_table._del(key)
+                    self.otn_pm_history_table._del(key)
 
             # 24-hour historical bins (1..7)
             hist_24 = self.history_bins[GRANULARITY_24H].get((resource_name, pm_name), deque())
@@ -308,7 +509,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
                         entry["validity"],
                     )
                 else:
-                    self.otn_pm_state_table._del(key)
+                    self.otn_pm_history_table._del(key)
 
     def _collect_and_publish(self):
         self.cycle_count += 1
@@ -325,6 +526,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
         current_complete = 0
         current_partial = 0
         current_suspect = 0
+        history_updated = False
 
         for source_table_name, pm_names in config.items():
             if not pm_names or source_table_name == OTN_PM_STATE_TABLE:
@@ -372,9 +574,16 @@ class SonicPmDaemon(daemon_base.DaemonBase):
                         current_start_iso,
                         validity,
                     )
-                    self._update_history_bins(metric_key, sample_value, validity, now_epoch)
+                    history_updated = self._update_history_bins(
+                        metric_key, sample_value, validity, now_epoch
+                    ) or history_updated
 
-        self._write_historical_rows()
+        if history_updated or self.history_sync_pending:
+            self._write_historical_rows()
+            self.history_sync_pending = False
+        if history_updated:
+            # Persist only when a historical bin actually rolls/updates.
+            self._save_persisted_state()
         if self.cycle_count == 1 or self.cycle_count % LOG_SUMMARY_EVERY_CYCLES == 0:
             self.log.log_notice(
                 "Cycle {} summary: source_tables={}, resources={}, metrics_tracked={}, current(complete={}, partial={}, suspect={})".format(
@@ -393,6 +602,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
         if sig in (signal.SIGINT, signal.SIGTERM):
             exit_code = 128 + sig
             self.log.log_notice("Caught signal {}, exiting".format(sig))
+            self._save_persisted_state()
             self.stop_event.set()
 
     def run(self):
