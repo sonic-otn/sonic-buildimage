@@ -123,6 +123,17 @@ module sonic-otn-pm {
             "Bin index. 0 for current; 1..96 for 15min (1 = most recent);
             1..7 for 24hour (1 = most recent).";
         }
+        leaf instant {
+          when "../granularity = 'current'" {
+            description
+              "Present only for current PM entries (bin-number 0).";
+          }
+          type decimal64 {
+            fraction-digits 2;
+          }
+          description
+            "Instant realtime value from the current bin";
+        }
         leaf min {
           type decimal64 {
             fraction-digits 2;

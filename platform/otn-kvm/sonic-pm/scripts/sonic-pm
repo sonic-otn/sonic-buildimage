@@ -352,7 +352,17 @@ class SonicPmDaemon(daemon_base.DaemonBase):
     def _state_key(resource_name, pm_name, granularity, bin_number):
         return "{}|{}|{}|{}".format(resource_name, pm_name, granularity, bin_number)
 
-    def _write_row(self, resource_name, pm_name, granularity, bin_number, stats, timestamp, validity):
+    def _write_row(
+        self,
+        resource_name,
+        pm_name,
+        granularity,
+        bin_number,
+        stats,
+        timestamp,
+        validity,
+        instant_value=None,
+    ):
         key = self._state_key(resource_name, pm_name, granularity, bin_number)
         if stats is None:
             min_str = DEFAULT_ZERO
@@ -363,15 +373,22 @@ class SonicPmDaemon(daemon_base.DaemonBase):
             max_str = self._to_decimal_string(stats["max"])
             avg_str = self._to_decimal_string(stats["avg"])
 
-        fvs = swsscommon.FieldValuePairs(
-            [
-                ("min", min_str),
-                ("max", max_str),
-                ("avg", avg_str),
-                ("timestamp", timestamp),
-                ("validity", validity),
-            ]
-        )
+        row_fields = [
+            ("min", min_str),
+            ("max", max_str),
+            ("avg", avg_str),
+            ("timestamp", timestamp),
+            ("validity", validity),
+        ]
+        if granularity == GRANULARITY_CURRENT:
+            instant_str = (
+                self._to_decimal_string(instant_value)
+                if instant_value is not None
+                else DEFAULT_ZERO
+            )
+            row_fields.insert(0, ("instant", instant_str))
+
+        fvs = swsscommon.FieldValuePairs(row_fields)
         self.otn_pm_history_table.set(key, fvs)
 
     def _load_enabled_pm_config(self):
@@ -573,6 +590,7 @@ class SonicPmDaemon(daemon_base.DaemonBase):
                         current_stats,
                         current_start_iso,
                         validity,
+                        instant_value=sample_value,
                     )
                     history_updated = self._update_history_bins(
                         metric_key, sample_value, validity, now_epoch
