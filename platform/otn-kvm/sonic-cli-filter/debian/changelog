@@ -1,0 +1,9 @@
+sonic-cli-filter (1.0.0) unstable; urgency=low
+
+  * Initial release
+  * Platform-specific CLI command filter
+  * Removes unwanted switch-oriented CLI commands via plugin mechanism
+  * Uses per-device cli_unwanted.json blacklist configuration
+
+ -- Molex <lu.mao@molex.com>  Tue, 31 Mar 2026 00:00:00 +0000
+

@@ -6,6 +6,7 @@ include $(PLATFORM_PATH)/docker-syncd-otn-kvm.dep
 include $(PLATFORM_PATH)/platform-modules-otn-kvm.dep
 include $(PLATFORM_PATH)/sonic-version.dep
 include $(PLATFORM_PATH)/sonic-yanggen.dep
+include $(PLATFORM_PATH)/sonic-cli-filter.dep
 include $(PLATFORM_PATH)/one-image.dep
 include $(PLATFORM_PATH)/onie.dep
 include $(PLATFORM_PATH)/kvm-image.dep

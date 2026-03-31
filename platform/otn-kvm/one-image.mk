@@ -5,7 +5,8 @@ $(SONIC_ONE_IMAGE)_MACHINE = otn-kvm
 $(SONIC_ONE_IMAGE)_IMAGE_TYPE = onie
 $(SONIC_ONE_IMAGE)_INSTALLS += $(SYSTEMD_SONIC_GENERATOR) \
                                $(OTN_KVM_HALCLIENT_DEB) \
-                               $(SONIC_YANGGEN)
+                               $(SONIC_YANGGEN) \
+                               $(SONIC_CLI_FILTER)
 $(SONIC_ONE_IMAGE)_LAZY_INSTALLS += $(OTN_KVM_OLSV_PLATFORM_MODULE)
 ifeq ($(INSTALL_DEBUG_TOOLS),y)
 $(SONIC_ONE_IMAGE)_DOCKERS += $(SONIC_INSTALL_DOCKER_DBG_IMAGES)
