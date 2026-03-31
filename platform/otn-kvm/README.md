@@ -215,19 +215,58 @@ admin@sonic:~$
 ```
 
 ## Redis
-We have added the following tables to support data of OCS. 
-- For CONFIG_DB (DB 4)
-  - OTN_ATTENUATOR
-  - OTN_OA
-  - OTN_OCM
-  - OTN_OCM_CHANNEL
-  - OTN_OSC
-- For STATE_DB (DB 6)
-  - OTN_ATTENUATOR_TABLE
-  - OTN_OA_TABLE
-  - OTN_OCM_CHANNEL_TABLE
-  - OTN_OSC_TABLE
+Factory defaults come from `device/virtual/x86_64-otn-kvm_x86_64-r0/OLS-V/otn_config.json`
+and are loaded by the `otn` config-engine preset. The prototype ships these
+CONFIG_DB (DB 4) tables:
+
+- OTN_ATTENUATOR
+- OTN_OA
+- OTN_OSC
+
+The corresponding STATE_DB (DB 6) tables published by orchagent are:
+
+- OTN_ATTENUATOR_TABLE
+- OTN_OA_TABLE
+- OTN_OSC_TABLE
+
+## CLI command filter
+otn-kvm is an optical device, so switch-oriented CLIs (VLAN, VXLAN, NAT, BGP,
+QoS queues, and so on) are hidden at runtime. The `sonic-cli-filter` package
+installs `zzz_{show,config,clear}_platform_filter` plugins that load last and
+monkey-patch Click so blacklisted commands do not appear in help or tab
+completion. The per-device blacklist is:
+
+```
+/usr/share/sonic/device/x86_64-otn-kvm_x86_64-r0/cli_unwanted.json
+```
+
+Verify after login. `show vlan` / `config vlan` must not exist, and they must
+not be listed in `--help`. Nested entries such as `ip.bgp` hide only that
+subcommand:
+
+```bash
+admin@sonic:~$ show --help | grep -E 'vlan|vxlan|nat|macsec' || true
+admin@sonic:~$ config --help | grep -E 'vlan|vxlan|nat|macsec' || true
+admin@sonic:~$ show vlan
+Usage: show [OPTIONS] COMMAND [ARGS]...
+Try "show -h" for help.
+
+Error: No such command "vlan".
+admin@sonic:~$ config vlan
+Usage: config [OPTIONS] COMMAND [ARGS]...
+Try "config -h" for help.
+
+Error: No such command "vlan".
+admin@sonic:~$ show platform summary
+Platform: x86_64-otn-kvm_x86_64-r0
+...
+```
+
+To change the set of hidden commands, edit `cli_unwanted.json` and rebuild
+`sonic-device-data` (no need to change the filter package). See
+[sonic-cli-filter/README.md](./sonic-cli-filter/README.md) for the plugin
+load order and how dotted paths (`ip.bgp`) work.
 
 ## OTN gNMI and REST Examples
 Detailed CLI, REST and gNMI examples for the `otn-kvm` device are available in
-[OTN-KVM-NBI-Examples](./OTN-KVM-NBI-Example.md).
+[OTN-KVM-NBI-Examples](https://github.com/sonic-otn/sonic-buildimage/blob/otn_pr/platform/otn-kvm/OTN-KVM-NBI-Example.md).

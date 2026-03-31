@@ -17,12 +17,10 @@ In ```sonic-mgmt-common```, REST APIs are generated from both OpenConfig and SON
 For OTN specifically, OpenConfig APIs are generated from:
 - `openconfig-optical-amplifier.yang`
 - `openconfig-optical-attenuator.yang`
-- `openconfig-channel-monitor.yang`
 
 SONiC APIs are generated from:
 - `sonic-optical-amplifier.yang`
 - `sonic-optical-attenuator.yang`
-- `sonic-channel-monitor.yang`
 
 Some example usage is shown below.
 ### Optical-amplifier (OA)
@@ -315,124 +313,6 @@ admin@sonic:~$   curl -k -X GET\
   ]
 }
 ```
-### Optical Channel Monitor (OCM)
-#### Get configuration and live monitoring data from a specific Optical Channel Monitor (OCM0-0) via OpenConfig YANG
-```bash
-admin@sonic:~$     curl -k -X GET\
-  "https://127.0.0.1/restconf/data/openconfig-channel-monitor:channel-monitors/channel-monitor=OCM0-0" \
-  -H "accept: application/yang-data+json" | jq
-```
-```json
-{
-  "openconfig-channel-monitor:channel-monitor": [
-    {
-      "channels": {
-        "channel": [
-          {
-            "lower-frequency": "191262500",
-            "state": {
-              "lower-frequency": "191262500",
-              "power": "0.12",
-              "target-power": "0.22",
-              "upper-frequency": "191337500"
-            },
-            "upper-frequency": "191337500"
-          },
-          {
-            "lower-frequency": "191337500",
-            "state": {
-              "lower-frequency": "191337500",
-              "power": "0.14",              
-              "target-power": "0.24",
-              "upper-frequency": "191412500"
-            },
-            "upper-frequency": "191412500"
-          },
-          
-          // additional channels omitted for brevity
-        ]
-      },
-      "config": {
-        "monitor-port": "LineIn",
-        "name": "OCM0-0"
-      },
-      "name": "OCM0-0",
-      "state": {
-        "monitor-port": "LineIn",
-        "name": "OCM0-0"
-      }
-    }
-  ]
-}
-```
-
-#### Get configuration and monitoring data from a single channel (lower-frequency=196062500, upper-frequency=196137500) of the Optical Channel Monitor (OCM0-0)
-```bash
-admin@sonic:~$   curl -k -X GET\
-   "https://127.0.0.1/restconf/data/openconfig-channel-monitor:channel-monitors/channel-monitor=OCM0-0/channels/channel=196062500,196137500" \
-   -H "accept: application/yang-data+json" | jq
-```
-```json
-{
-  "openconfig-channel-monitor:channel": [
-    {
-      "lower-frequency": "196062500",
-      "state": {
-        "lower-frequency": "196062500",
-        "power": "1.4",
-        "target-power": "1.5",
-        "upper-frequency": "196137500"
-      },
-      "upper-frequency": "196137500"
-    }
-  ]
-}
-```
-#### Get channel power data from a single channel (lower-frequency=196062500, upper-frequency=196137500) of the Optical Channel Monitor (OCM0-0)
-```bash
-admin@sonic:~$   curl -k -X GET\
-   "https://127.0.0.1/restconf/data/openconfig-channel-monitor:channel-monitors/channel-monitor=OCM0-0/channels/channel=196062500,196137500/state/power" \
-   -H "accept: application/yang-data+json" | jq
-```
-```json
-{
-  "openconfig-channel-monitor:power": "1.4"
-}
-```
-
-#### Get the list of configured OTN channel monitor instances and their associated monitor ports using the SONiC YANG model
-```bash
-  curl -k -X GET\
-  "https://127.0.0.1/restconf/data/sonic-channel-monitor:sonic-channel-monitor/OTN_OCM/OTN_OCM_LIST" \
-  -H "accept: application/yang-data+json" | jq
-```
-```json
-{
-  "sonic-channel-monitor:OTN_OCM_LIST": [
-    {
-      "monitor-port": "LineIn",
-      "name": "OCM0-0"
-    },
-    {
-      "monitor-port": "LineOut",
-      "name": "OCM0-1"
-    },
-    {
-      "monitor-port": "ClientIn",
-      "name": "OCM0-2"
-    },
-    {
-      "monitor-port": "ClientOut",
-      "name": "OCM0-3"
-    },
-    {
-      "monitor-port": "OcmIn",
-      "name": "OCM0-4"
-    }
-  ]
-}
-```
-
 
 ## gNMI Support for OTN
 The SONiC `otn-kvm` image supports gNMI for model-driven management using OpenConfig YANG models. 
