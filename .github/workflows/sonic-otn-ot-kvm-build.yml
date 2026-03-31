@@ -24,7 +24,7 @@ jobs:
       run: |
           cd 202411_otn_${{github.run_number}}
           make init
-          make configure PLATFORM=ot-kvm
+          make configure PLATFORM=otn-kvm
           make SONIC_BUILD_JOBS=8 target/sonic-otn-kvm.img.gz 
 
     - name: 'Upload Artifact'
