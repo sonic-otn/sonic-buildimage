@@ -1,0 +1,36 @@
+name: otn-dev-kvm-build
+
+on:
+  push:
+    branches: [ "otn-dev" ]
+  pull_request:
+    branches: [ "otn-dev" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: sonic-otn-server
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        path: otn_dev_${{github.run_number}}
+
+    - name: build
+      run: |
+          cd otn_dev_${{github.run_number}}
+          make init
+          make configure PLATFORM=otn-kvm
+          make SONIC_BUILD_JOBS=8 target/sonic-otn-kvm.img.gz 
+
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v4
+      with:
+        name: otn-dev-artifact
+        path: |
+          otn_dev_${{github.run_number}}/sonic-installer.img
+          otn_dev_${{github.run_number}}/target/*.img.gz
