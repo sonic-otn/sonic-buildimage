@@ -1,10 +1,10 @@
-name: 202411-otn-kvm-build
+name: otn-dev-kvm-build
 
 on:
   push:
-    branches: [ "202411_otn" ]
+    branches: [ "otn-dev" ]
   pull_request:
-    branches: [ "202411_otn" ]
+    branches: [ "otn-dev" ]
   workflow_dispatch:
 
 concurrency:
@@ -18,11 +18,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        path: 202411_otn_${{github.run_number}}
+        path: otn_dev_${{github.run_number}}
 
     - name: build
       run: |
-          cd 202411_otn_${{github.run_number}}
+          cd otn_dev_${{github.run_number}}
           make init
           make configure PLATFORM=otn-kvm
           make SONIC_BUILD_JOBS=8 target/sonic-otn-kvm.img.gz 
@@ -30,7 +30,7 @@ jobs:
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: 202411-otn-artifact
+        name: otn-dev-artifact
         path: |
-          202411_otn_${{github.run_number}}/sonic-installer.img
-          202411_otn_${{github.run_number}}/target/*.img.gz
+          otn_dev_${{github.run_number}}/sonic-installer.img
+          otn_dev_${{github.run_number}}/target/*.img.gz
