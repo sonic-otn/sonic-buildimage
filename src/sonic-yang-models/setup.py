@@ -78,6 +78,7 @@ def print_yang_files_validation_report(yang_files_list):
 # Specify only the file basenames here; directory prefixes will be added automatically.
 yang_files = [
     'sonic-acl.yang',
+    'sonic-alarm.yang',
     'sonic-asic-sensors.yang',
     'sonic-auto_techsupport.yang',
     'sonic-banner.yang',
@@ -128,6 +129,7 @@ yang_files = [
     'sonic-events-host.yang',
     'sonic-events-swss.yang',
     'sonic-events-syncd.yang',
+    'sonic-event.yang',
     'sonic-exp-fc-map.yang',
     'sonic-extension.yang',
     'sonic-fabric-monitor.yang',
@@ -162,6 +164,7 @@ yang_files = [
     'sonic-neigh.yang',
     'sonic-ntp.yang',
     'sonic-nvgre-tunnel.yang',
+    'sonic-otn-pm.yang',
     'sonic-passwh.yang',
     'sonic-pbh.yang',
     'sonic-peer-switch.yang',
