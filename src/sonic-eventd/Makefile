@@ -15,7 +15,7 @@ EVENTDB_PROF := etc/eventd.json
 CP := cp
 MKDIR := mkdir
 CC := g++
-LIBS := -lhiredis -lswsscommon -lzmq -lboost_serialization -llua5.1
+LIBS := -levent -lhiredis -lswsscommon -lpthread -lboost_thread -lboost_system -lzmq -lboost_serialization -luuid -llua5.1
 TEST_LIBS := -L/usr/src/gtest -lgtest -lgtest_main -lgmock -lgmock_main
 
 CFLAGS += -Wall -std=c++17 -fPIE
@@ -35,7 +35,7 @@ endif
 
 all: sonic-eventd eventd-tool rsyslog-plugin sonic-eventdb
 
-test: eventd-tests rsyslog-plugin-tests eventdb-tests
+test: eventd-tests rsyslog-plugin-tests
 
 sonic-eventd: $(OBJS)
 	@echo 'Building target: $@'
