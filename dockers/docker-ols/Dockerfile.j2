@@ -35,6 +35,5 @@ RUN apt-get clean -y      && \
     rm -rf /debs ~/.cache /python-wheels
 
 COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
-COPY ["files/supervisor-proc-exit-listener", "/usr/bin"]
 
 ENTRYPOINT ["/usr/local/bin/supervisord"]
