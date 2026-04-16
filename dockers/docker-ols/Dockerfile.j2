@@ -1,7 +1,10 @@
 {% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files %}
-FROM docker-swss-layer-bookworm-{{DOCKER_USERNAME}}:{{DOCKER_USERTAG}}
+ARG BASE=docker-config-engine-bookworm-{{DOCKER_USERNAME}}:{{DOCKER_USERTAG}}
+
+FROM $BASE AS base
 
 ARG docker_container_name
+ARG image_version
 
 # Make apt-get non-interactive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -10,7 +13,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install required packages
 RUN apt-get update   && \
     apt-get install -y  \
-        logrotate       
+        logrotate       \
+        gdb
 
 {% if docker_ols_debs.strip() -%}
 # Copy locally-built Debian package dependencies
@@ -34,6 +38,13 @@ RUN apt-get clean -y      && \
     apt-get autoremove -y && \
     rm -rf /debs ~/.cache /python-wheels
 
+RUN mkdir -p /tmp/gnmic \
+    && cd /tmp/gnmic \
+    && curl -fsSL -o gnmic.deb https://github.com/openconfig/gnmic/releases/download/v0.41.0/gnmic_0.41.0_Linux_x86_64.deb \
+    && dpkg -i gnmic.deb \
+    && rm -rf /tmp/gnmic
+
 COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
+COPY ["cli", "/cli/"]
 
 ENTRYPOINT ["/usr/local/bin/supervisord"]

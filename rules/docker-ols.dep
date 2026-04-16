@@ -1,6 +1,5 @@
-
 DPATH       := $($(DOCKER_OLS)_PATH)
-DEP_FILES   := $(SONIC_COMMON_FILES_LIST) rules/docker-ols.mk rules/docker-ols.dep   
+DEP_FILES   := $(SONIC_COMMON_FILES_LIST) rules/docker-ols.mk rules/docker-ols.dep
 DEP_FILES   += $(SONIC_COMMON_BASE_FILES_LIST)
 DEP_FILES   += $(shell git ls-files $(DPATH))
 
