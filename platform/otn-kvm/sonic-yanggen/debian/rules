@@ -30,9 +30,9 @@ override_dh_auto_build:
 	@echo "========================================"
 	@echo "Building libyang from source"
 	@echo "========================================"
-	# Clone and build libyang from source
+	# Clone and build libyang from source (pinned to tag v4.2.2)
 	@if [ ! -d "$(CURDIR)/libyang" ]; then \
-		git clone https://github.com/CESNET/libyang.git $(CURDIR)/libyang && \
+		git clone --depth 1 --branch v4.2.2 https://github.com/CESNET/libyang.git $(CURDIR)/libyang && \
 		cd $(CURDIR)/libyang && \
 		mkdir -p build && cd build && \
 		cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR)/libyang-install -DCMAKE_INSTALL_INCLUDEDIR=include ..&& \
@@ -50,7 +50,7 @@ override_dh_auto_build:
 	@export CFLAGS="-I$(CURDIR)/libyang-install/include" && \
 	export LDFLAGS="-L$(CURDIR)/libyang-install/lib" && \
 	export LD_LIBRARY_PATH=$(CURDIR)/libyang-install/lib:$$LD_LIBRARY_PATH && \
-	pip3 install --target=$(CURDIR)/python-deps libyang
+	pip3 install --target=$(CURDIR)/python-deps libyang==4.0.0
 	
 	@echo "========================================"
 	@echo "Auto-discovering devices with YANG configs..."
