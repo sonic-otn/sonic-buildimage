@@ -1,0 +1,64 @@
+module sonic-optical-attenuator {
+  yang-version 1.1;
+  namespace "http://github.com/sonic-net/sonic-optical-attenuator";
+  prefix opt-att;
+
+  organization
+    "SONiC";
+  contact
+    "SONiC";
+  description
+    "OTN_ATTENUATOR YANG Module for SONiC OS";
+
+  revision 2026-06-01 {
+    description
+      "First revision, derived from openconfig-optical-attenuator.yang {version 2019-07-19}";
+  }
+
+  container sonic-optical-attenuator {
+    container OTN_ATTENUATOR {
+      description
+        "Enclosing container for list of attenuators";
+      list OTN_ATTENUATOR_LIST {
+        key "name";
+        leaf name {
+          type string;
+          description
+            "User-defined name assigned to identify a specific attenuator
+             in the device";
+        }
+        leaf attenuation-mode {
+          type string;
+          description
+            "The operating mode of the attenuator";
+        }
+        leaf target-output-power {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          units "dB";
+          description
+            "Power level set on the output of attenuator.  This leaf is
+             only relevant when in CONSTANT_POWER mode.";
+        }
+        leaf attenuation {
+          type decimal64 {
+            range "0..max";
+            fraction-digits 2;
+          }
+          units "dB";
+          description
+            "Attenuation applied by the attenuator.  This leaf is only
+             relevant when in CONSTANT_ATTENUATION mode.";
+        }
+        leaf enabled {
+          type boolean;
+          description
+            "When true, attenuator is set to specified attenuation or varies to
+             maintain constant output power.  When false, the attenuator is set
+             max attenuation or blocked.";
+        }
+      }
+    }
+  }
+}

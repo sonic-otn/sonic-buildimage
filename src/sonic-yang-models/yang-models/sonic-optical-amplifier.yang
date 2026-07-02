@@ -1,0 +1,136 @@
+module sonic-optical-amplifier {
+  yang-version 1.1;
+  namespace "http://github.com/sonic-net/sonic-optical-amplifier";
+  prefix opt-amp;
+
+  organization
+    "SONiC";
+  contact
+    "SONiC";
+  description
+    "OTN_OA and OTN_OSC YANG Module for SONiC OS";
+
+  revision 2026-06-01 {
+    description
+      "First revision, derived from openconfig-optical-amplifier.yang {version 2019-12-06}";
+  }
+
+  container sonic-optical-amplifier {
+    container OTN_OA {
+      description
+        "Enclosing container for list of amplifiers";
+      list OTN_OA_LIST {
+        key "name";
+        leaf name {
+          type string;
+          description
+            "User-defined name assigned to identify a specific amplifier
+             in the device";
+        }
+        leaf type {
+          type string;
+          description
+            "Type of the amplifier";
+        }
+        leaf target-gain {
+          type decimal64 {
+            range "0..max";
+            fraction-digits 2;
+          }
+          units "dB";
+          description
+            "Positive gain applied by the amplifier. This is used
+             when the amp-mode is in CONSTANT_GAIN or DYNAMIC_GAIN
+             mode to set the target gain that the amplifier should
+             achieve.";
+        }
+        leaf min-gain {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          units "dBm";
+          description
+            "The minimum allowed gain of the amplifier. This is used
+             when the amp-mode is in CONSTANT_POWER or DYNAMIC_GAIN mode
+             to prevent the gain from dropping below a desired threshold.
+             If left empty, the platform will apply a minimum gain based
+             on hardware specifications.";
+        }
+        leaf max-gain {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          units "dBm";
+          description
+            "The maximum allowed gain of the amplifier. This is used
+             when the amp-mode is in CONSTANT_POWER or DYNAMIC_GAIN mode
+             to prevent the gain from exceeding a desired threshold. If
+             left empty, the platform will apply a maximum gain based on
+             hardware specifications.";
+        }
+        leaf target-gain-tilt {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          units "dB";
+          description
+            "Gain tilt control";
+        }
+        leaf gain-range {
+          type string;
+          description
+            "Selected gain range.  The gain range is a platform-defined
+             value indicating the switched gain amplifier setting";
+        }
+        leaf amp-mode {
+          type string;
+          description
+            "The operating mode of the amplifier";
+        }
+        leaf target-output-power {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          units "dBm";
+          description
+            "Output optical power of the amplifier.";
+        }
+        leaf max-output-power {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          units "dBm";
+          description
+            "The maximum optical output power of the amplifier. This
+             may be used to prevent the output power from exceeding a
+             desired threshold.";
+        }
+        leaf enabled {
+          type boolean;
+          description
+            "Turns power on / off to the amplifiers gain module.";
+        }
+        leaf fiber-type-profile {
+          type string;
+          description
+            "The fiber type profile specifies details about the
+             fiber type which are needed to accurately determine
+             the gain and perform efficient amplification. This is
+             only needed for Raman type amplifiers.";
+        }
+      }
+    }
+    container OTN_OSC {
+      description
+        "Enclosing container for list of supervisory channels";
+      list OTN_OSC_LIST {
+        key "interface";
+        leaf interface {
+          type string;
+          description
+            "Reference to an OSC interface";
+        }
+      }
+    }
+  }
+}
