@@ -1,0 +1,28 @@
+{
+    "VALID_OTN_OCM": {
+        "sonic-channel-monitor:sonic-channel-monitor": {
+            "sonic-channel-monitor:OTN_OCM": {
+                "OTN_OCM_LIST": [
+                    {
+                        "name": "OCM0-0",
+                        "monitor-port": "line-in"
+                    }
+                ]
+            }
+        }
+    },
+
+    "VALID_OTN_OCM_CHANNEL": {
+        "sonic-channel-monitor:sonic-channel-monitor": {
+            "sonic-channel-monitor:OTN_OCM_CHANNEL": {
+                "OTN_OCM_CHANNEL_LIST": [
+                    {
+                        "name": "OCM0-0",
+                        "lower-frequency": "191325000",
+                        "upper-frequency": "191375000"
+                    }
+                ]
+            }
+        }
+    }
+}

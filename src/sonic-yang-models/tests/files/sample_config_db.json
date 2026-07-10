@@ -3320,7 +3320,16 @@
                 "attenuation-mode": "CONSTANT_ATTENUATION",
                 "target-output-power": "5.0",
                 "attenuation": "10.0",
-                "enabled": "true"            }
+                "enabled": "true"
+            }
+        },
+        "OTN_OCM": {
+            "OCM0-0": {
+                "monitor-port": "line-in"
+            }
+        },
+        "OTN_OCM_CHANNEL": {
+            "OCM0-0|191325000|191375000": {}
         }
     },
     "SAMPLE_CONFIG_DB_UNKNOWN": {

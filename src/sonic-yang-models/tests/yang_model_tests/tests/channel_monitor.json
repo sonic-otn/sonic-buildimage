@@ -1,0 +1,9 @@
+{
+    "VALID_OTN_OCM": {
+        "desc": "Load valid OTN_OCM configuration"
+    },
+
+    "VALID_OTN_OCM_CHANNEL": {
+        "desc": "Load valid OTN_OCM_CHANNEL configuration"
+    }
+}

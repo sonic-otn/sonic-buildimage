@@ -1,0 +1,73 @@
+module sonic-channel-monitor {
+  yang-version 1.1;
+  namespace "http://github.com/sonic-net/sonic-channel-monitor";
+  prefix channel-monitor;
+
+  organization
+    "SONiC";
+  contact
+    "SONiC";
+  description
+    "SONIC CHANNEL MONITOR";
+
+  revision 2026-06-01 {
+    description
+      "First revision, derived from openconfig-channel-monitor.yang {version 2024-04-04}";
+  }
+
+  container sonic-channel-monitor {
+    container OTN_OCM {
+      description
+        "Top-level container for optical channel monitors";
+      list OTN_OCM_LIST {
+        key "name";
+        leaf name {
+          type string;
+          description
+            "Reference to system-supplied name of the port on the
+             optical channel monitor (OCM). If this port is embedded
+             in another card (i.e. an amplifier card) the device
+             should still define a port representing the OCM even if
+             it is internal and not physically present on the
+             faceplate of the card";
+        }
+        leaf monitor-port {
+          type string;
+          description
+            "Reference to system-supplied name of the port that the
+             channel monitor is physically connected to. This port
+             will be of type MONITOR. This port is a tap off of the
+             monitored-port and would be in the same card as the
+             monitored port. If this port is embedded in another card
+             (i.e. an amplifier card) the device should still define
+             a port representing the monitor port if it is internal
+             and not physically present on the faceplate of the card";
+        }
+      }
+    }
+    container OTN_OCM_CHANNEL {
+      description
+        "List of tuples describing the spectrum power distribution";
+      list OTN_OCM_CHANNEL_LIST {
+        key "name lower-frequency upper-frequency";
+        leaf name {
+          type string;
+          description
+            "References the optical channel monitor name";
+        }
+        leaf lower-frequency {
+          type uint64;
+          units "MHz";
+          description
+            "Lower frequency of the specified spectrum power";
+        }
+        leaf upper-frequency {
+          type uint64;
+          units "MHz";
+          description
+            "Upper frequency of the specified spectrum power";
+        }
+      }
+    }
+  }
+}
