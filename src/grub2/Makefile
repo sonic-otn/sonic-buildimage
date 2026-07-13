@@ -40,7 +40,11 @@ $(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
 ifeq ($(CROSS_BUILD_ENVIRON), y)
 	dpkg-buildpackage -b -us -uc -a$(CONFIGURED_ARCH) -Pcross,nocheck -j$(SONIC_CONFIG_MAKE_JOBS) --admindir $(SONIC_DPKG_ADMINDIR)
 else
-	dpkg-buildpackage -b -us -uc -j$(SONIC_CONFIG_MAKE_JOBS) --admindir $(SONIC_DPKG_ADMINDIR)
+	# Skip GRUB's upstream test-suite (dh_auto_test / "make check"). The
+	# grub_cmd_sleep test is timing-flaky under loaded CI runners and fails
+	# non-deterministically; this is a released Debian package, so its self
+	# tests add no SONiC-specific coverage. Mirrors the cross build's nocheck.
+	DEB_BUILD_OPTIONS="$$DEB_BUILD_OPTIONS nocheck" dpkg-buildpackage -b -us -uc -j$(SONIC_CONFIG_MAKE_JOBS) --admindir $(SONIC_DPKG_ADMINDIR)
 endif
 	popd
 
