@@ -12,7 +12,7 @@
 try:
     import os
     from sonic_platform_base.thermal_base import ThermalBase
-    from HalPlatformApi.client import *
+    from sonic_platform.hal import *
 except ImportError as e:
     raise ImportError(str(e) + "- required module not found")
 

@@ -1,5 +1,5 @@
 {% from "dockers/dockerfile-macros.j2" import install_debian_packages %}
-FROM docker-config-engine-bookworm-{{DOCKER_USERNAME}}:{{DOCKER_USERTAG}}
+FROM docker-config-engine-trixie-{{DOCKER_USERNAME}}:{{DOCKER_USERTAG}}
 
 ARG docker_container_name
 
@@ -18,9 +18,6 @@ debs/
 
 # Install locally-built Debian packages and implicitly install their dependencies
 {{ install_debian_packages(docker_syncd_otn_kvm_debs.split(' ')) }}
-
-## Install Thrift 0.17 runtime library
-RUN apt-get install -y libthrift-0.17.0
 
 RUN ldconfig
 

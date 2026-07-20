@@ -12,7 +12,7 @@ local function convertToSigned(unsigned)
     return unsigned - 2^32
   end
 end
-  
+
 local function strValuePro(str, div)
   local v = tonumber(str)
   v = convertToSigned(v)
@@ -25,6 +25,12 @@ local function hex_decode(str)
     end))
 end
 
+local DIV = 100
+
+local function scale(v)
+  return strValuePro(v, DIV)
+end
+
 local logtable = {}
 
 local function logit(msg)
@@ -32,116 +38,85 @@ local function logit(msg)
 end
 
 local counters_db = ARGV[1]
-local counters_table_name = ARGV[2] 
+local counters_table_name = ARGV[2]
 local state_db = "6"
 local vid_table_name = "COUNTERS_OTN_OA_NAME_MAP"
 local state_table_name = "OTN_OA_TABLE"
 
--- Phase 1: read counters
+-- {counter attribute, state field, transform fn, default value for first creation}
+local specs = {
+  {'SAI_OTN_OA_ATTR_ENABLED',              'enabled',             nil,        'false'},
+  {'SAI_OTN_OA_ATTR_INGRESS_PORT',         'ingress-port',        hex_decode, ''},
+  {'SAI_OTN_OA_ATTR_EGRESS_PORT',          'egress-port',         hex_decode, ''},
+  {'SAI_OTN_OA_ATTR_ACTUAL_GAIN',          'actual-gain',         scale,      '0'},
+  {'SAI_OTN_OA_ATTR_ACTUAL_GAIN_TILT',     'actual-gain-tilt',    scale,      '0'},
+  {'SAI_OTN_OA_ATTR_INPUT_POWER_TOTAL',    'input-power-total',   scale,      '-60'},
+  {'SAI_OTN_OA_ATTR_INPUT_POWER_C_BAND',   'input-power-c-band',  scale,      '-60'},
+  {'SAI_OTN_OA_ATTR_INPUT_POWER_L_BAND',   'input-power-l-band',  scale,      '-60'},
+  {'SAI_OTN_OA_ATTR_OUTPUT_POWER_TOTAL',   'output-power-total',  scale,      '-60'},
+  {'SAI_OTN_OA_ATTR_OUTPUT_POWER_C_BAND',  'output-power-c-band', scale,      '-60'},
+  {'SAI_OTN_OA_ATTR_OUTPUT_POWER_L_BAND',  'output-power-l-band', scale,      '-60'},
+  {'SAI_OTN_OA_ATTR_LASER_BIAS_CURRENT',   'laser-bias-current',  scale,      '0'},
+  {'SAI_OTN_OA_ATTR_OPTICAL_RETURN_LOSS',  'optical-return-loss', scale,      '0'},
+}
+
+-- attribute name list for a single HMGET, and the default field/value list
+local attrs = {}
+local defaults = {}
+for i, s in ipairs(specs) do
+  attrs[i] = s[1]
+  if s[4] then
+    defaults[#defaults+1] = s[2]
+    defaults[#defaults+1] = s[4]
+  end
+end
+
+-- Phase 1: read counters, build per-object update lists.
+-- Attributes that are missing from COUNTERS are simply left out of the
+-- field list, so HMSET will not touch the previous value in STATE_DB.
+local updates = {}
+
 redis.call('SELECT', counters_db)
 for i = 1, #KEYS do
   local vid = KEYS[i]
   local obj_name = redis.call('HGET', vid_table_name, vid)
   if obj_name then
-    local div = 100
-    -- Get new COUNTERS values
     local counter_key = counters_table_name .. ':' .. vid
+    local vals = redis.call('HMGET', counter_key, unpack(attrs))
 
-    local ingress_port = ""
-    local val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_INGRESS_PORT')
-    if val then
-      ingress_port = hex_decode(val)
+    local fields = {}
+    for j, s in ipairs(specs) do
+      local v = vals[j]
+      if v then                     -- missing fields come back as false
+        local fn = s[3]
+        fields[#fields+1] = s[2]
+        fields[#fields+1] = fn and fn(v) or v
+      end
     end
 
-    local egress_port = ""
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_EGRESS_PORT')
-    if val then
-      egress_port = hex_decode(val)
+    if #fields > 0 then
+      updates[#updates+1] = {obj_name, fields}
+    else
+      logit("No counters for " .. obj_name)
     end
-
-    local actual_gain = "0"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_ACTUAL_GAIN')
-    if val then
-      actual_gain = strValuePro(val, div)
-    end
-
-    local actual_tilt = "0"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_ACTUAL_GAIN_TILT')
-    if val then
-      actual_tilt = strValuePro(val, div)
-    end
-
-    local input_power_total = "-60"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_INPUT_POWER_TOTAL')
-    if val then
-      input_power_total = strValuePro(val, div)
-    end
-
-    local input_power_c = "-60"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_INPUT_POWER_C_BAND')
-    if val then
-      input_power_total = strValuePro(val, div)
-    end
-
-    local input_power_l = "-60"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_INPUT_POWER_L_BAND')
-    if val then
-      input_power_l = strValuePro(val, div)
-    end
-
-    local output_power_total = "-60"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_OUTPUT_POWER_TOTAL')
-    if val then
-      output_power_total = strValuePro(val, div)
-    end
-
-    local output_power_c = "-60"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_OUTPUT_POWER_C_BAND')
-    if val then
-      output_power_c = strValuePro(val, div)
-    end
-
-    local output_power_l = "-60"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_OUTPUT_POWER_L_BAND')
-    if val then
-      output_power_l = strValuePro(val, div)
-    end
-
-    local laser_current = "0"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_LASER_BIAS_CURRENT')
-    if val then
-      laser_current = strValuePro(val, div)
-    end
-
-    local return_loss = "0"
-    val = redis.call('HGET', counter_key, 'SAI_OTN_OA_ATTR_OPTICAL_RETURN_LOSS')
-    if val then
-      return_loss = strValuePro(val, div)
-    end
-
-    -- switch to state DB and update
-    redis.call('SELECT', state_db)
-    redis.call('HMSET', state_table_name .. '|' .. obj_name,
-               'ingress-port', ingress_port,
-               'egress-port', egress_port,
-               'actual-gain', actual_gain,
-               'actual-gain-tilt', actual_tilt,
-               'input-power-total', input_power_total,
-               'input-power-c-band', input_power_c,
-               'input-power-l-band', input_power_l,
-               'output-power-total', output_power_total,
-               'output-power-c-band', output_power_c,
-               'output-power-l-band', output_power_l,
-               'laser-bias-current', laser_current,
-               'optical-return-loss', return_loss)
-
-    -- switch back for next iteration
-    redis.call('SELECT', counters_db)
-
-    logit("Updated " .. obj_name)
   else
     logit("No mapping for vid=" .. vid)
   end
+end
+
+-- Phase 2: write STATE_DB once
+redis.call('SELECT', state_db)
+for _, u in ipairs(updates) do
+  local state_key = state_table_name .. '|' .. u[1]
+
+  -- seed defaults only when the entry does not exist yet, so consumers
+  -- never see a half-populated hash on first poll
+  if redis.call('EXISTS', state_key) == 0 then
+    redis.call('HMSET', state_key, unpack(defaults))
+  end
+
+  redis.call('HMSET', state_key, unpack(u[2]))
+  logit("Updated " .. u[1])
 end
 
 return logtable

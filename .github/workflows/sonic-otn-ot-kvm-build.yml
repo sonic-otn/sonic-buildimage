@@ -25,7 +25,9 @@ jobs:
           cd otn_dev_${{github.run_number}}
           make init
           make configure PLATFORM=otn-kvm
-          make SONIC_BUILD_JOBS=8 target/sonic-otn-kvm.img.gz 
+          # otn-kvm is Trixie-only (all containers, syncd included), so skip the
+          # Bookworm pass the top-level Makefile still enables by default.
+          make NOBOOKWORM=1 SONIC_BUILD_JOBS=8 target/sonic-otn-kvm.img.gz
 
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v4

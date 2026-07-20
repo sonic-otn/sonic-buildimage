@@ -13,7 +13,7 @@ try:
     import os
     from sonic_platform_base.module_base import ModuleBase
     from sonic_platform.component import Component
-    from HalPlatformApi.client import *
+    from sonic_platform.hal import *
 except ImportError as e:
     raise ImportError(str(e) + "- required module not found")
 

@@ -9,7 +9,7 @@
 
 try:
     from sonic_platform_base.watchdog_base import WatchdogBase
-    from HalPlatformApi.client import *
+    from sonic_platform.hal import *
 except ImportError as e:
     raise ImportError(str(e) + "- required module not found")
 

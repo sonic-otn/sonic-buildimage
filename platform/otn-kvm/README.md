@@ -8,8 +8,15 @@ For SONiC compilation environment setup, please refer to [sonic-buildimage](http
 ``` bash
 make init
 make configure PLATFORM=otn-kvm
-make BLDENV=bookworm SONIC_BUILD_JOBS=8 target/sonic-otn-kvm.img.gz
+make NOBOOKWORM=1 target/sonic-otn-kvm.img.gz
 ```
+
+> `NOBOOKWORM=1` skips the redundant Debian Bookworm build pass. otn-kvm is
+> Trixie-only (all containers, including `syncd`, are Trixie-based), so the
+> Bookworm pass produces nothing the image needs and only wastes build time.
+> The top-level `Makefile` still defaults to `NOBOOKWORM ?= 0` (upstream
+> Bookworm→Trixie transition scaffolding), so pass `NOBOOKWORM=1` explicitly
+> on the otn-kvm build.
 
 # HOWTO setup KVM environment
 1. Install Ubuntu KVM tools
@@ -75,7 +82,7 @@ Input user and password to login, which are configured in config file, admin/You
 ```
 sonic login: admin
 Password: 
-Linux sonic 6.1.0-29-2-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.123-1 (2025-01-02) x86_64
+Linux sonic 6.12.41+deb13-sonic-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.41-1 (2026-07-13) x86_64
 You are on
   ____   ___  _   _ _  ____
  / ___| / _ \| \ | (_)/ ___|
@@ -104,10 +111,10 @@ RSA key fingerprint is SHA256:+pZRW181kQeX5mhEoVaK9VTm1b/nFsyxdkfNYNaQwWY.
 This key is not known by any other names.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added '[localhost]:2222' (RSA) to the list of known hosts.
-Debian GNU/Linux 12 \n \l
+Debian GNU/Linux 13 \n \l
 
 admin@localhost's password:
-Linux sonic 6.1.0-29-2-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.123-1 (2025-01-02) x86_64
+Linux sonic 6.12.41+deb13-sonic-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.41-1 (2026-07-13) x86_64
 You are on
   ____   ___  _   _ _  ____
  / ___| / _ \| \ | (_)/ ___|
@@ -127,6 +134,11 @@ admin@sonic:~$
 ```
 
 ## Show PMON platform information
+> otn-kvm is backed by a simulated HAL, so the inventory fields (model, serial,
+> hardware revision) and the sensor readings below are synthetic placeholders,
+> not values read from real hardware. Timestamps and the kernel version in the
+> examples come from one particular build and will differ on yours.
+
 ### Show summary information
 ```bash
 admin@sonic:~$ show platform summary 
@@ -134,9 +146,9 @@ Platform: x86_64-otn-kvm_x86_64-r0
 HwSKU: OLS-V
 ASIC: otn-kvm
 ASIC Count: 1
-Serial Number: D9401XXX
-Model Number: 1835260XXX
-Hardware Revision: 1.01
+Serial Number: 123456789
+Model Number: KVM-1234
+Hardware Revision: 1.0
 Switch Type: otn
 admin@sonic:~$
 ```
@@ -144,52 +156,61 @@ admin@sonic:~$
 ### Show PSU information
 ```bash
 admin@sonic:~$ show platform psu
-PSU    Model    Serial               HW Rev      Voltage (V)    Current (A)    Power (W)  Status    LED
------  -------  -------------------  --------  -------------  -------------  -----------  --------  -----
-PSU 1  VM-PSU   G1251551NJ220600XXX  R00               11.96           1.97        23.62  OK        green
-PSU 2  VM-PSU   G1251551NJ220600XXX  R00               11.98           2.01        23.95  OK        green
+PSU    Model         Serial    HW Rev    Voltage (V)    Current (A)    Power (W)  Status    LED
+-----  ---------  ---------  --------  -------------  -------------  -----------  --------  -----
+PSU0   PSU Model  123456789      1.00          12.00           1.50        18.00  OK        green
+PSU1   PSU Model  123456789      1.00          12.00           1.50        18.00  OK        green
 admin@sonic:~$ 
 ```
 
 ### Show fan information
 ```bash
 admin@sonic:~$ show platform fan
-  Drawer    LED            FAN    Speed              Direction    Presence    Status          Timestamp
---------  -----  -------------  -------  ---------------------  ----------  --------  -----------------
-FanTray0  green  FanTray0-Fan0      51%  FAN_DIRECTION_EXHAUST     Present        OK  20250723 03:31:23
-FanTray0  green  FanTray0-Fan1      53%  FAN_DIRECTION_EXHAUST     Present        OK  20250723 03:31:23
-FanTray0  green  FanTray0-Fan2      55%  FAN_DIRECTION_EXHAUST     Present        OK  20250723 03:31:23
-FanTray0  green  FanTray0-Fan3      57%  FAN_DIRECTION_EXHAUST     Present        OK  20250723 03:31:23
-     N/A  green       PSU0-Fan     100%   FAN_DIRECTION_INTAKE     Present        OK  20250723 03:31:23
-     N/A  green       PSU1-Fan     100%   FAN_DIRECTION_INTAKE     Present        OK  20250723 03:31:23
+  Drawer    LED            FAN    Speed    Direction    Presence    Status          Timestamp
+--------  -----  -------------  -------  -----------  ----------  --------  -----------------
+FanTray0  green  FanTray0-Fan0      50%       intake     Present        OK  20260805 20:32:06
+FanTray0  green  FanTray1-Fan1      50%       intake     Present        OK  20260805 20:32:06
+FanTray0  green  FanTray2-Fan2      50%       intake     Present        OK  20260805 20:32:06
+FanTray0  green  FanTray3-Fan3      50%       intake     Present        OK  20260805 20:32:06
+     N/A  green       PSU0-Fan      50%       intake     Present        OK  20260805 20:32:06
+     N/A  green       PSU1-Fan      50%       intake     Present        OK  20260805 20:32:06
 admin@sonic:~$
 ```
+
+All four chassis fans belong to the single `FanTray0` drawer, but their names come
+straight from `platform.json` and are not renumbered per drawer, which is why
+`FanTray1-Fan1` through `FanTray3-Fan3` appear under drawer `FanTray0`.
 
 ### Show thermal information
 ```bash
 admin@sonic:~$ show platform temperature 
+Failed to get port config
         Sensor    Temperature    High TH    Low TH    Crit High TH    Crit Low TH    Warning          Timestamp
 --------------  -------------  ---------  --------  --------------  -------------  ---------  -----------------
-  System Board              0         75        -5              70              0      False  20250723 03:32:23
-System Exhaust              0         75        -5              70              0      False  20250723 03:32:23
+  System Board             35         70        10              90              5      False  20260805 20:32:06
+System Exhaust             35         70        10              90              5      False  20260805 20:32:06
 admin@sonic:~$
 ```
+
+The `Failed to get port config` line is expected: otn-kvm has no front-panel
+Ethernet ports, so the command finds no port configuration to read transceiver
+temperatures from. The chassis sensors above are unaffected.
 
 ### Show firmware information
 ```bash
 admin@sonic:~$ show platform firmware status
-Chassis    Module       Component    Version    Description
+Chassis    Module       Component      Version  Description
 ---------  -----------  -----------  ---------  -------------------------------------------------------------
-OLA        LINE-CARD0   OA0-0        1.00.0002  Optical amplifier (west)
-                        OA0-1        1.00.0002  Optical amplifier (east)
-                        OSC0-0       1.02.0003  Optical supervisory channel (west)
-                        OSC0-1       N/A        Optical supervisory channel (east)
-                        OCM0-0       1.00.0003  Optical channel monitor
-                        OTDR0-0      1.00.0004  Optical time domain reflectometer
-           SUPERVISOR0  BIOS         5.6.5      Performs initialization of hardware components during booting
-                        FPGA         1.01.0004  Platform managment controller for on-board components
-                        CPLD         1.01.0005  Used for managing IO modules
-                        ONIE         2022.08    Open network install environment
+OLA        LINE-CARD0   OA0-0                1  Optical amplifier (west)
+                        OA0-1                1  Optical amplifier (east)
+                        OSC0-0               1  Optical supervisory channel (west)
+                        OSC0-1               1  Optical supervisory channel (east)
+                        OCM0-0               1  Optical channel monitor
+                        OTDR0-0              1  Optical time domain reflectometer
+           SUPERVISOR0  BIOS                 1  Performs initialization of hardware components during booting
+                        FPGA                 1  Platform managment controller for on-board components
+                        CPLD                 1  Used for managing IO modules
+                        ONIE                 1  Open network install environment
 admin@sonic:~$
 ```
 

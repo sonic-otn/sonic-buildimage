@@ -22,7 +22,7 @@ try:
     from sonic_platform.psu import Psu
     from sonic_platform.thermal import Thermal
     from sonic_platform.watchdog import Watchdog
-    from HalPlatformApi.client import *
+    from sonic_platform.hal import *
 except ImportError as e:
     raise ImportError(str(e) + "- required module not found")
 

@@ -16,7 +16,7 @@ try:
     import subprocess
     import tarfile
     from sonic_platform_base.component_base import ComponentBase
-    from HalPlatformApi.client import *
+    from sonic_platform.hal import *
 except ImportError as e:
     raise ImportError(str(e) + "- required module not found")
 

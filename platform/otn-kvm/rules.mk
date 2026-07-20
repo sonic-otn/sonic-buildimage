@@ -1,6 +1,4 @@
 include $(PLATFORM_PATH)/otn-libs-release.mk
-include $(PLATFORM_PATH)/hal-server.mk
-include $(PLATFORM_PATH)/hal-client.mk
 include $(PLATFORM_PATH)/sai.mk
 include $(PLATFORM_PATH)/docker-syncd-otn-kvm.mk
 include $(PLATFORM_PATH)/platform-modules-otn-kvm.mk
@@ -16,5 +14,6 @@ SONIC_ALL += $(SONIC_ONE_IMAGE) $(SONIC_KVM_IMAGE) $(SONIC_RAW_IMAGE)
 # Inject otn-kvm sai into syncd
 $(SYNCD)_DEPENDS += $(OTN_KVM_LIBSAI_DEB) $(LIBSAIMETADATA_DEV)
 
-# Inject otn-kvm hal dependency library into pmon
-$(DOCKER_PLATFORM_MONITOR)_DEPENDS += $(OTN_KVM_HALCLIENT_DEB)
+# The platform (PMON) HAL driver is implemented natively in the sonic_platform
+# python package (sonic-platform-modules-otn-kvm/ols-v/sonic_platform/hal.py),
+# so no thrift client/server library is needed anymore.
