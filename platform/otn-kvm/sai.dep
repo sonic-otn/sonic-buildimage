@@ -1,0 +1,2 @@
+#DPKG FRK
+$(OTN_KVM_LIBSAI_DEB)_CACHE_MODE  := none

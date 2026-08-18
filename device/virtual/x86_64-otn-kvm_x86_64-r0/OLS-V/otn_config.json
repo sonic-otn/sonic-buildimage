@@ -1,0 +1,38 @@
+{
+  "OTN_ATTENUATOR": {
+    "VOA0-0": {
+      "attenuation": "4.2",
+      "attenuation-mode": "CONSTANT_ATTENUATION",
+      "enabled": "true"
+    },
+    "VOA0-1": {
+      "attenuation": "3.2",
+      "attenuation-mode": "CONSTANT_ATTENUATION",
+      "enabled": "true"
+    }
+  },
+  "OTN_OA": {
+    "OA0-0": {
+      "target-gain": "4.2",
+      "target-gain-tilt": "0.4",
+      "gain-range": "FIXED_GAIN_RANGE",
+      "amp-mode": "CONSTANT_GAIN",
+      "enabled": "true",
+      "type": "EDFA"
+    },
+    "OA0-1": {
+      "target-gain": "5.2",
+      "target-gain-tilt": "0.5",
+      "gain-range": "FIXED_GAIN_RANGE",
+      "amp-mode": "CONSTANT_GAIN",
+      "enabled": "true",
+      "type": "EDFA"
+    }
+  },
+  "OTN_OSC": {
+    "OSC0-0": {
+    },
+    "OSC0-1": {
+    }
+  }
+}
