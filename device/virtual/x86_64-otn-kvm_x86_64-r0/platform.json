@@ -57,6 +57,14 @@
                         "name": "OA0-1"
                     },
                     {
+                        "description": "Variable optical attenuator (west)",
+                        "name": "VOA0-0"
+                    },
+                    {
+                        "description": "Variable optical attenuator (east)",
+                        "name": "VOA0-1"
+                    },
+                    {
                         "description": "Optical supervisory channel (west)",
                         "name": "OSC0-0"
                     },

@@ -15,6 +15,7 @@ end
 
 local function strValuePro(str, div)
   local v = tonumber(str)
+  if not v then return "0" end
   v = convertToSigned(v)
   return tostring(v / div)
 end
