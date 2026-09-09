@@ -1,0 +1,4 @@
+sonic-otn-kvm-platform-modules (1.0) unstable; urgency=low
+  * Initial release: Support SONiC platform API for OTN-KVM.
+
+ -- Molex <lu.mao@molex.com>  Fri, 10 Feb 2023 16:00:00 +0800
