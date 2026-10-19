@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+find_plugin_dir() {
+    local mod="$1"
+    local dir
+    dir=$(python3 -c "import ${mod}.plugins; print(${mod}.plugins.__path__[0])" 2>/dev/null) \
+        || dir=$(python3 -c "import ${mod}, os; print(os.path.join(os.path.dirname(${mod}.__file__), 'plugins'))" 2>/dev/null) \
+        || true
+    echo "$dir"
+}
+
+SHOW_DIR=$(find_plugin_dir show)
+CONFIG_DIR=$(find_plugin_dir config)
+CLEAR_DIR=$(find_plugin_dir clear)
+
+rm -f "${SHOW_DIR}/zzz_show_platform_filter.py"   2>/dev/null || true
+rm -f "${CONFIG_DIR}/zzz_config_platform_filter.py" 2>/dev/null || true
+rm -f "${CLEAR_DIR}/zzz_clear_platform_filter.py"  2>/dev/null || true
+
+exit 0

@@ -1,0 +1,4 @@
+sonic_cli_filter.py usr/lib/python3/dist-packages
+plugins/zzz_show_platform_filter.py usr/share/sonic-cli-filter/plugins
+plugins/zzz_config_platform_filter.py usr/share/sonic-cli-filter/plugins
+plugins/zzz_clear_platform_filter.py usr/share/sonic-cli-filter/plugins

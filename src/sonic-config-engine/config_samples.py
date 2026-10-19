@@ -1,3 +1,5 @@
+import json
+import os
 import sys
 
 from collections import defaultdict
@@ -28,7 +30,8 @@ def generate_common_config(data):
 #    'l2': generate_l2_config,
 #    'empty': generate_empty_config,
 #    'l1': generate_l1_config,
-#    'l3': generate_l3_config
+#    'l3': generate_l3_config,
+#    'otn': generate_otn_config
 
 def generate_l1_config(data):
     for port in natsorted(data['PORT']):
@@ -305,13 +308,56 @@ def generate_l2_config(data):
             data['VLAN_MEMBER']['Vlan1000|{}'.format(port)] = {'tagging_mode': 'untagged'}
     return data
 
+def read_device_json(path):
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (IOError, OSError, ValueError):
+        return {}
+
+def generate_otn_config(data):
+    """Factory default for OTN (optical transport) devices.
+
+    An optical platform has no Ethernet ports to derive a sample topology
+    from. What its factory default needs instead is the optical inventory
+    that ships with the platform, so this preset picks it up from the device
+    folder:
+
+        <platform>/otn_metadata.json        DEVICE_METADATA of the platform
+        <platform>/<hwsku>/otn_config.json  OTN_* tables of the hwsku
+
+    Like the 'empty' preset, nothing else is carried over.
+    """
+    new_data = {'DEVICE_METADATA': data['DEVICE_METADATA']}
+    localhost = new_data['DEVICE_METADATA']['localhost']
+    if 'hostname' not in localhost:
+        localhost['hostname'] = 'sonic'
+    if data.get('PORT'):
+        new_data['PORT'] = data['PORT']
+
+    try:
+        platform_dir = device_info.get_path_to_platform_dir()
+    except OSError:
+        return new_data
+
+    metadata = read_device_json(os.path.join(platform_dir, 'otn_metadata.json'))
+    localhost.update(metadata.get('DEVICE_METADATA', {}).get('localhost', {}))
+
+    hwsku_dir = os.path.join(platform_dir, localhost.get('hwsku', ''))
+    otn_config = read_device_json(os.path.join(hwsku_dir, 'otn_config.json'))
+    for table, rows in otn_config.items():
+        new_data.setdefault(table, rows)
+
+    return new_data
+
 _sample_generators = {
         't1': generate_t1_sample_config,
         'l2': generate_l2_config,
         't1-smartswitch': generate_t1_smartswitch_sample_config,
         'empty': generate_empty_config,
         'l1': generate_l1_config,
-        'l3': generate_l3_config
+        'l3': generate_l3_config,
+        'otn': generate_otn_config
         }
 
 def get_available_config():

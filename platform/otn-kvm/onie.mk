@@ -1,0 +1,5 @@
+ONIE_RECOVERY_IMAGE_VER = r0
+ONIE_RECOVERY_IMAGE = onie-recovery-x86_64-otn-kvm_x86_64-$(ONIE_RECOVERY_IMAGE_VER).iso
+$(ONIE_RECOVERY_IMAGE)_URL = "https://github.com/sonic-otn/onie/releases/download/otn-kvm-$(ONIE_RECOVERY_IMAGE_VER)/$(ONIE_RECOVERY_IMAGE)"
+
+SONIC_ONLINE_FILES += $(ONIE_RECOVERY_IMAGE)

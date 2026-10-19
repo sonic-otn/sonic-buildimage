@@ -1,0 +1,8 @@
+{
+    "DEVICE_METADATA": {
+        "localhost": {
+            "type": "OtnOls",
+            "switch_type": "otn"
+        }
+    }
+}

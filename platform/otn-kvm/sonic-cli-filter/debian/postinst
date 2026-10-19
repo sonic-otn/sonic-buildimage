@@ -1,0 +1,39 @@
+#!/bin/bash
+set -e
+
+STAGING="/usr/share/sonic-cli-filter/plugins"
+
+# Find the plugins/ subdirectory for a given top-level CLI module.
+# First try importing <mod>.plugins directly; if that fails, fall back to
+# locating <mod>/__init__.py and appending /plugins.
+find_plugin_dir() {
+    local mod="$1"
+    local dir
+    dir=$(python3 -c "import ${mod}.plugins; print(${mod}.plugins.__path__[0])" 2>/dev/null) \
+        || dir=$(python3 -c "import ${mod}, os; print(os.path.join(os.path.dirname(${mod}.__file__), 'plugins'))" 2>/dev/null) \
+        || true
+    echo "$dir"
+}
+
+SHOW_DIR=$(find_plugin_dir show)
+CONFIG_DIR=$(find_plugin_dir config)
+CLEAR_DIR=$(find_plugin_dir clear)
+
+link_plugin() {
+    local src="$1"
+    local dir="$2"
+    local name="$3"
+    if [ -z "$dir" ]; then
+        echo "WARNING: could not locate plugin dir for $name, skipping"
+        return
+    fi
+    mkdir -p "$dir"
+    ln -sf "$src" "$dir/$name"
+    echo "Linked $name -> $dir"
+}
+
+link_plugin "$STAGING/zzz_show_platform_filter.py"   "$SHOW_DIR"   "zzz_show_platform_filter.py"
+link_plugin "$STAGING/zzz_config_platform_filter.py" "$CONFIG_DIR" "zzz_config_platform_filter.py"
+link_plugin "$STAGING/zzz_clear_platform_filter.py"  "$CLEAR_DIR"  "zzz_clear_platform_filter.py"
+
+exit 0

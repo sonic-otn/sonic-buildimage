@@ -1,0 +1,18 @@
+Source: sonic-cli-filter
+Section: net
+Priority: optional
+Maintainer: SONiC Team <sonic-dev@lists.sonic.net>
+Build-Depends: debhelper (>= 12)
+Standards-Version: 4.5.1
+Homepage: https://github.com/sonic-net/sonic-buildimage
+
+Package: sonic-cli-filter
+Architecture: all
+Depends: ${misc:Depends},
+         sonic-utilities-data
+Description: SONiC CLI command filter
+ Platform-specific CLI command filter that removes unwanted switch-oriented
+ commands (VLAN, VXLAN, NAT, etc.) from the SONiC show/config/clear CLIs.
+ .
+ Uses the existing sonic-utilities plugin mechanism with a per-device JSON
+ blacklist to prune commands after registration.

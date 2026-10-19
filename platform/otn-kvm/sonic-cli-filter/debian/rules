@@ -1,0 +1,29 @@
+#!/usr/bin/make -f
+
+PACKAGE_NAME := sonic-cli-filter
+DESTDIR := debian/$(PACKAGE_NAME)
+
+# Core module goes to standard dist-packages (always on sys.path)
+PYLIB := $(DESTDIR)/usr/lib/python3/dist-packages
+# Plugin files staged under /usr/share for postinst to symlink
+STAGING := $(DESTDIR)/usr/share/sonic-cli-filter/plugins
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	@echo "Nothing to build"
+
+override_dh_auto_install:
+	install -d $(PYLIB)
+	install -m 644 sonic_cli_filter.py $(PYLIB)/sonic_cli_filter.py
+
+	install -d $(STAGING)
+	install -m 644 plugins/zzz_show_platform_filter.py $(STAGING)/zzz_show_platform_filter.py
+	install -m 644 plugins/zzz_config_platform_filter.py $(STAGING)/zzz_config_platform_filter.py
+	install -m 644 plugins/zzz_clear_platform_filter.py $(STAGING)/zzz_clear_platform_filter.py
+
+override_dh_auto_clean:
+	dh_auto_clean
+
+override_dh_usrlocal:
